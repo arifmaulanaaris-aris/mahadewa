@@ -68,6 +68,7 @@
     .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
     .form-control { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #ffffff; }
     .form-control:focus { border-color: #dc2626; }
+    .form-control:disabled { background-color: #f1f5f9; cursor: not-allowed; color: #64748b; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
@@ -90,6 +91,7 @@
       .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
       .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
       .grid-2 { grid-template-columns: 1fr; }
+      .alert-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
   </style>
 </head>
@@ -137,11 +139,19 @@
             <span style="font-size: 11px;">Area disesuaikan dengan divisi Anda. Pengiriman tanpa foto lengkap dikenakan denda Rp 15.000 per area.</span>
           </div>
           <div>
-            <span class="form-label" style="color: #991b1b; margin-bottom: 2px;">Divisi Area:</span>
+            <span class="form-label" style="color: #991b1b; margin-bottom: 2px;">DIVISI AREA:</span>
             <select id="selectDivisiArea" class="form-control" style="width: auto; padding: 4px 8px;" onchange="updateAreaList()">
-              <option value="Teknisi">🛠️ Teknisi / Service</option>
-              <option value="Admin">💻 Admin / Kasir</option>
-              <option value="Marketing">📢 Marketing / Sales</option>
+              <option value="TEKNISI">🔧 Teknisi / Service</option>
+              <option value="KASIR">💳 Kasir</option>
+              <option value="ADMIN 01">💻 Admin 01</option>
+              <option value="ADMIN 02">💻 Admin 02</option>
+              <option value="MARKETING 01">📢 Marketing 01</option>
+              <option value="MARKETING 02">📢 Marketing 02</option>
+              <option value="MARKETING 03">📢 Marketing 03</option>
+              <option value="GUDANG">📦 Gudang / Logistik</option>
+              <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
+              <option value="Promotor HP">📱 Promotor HP</option>
+              <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
             </select>
           </div>
         </div>
@@ -149,31 +159,20 @@
         <!-- FORM UPLOAD FOTO KEBERSIHAN -->
         <div class="box-panel">
           <div class="panel-header"><span>Form Kirim Laporan Kebersihan</span></div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">Pilih Area Kerja</label>
-              <select id="inputNamaArea" class="form-control">
-                <option value="Meja Service Teknisi">Meja Service Teknisi</option>
-                <option value="Rak Sparepart">Rak Sparepart</option>
-                <option value="Lantai Area Service">Lantai Area Service</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Status Kebersihan</label>
-              <select id="inputStatusKebersihan" class="form-control">
-                <option value="Selesai">Selesai Dibersihkan</option>
-                <option value="Proses">Sedang Proses</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label class="form-label">Pilih Area Kerja</label>
+            <select id="inputNamaArea" class="form-control">
+              <!-- Opsi diisi otomatis berdasarkan divisi -->
+            </select>
           </div>
           <div class="grid-2">
             <div class="form-group">
-              <label class="form-label">Foto Before (Sebelum)</label>
-              <input type="file" id="fileBefore" class="form-control" accept="image/*">
+              <label class="form-label">Foto Before (Ambil dari Kamera)</label>
+              <input type="file" id="fileBefore" class="form-control" accept="image/*" capture="environment">
             </div>
             <div class="form-group">
-              <label class="form-label">Foto After (Sesudah)</label>
-              <input type="file" id="fileAfter" class="form-control" accept="image/*">
+              <label class="form-label">Foto After (Ambil dari Kamera)</label>
+              <input type="file" id="fileAfter" class="form-control" accept="image/*" capture="environment">
             </div>
           </div>
           <button id="btnSubmitLaporan" class="btn-submit" onclick="submitLaporanKebersihan()">Kirim Laporan Foto</button>
@@ -214,9 +213,17 @@
             <div class="form-group">
               <label class="form-label">Divisi Target</label>
               <select id="auditDivisiTarget" class="form-control">
-                <option value="Teknisi">Teknisi</option>
-                <option value="Admin">Admin</option>
-                <option value="Marketing">Marketing</option>
+                <option value="TEKNISI">Teknisi / Service</option>
+                <option value="KASIR">Kasir</option>
+                <option value="ADMIN 01">Admin 01</option>
+                <option value="ADMIN 02">Admin 02</option>
+                <option value="MARKETING 01">Marketing 01</option>
+                <option value="MARKETING 02">Marketing 02</option>
+                <option value="MARKETING 03">Marketing 03</option>
+                <option value="GUDANG">Gudang / Logistik</option>
+                <option value="Promotor Pembiayaan">Promotor Pembiayaan</option>
+                <option value="Promotor HP">Promotor HP</option>
+                <option value="Promotor INFINIX">Promotor INFINIX</option>
               </select>
             </div>
           </div>
@@ -229,7 +236,7 @@
               <label class="form-label">Hasil Audit</label>
               <select id="auditStatusResult" class="form-control">
                 <option value="BERSIH">✅ BERSIH (Lolos Audit)</option>
-                <option value="KOTOR">❌ KOTOR (Dena Rp 15.000)</option>
+                <option value="KOTOR">❌ KOTOR (Denda Rp 15.000)</option>
               </select>
             </div>
           </div>
@@ -238,8 +245,8 @@
             <input type="text" id="auditCatatan" class="form-control" placeholder="Berikan catatan jika ada area yang kotor...">
           </div>
           <div class="form-group">
-            <label class="form-label">Foto Bukti Audit</label>
-            <input type="file" id="auditFileFoto" class="form-control" accept="image/*">
+            <label class="form-label">Foto Bukti Audit (Ambil dari Kamera)</label>
+            <input type="file" id="auditFileFoto" class="form-control" accept="image/*" capture="environment">
           </div>
           <button id="btnSubmitAudit" class="btn-submit" onclick="submitAuditKebersihan()">Kirim Hasil Audit</button>
         </div>
@@ -288,11 +295,11 @@
     </div>
   </div>
 
- <!-- SCRIPT UTAMA -->
+  <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      // 1. Periksa sesi autentikasi dan atur nav
+      // 1. Periksa sesi autentikasi dan render navigasi
       const user = checkAuthAndRenderNav();
       if (user) {
         applyRoleRestrictions(user);
@@ -307,19 +314,15 @@
 
       const userRole = (user.role || "").toUpperCase();
 
-      // Jika role adalah STAFF, kunci dropdown pilihan divisi area
+      // Kunci dropdown divisi jika role adalah STAFF
       if (userRole === "STAFF") {
         selectDivisi.disabled = true;
-        selectDivisi.style.backgroundColor = "#f1f5f9";
-        selectDivisi.style.cursor = "not-allowed";
         selectDivisi.title = "Akses pemindahan divisi area hanya untuk Admin/Supervisor";
       } else {
         selectDivisi.disabled = false;
-        selectDivisi.style.backgroundColor = "#ffffff";
-        selectDivisi.style.cursor = "pointer";
       }
 
-      // Perbarui opsi area kerja pertama kali
+      // Perbarui opsi area kerja
       updateAreaList();
     }
 
@@ -339,12 +342,18 @@
       areaSelect.innerHTML = "";
 
       let options = [];
-      if (div === "Teknisi") {
+      if (div === "TEKNISI") {
         options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
-      } else if (div === "Admin") {
-        options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Admin"];
+      } else if (div === "KASIR") {
+        options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
+      } else if (div.startsWith("ADMIN")) {
+        options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
+      } else if (div.startsWith("MARKETING") || div.startsWith("Promotor")) {
+        options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
+      } else if (div === "GUDANG") {
+        options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
       } else {
-        options = ["Area Display Laptop", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
+        options = ["Area Kerja General", "Lantai Utama"];
       }
 
       options.forEach(opt => {
@@ -439,13 +448,18 @@
       const fileB = document.getElementById("fileBefore").files[0];
       const fileA = document.getElementById("fileAfter").files[0];
 
+      if (!fileB || !fileA) {
+        alert("Harap ambil Foto Before dan Foto After menggunakan kamera!");
+        return;
+      }
+
       const btn = document.getElementById("btnSubmitLaporan");
       btn.innerText = "Mengirim...";
       btn.disabled = true;
 
       try {
-        const base64Before = fileB ? await toBase64(fileB) : "";
-        const base64After = fileA ? await toBase64(fileA) : "";
+        const base64Before = await toBase64(fileB);
+        const base64After = await toBase64(fileA);
 
         const payload = {
           action: "simpanKebersihanArea",
