@@ -162,7 +162,7 @@
           <div class="form-group">
             <label class="form-label">Pilih Area Kerja</label>
             <select id="inputNamaArea" class="form-control">
-              <!-- Opsi diisi otomatis berdasarkan divisi -->
+              <!-- Opsi diisi otomatis berdasarkan data dinamis / pilihan divisi -->
             </select>
           </div>
           <div class="grid-2">
@@ -298,6 +298,8 @@
   <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
+    let globalAreaMap = {}; // Variabel penampung mapping area dari sheet AREA_KEBERSIHAN
+
     window.addEventListener("DOMContentLoaded", () => {
       // 1. Periksa sesi autentikasi dan render navigasi
       const user = checkAuthAndRenderNav();
@@ -335,25 +337,31 @@
     }
 
     function updateAreaList() {
-      const div = document.getElementById("selectDivisiArea").value;
+      const divSelect = document.getElementById("selectDivisiArea");
       const areaSelect = document.getElementById("inputNamaArea");
-      if (!areaSelect) return;
-      
+      if (!divSelect || !areaSelect) return;
+
+      const div = divSelect.value.trim().toUpperCase();
       areaSelect.innerHTML = "";
 
-      let options = [];
-      if (div === "TEKNISI") {
-        options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
-      } else if (div === "KASIR") {
-        options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
-      } else if (div.startsWith("ADMIN")) {
-        options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
-      } else if (div.startsWith("MARKETING") || div.startsWith("Promotor")) {
-        options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
-      } else if (div === "GUDANG") {
-        options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
-      } else {
-        options = ["Area Kerja General", "Lantai Utama"];
+      // 1. Utama: Ambil dari data spreadsheet (sheet AREA_KEBERSIHAN)
+      let options = globalAreaMap[div] || [];
+
+      // 2. Fallback jika sheet AREA_KEBERSIHAN belum diisi atau data belum masuk
+      if (options.length === 0) {
+        if (div === "TEKNISI") {
+          options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
+        } else if (div === "KASIR") {
+          options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
+        } else if (div.startsWith("ADMIN")) {
+          options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
+        } else if (div.startsWith("MARKETING") || div.startsWith("PROMOTOR")) {
+          options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
+        } else if (div === "GUDANG") {
+          options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
+        } else {
+          options = ["Area Kerja General", "Lantai Utama"];
+        }
       }
 
       options.forEach(opt => {
@@ -372,8 +380,15 @@
     }
 
     function renderUI(data) {
-      if (!data || !data.kebersihan) return;
+      if (!data) return;
 
+      // Ambil mapping area dari Google Sheets jika tersedia
+      if (data.areaKebersihanMap) {
+        globalAreaMap = data.areaKebersihanMap;
+        updateAreaList();
+      }
+
+      if (!data.kebersihan) return;
       const keb = data.kebersihan;
 
       // 1. Render Tabel Riwayat Kebersihan
