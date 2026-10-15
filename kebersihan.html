@@ -142,17 +142,14 @@
           <div>
             <span class="form-label" style="color: #991b1b; margin-bottom: 2px;">DIVISI AREA:</span>
             <select id="selectDivisiArea" class="form-control" style="width: auto; padding: 4px 8px;" onchange="updateAreaList()">
-              <option value="TEKNISI">🔧 Teknisi / Service</option>
-              <option value="KASIR">💳 Kasir</option>
-              <option value="ADMIN 01">💻 Admin 01</option>
-              <option value="ADMIN 02">💻 Admin 02</option>
-              <option value="MARKETING 01">📢 Marketing 01</option>
-              <option value="MARKETING 02">📢 Marketing 02</option>
-              <option value="MARKETING 03">📢 Marketing 03</option>
-              <option value="GUDANG">📦 Gudang / Logistik</option>
-              <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
-              <option value="Promotor HP">📱 Promotor HP</option>
-              <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
+              <option value="TEKNISI">🔧 TEKNISI</option>
+              <option value="KASIR">💳 KASIR</option>
+              <option value="ADMIN">💻 ADMIN</option>
+              <option value="MARKETING">📢 MARKETING</option>
+              <option value="GUDANG">📦 GUDANG</option>
+              <option value="PROMOTOR HP">📱 PROMOTOR HP</option>
+              <option value="PROMOTOR INFINIX">📱 PROMOTOR INFINIX</option>
+              <option value="PROMOTOR PEMBIAYAAN">🤝 PROMOTOR PEMBIAYAAN</option>
             </select>
           </div>
         </div>
@@ -163,7 +160,7 @@
           <div class="form-group">
             <label class="form-label">Pilih Area Kerja</label>
             <select id="inputNamaArea" class="form-control">
-              <!-- Opsi diisi otomatis berdasarkan pilihan divisi -->
+              <!-- Opsi diisi otomatis -->
             </select>
           </div>
           <div class="grid-2">
@@ -210,17 +207,14 @@
             <div class="form-group">
               <label class="form-label">Divisi Target Audit</label>
               <select id="auditDivisiTarget" class="form-control" onchange="updateAuditFormOptions()">
-                <option value="TEKNISI">🔧 Teknisi / Service</option>
-                <option value="KASIR">💳 Kasir</option>
-                <option value="ADMIN 01">💻 Admin 01</option>
-                <option value="ADMIN 02">💻 Admin 02</option>
-                <option value="MARKETING 01">📢 Marketing 01</option>
-                <option value="MARKETING 02">📢 Marketing 02</option>
-                <option value="MARKETING 03">📢 Marketing 03</option>
-                <option value="GUDANG">📦 Gudang / Logistik</option>
-                <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
-                <option value="Promotor HP">📱 Promotor HP</option>
-                <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
+                <option value="TEKNISI">🔧 TEKNISI</option>
+                <option value="KASIR">💳 KASIR</option>
+                <option value="ADMIN">💻 ADMIN</option>
+                <option value="MARKETING">📢 MARKETING</option>
+                <option value="GUDANG">📦 GUDANG</option>
+                <option value="PROMOTOR HP">📱 PROMOTOR HP</option>
+                <option value="PROMOTOR INFINIX">📱 PROMOTOR INFINIX</option>
+                <option value="PROMOTOR PEMBIAYAAN">🤝 PROMOTOR PEMBIAYAAN</option>
               </select>
             </div>
             <div class="form-group">
@@ -297,12 +291,12 @@
         </div>
       </div>
 
-      <!-- TAB 4: KELOLA DIVISI AKUN (PERMANEN CLOUD SPREADSHEET) -->
+      <!-- TAB 4: KELOLA DIVISI AKUN -->
       <div id="kelola-divisi" class="tab-content">
         <div class="box-panel">
-          <div class="panel-header"><span>Atur Divisi Kebersihan Akun Staf (Tersimpan Permanen di Cloud)</span></div>
+          <div class="panel-header"><span>Atur Override Divisi Kebersihan Akun Staf</span></div>
           <p style="font-size: 12px; color: #64748b; margin-bottom: 16px;">
-            Pilih nama user dan tentukan divisinya. Data ini tersimpan di Google Sheets (`MAP_DIVISI`) dan tidak akan terhapus saat logout.
+            Aturan utama diambil dari kolom <b>DEVISI</b> di sheet <b>AKUN</b>. Gunakan form ini jika ingin mengubah divisi staf secara khusus via web.
           </p>
           <div class="grid-2">
             <div class="form-group">
@@ -312,17 +306,14 @@
             <div class="form-group">
               <label class="form-label">Tetapkan Divisi Area</label>
               <select id="targetDivisiSelect" class="form-control">
-                <option value="TEKNISI">🔧 Teknisi / Service</option>
-                <option value="KASIR">💳 Kasir</option>
-                <option value="ADMIN 01">💻 Admin 01</option>
-                <option value="ADMIN 02">💻 Admin 02</option>
-                <option value="MARKETING 01">📢 Marketing 01</option>
-                <option value="MARKETING 02">📢 Marketing 02</option>
-                <option value="MARKETING 03">📢 Marketing 03</option>
-                <option value="GUDANG">📦 Gudang / Logistik</option>
-                <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
-                <option value="Promotor HP">📱 Promotor HP</option>
-                <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
+                <option value="TEKNISI">🔧 TEKNISI</option>
+                <option value="KASIR">💳 KASIR</option>
+                <option value="ADMIN">💻 ADMIN</option>
+                <option value="MARKETING">📢 MARKETING</option>
+                <option value="GUDANG">📦 GUDANG</option>
+                <option value="PROMOTOR HP">📱 PROMOTOR HP</option>
+                <option value="PROMOTOR INFINIX">📱 PROMOTOR INFINIX</option>
+                <option value="PROMOTOR PEMBIAYAAN">🤝 PROMOTOR PEMBIAYAAN</option>
               </select>
             </div>
           </div>
@@ -354,11 +345,11 @@
   <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
-    let cloudDivisiMap = {}; // Menampung data mapping divisi dari sheet MAP_DIVISI
-    let globalAreaMap = {};  // Menampung data mapping area dari sheet AREA_KEBERSIHAN
+    let cloudDivisiMap = {}; // Override divisi dari sheet MAP_DIVISI
+    let akunUsersMap = {};  // Divisi bawaan dari sheet AKUN
+    let globalAreaMap = {};  // Area dari sheet AREA_KEBERSIHAN
 
     window.addEventListener("DOMContentLoaded", () => {
-      // 1. Periksa sesi autentikasi dan render navigasi
       const user = checkAuthAndRenderNav();
       if (user) {
         applyRoleRestrictions(user);
@@ -366,7 +357,14 @@
       }
     });
 
-    // Terapkan pembagian divisi ke dropdown berdasarkan user login
+    // Helper untuk mengambil divisi user (Utamakan dari MAP_DIVISI, jika tidak ada baru dari AKUN)
+    function getUserDivisi(username, defaultDiv) {
+      const u = (username || "").trim().toUpperCase();
+      if (cloudDivisiMap[u]) return cloudDivisiMap[u];
+      if (akunUsersMap[u]) return akunUsersMap[u];
+      return defaultDiv || "TEKNISI";
+    }
+
     function applyRoleRestrictions(user) {
       const selectDivisi = document.getElementById("selectDivisiArea");
       const btnKelola = document.getElementById("nav-kelola-divisi");
@@ -374,27 +372,23 @@
 
       const userRole = (user.role || "").toUpperCase();
       const uName = (user.username || user.nama || "").toUpperCase();
+      const userDevisi = getUserDivisi(uName, user.devisi);
 
-      // Cek apakah user ini punya pembagian divisi di Cloud Sheet
-      if (cloudDivisiMap[uName]) {
-        selectDivisi.value = cloudDivisiMap[uName];
-      }
+      selectDivisi.value = userDevisi.toUpperCase();
 
-      // Kunci dropdown divisi jika role adalah STAFF
       if (userRole === "STAFF") {
         selectDivisi.disabled = true;
-        selectDivisi.title = "Divisi area kebersihan telah ditentukan oleh Admin.";
+        selectDivisi.title = "Divisi area kebersihan telah ditentukan oleh Admin/Sheet AKUN.";
         if (btnKelola) btnKelola.style.display = "none";
       } else {
         selectDivisi.disabled = false;
-        if (btnKelola) btnKelola.style.display = "block"; // Tampilkan tab Kelola Divisi untuk ADMIN
+        if (btnKelola) btnKelola.style.display = "block";
       }
 
       updateAreaList();
       updateAuditFormOptions();
     }
 
-    // Update otomatis Staf Target dan Area Target pada Form Audit Kebersihan
     function updateAuditFormOptions() {
       const divSelect = document.getElementById("auditDivisiTarget");
       const stafSelect = document.getElementById("auditStafTargetSelect");
@@ -403,11 +397,14 @@
 
       const div = divSelect.value.trim().toUpperCase();
 
-      // 1. Cari daftar staf yang terdaftar di divisi ini dari cloudDivisiMap
+      // Gabungkan data user dari sheet AKUN dan MAP_DIVISI
       stafSelect.innerHTML = "";
+      let allUsers = Object.keys(Object.assign({}, akunUsersMap, cloudDivisiMap));
       let matchedStaff = [];
-      Object.keys(cloudDivisiMap).forEach(uname => {
-        if (cloudDivisiMap[uname].trim().toUpperCase() === div) {
+
+      allUsers.forEach(uname => {
+        let userDiv = getUserDivisi(uname, "");
+        if (userDiv.toUpperCase() === div) {
           matchedStaff.push(uname);
         }
       });
@@ -422,11 +419,11 @@
       } else {
         const el = document.createElement("option");
         el.value = "-";
-        el.innerText = "-- Belum ada staf terdaftar di divisi ini --";
+        el.innerText = "-- Belum ada staf di divisi ini --";
         stafSelect.appendChild(el);
       }
 
-      // 2. Cari daftar area yang terhubung dengan divisi ini
+      // Populate Area Target
       areaSelect.innerHTML = "";
       let options = globalAreaMap[div] || [];
 
@@ -454,7 +451,6 @@
       });
     }
 
-    // Fungsi Admin menyimpan pembagian divisi akun ke Cloud Sheet (MAP_DIVISI)
     async function simpanPembagianDivisi() {
       const targetUser = document.getElementById("targetUsername").value.trim().toUpperCase();
       const targetDiv = document.getElementById("targetDivisiSelect").value;
@@ -486,9 +482,9 @@
         btn.disabled = false;
 
         if (result.success) {
-          alert(`Berhasil! Pembagian divisi '${targetDiv}' untuk '${targetUser}' tersimpan permanen.`);
+          alert(`Berhasil! Divisi '${targetDiv}' untuk '${targetUser}' tersimpan permanen.`);
           document.getElementById("targetUsername").value = "";
-          fetchStats(); // Refresh data dari spreadsheet
+          fetchStats();
         } else {
           alert("Gagal menyimpan ke server.");
         }
@@ -500,7 +496,7 @@
     }
 
     async function hapusDivisiAkun(uname) {
-      if (confirm(`Hapus aturan divisi untuk akun ${uname}?`)) {
+      if (confirm(`Hapus override divisi untuk akun ${uname}?`)) {
         try {
           const payload = {
             action: "simpanMapDivisi",
@@ -515,7 +511,7 @@
           const result = await res.json();
 
           if (result.success) {
-            alert(`Aturan divisi untuk '${uname}' berhasil dihapus.`);
+            alert(`Override divisi untuk '${uname}' berhasil dihapus.`);
             fetchStats();
           }
         } catch (e) {
@@ -528,7 +524,9 @@
       const tbl = document.getElementById("tblDaftarDivisiAkun");
       if (!tbl) return;
 
-      const keys = Object.keys(cloudDivisiMap);
+      // Gabungkan daftar divisi dari Sheet AKUN dan Sheet MAP_DIVISI
+      let mergedMap = Object.assign({}, akunUsersMap, cloudDivisiMap);
+      const keys = Object.keys(mergedMap);
 
       if (keys.length === 0) {
         tbl.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada akun yang dikategorikan.</td></tr>`;
@@ -538,8 +536,8 @@
       tbl.innerHTML = keys.map(k => `
         <tr>
           <td><b>${k}</b></td>
-          <td><span class="badge-status badge-green">${cloudDivisiMap[k]}</span></td>
-          <td><button class="btn-badge-red" onclick="hapusDivisiAkun('${k}')">Hapus</button></td>
+          <td><span class="badge-status badge-green">${mergedMap[k]}</span></td>
+          <td>${cloudDivisiMap[k] ? `<button class="btn-badge-red" onclick="hapusDivisiAkun('${k}')">Reset Override</button>` : `<span style="font-size:11px; color:#64748b;">Default (AKUN)</span>`}</td>
         </tr>
       `).join('');
     }
@@ -596,12 +594,16 @@
     function renderUI(data) {
       if (!data) return;
 
-      // 1. Update data map divisi & area dari Google Sheets
+      if (data.akunUsers) {
+        akunUsersMap = data.akunUsers;
+      }
+
       if (data.mapDivisi) {
         cloudDivisiMap = data.mapDivisi;
-        renderDaftarDivisiWeb();
-        if (currentUser) applyRoleRestrictions(currentUser);
       }
+
+      renderDaftarDivisiWeb();
+      if (currentUser) applyRoleRestrictions(currentUser);
 
       if (data.areaKebersihanMap) {
         globalAreaMap = data.areaKebersihanMap;
@@ -612,7 +614,7 @@
       if (!data.kebersihan) return;
       const keb = data.kebersihan;
 
-      // 2. Render Tabel Riwayat Kebersihan
+      // Render Tabel Riwayat Kebersihan
       const tblK = document.getElementById("tblRiwayatKebersihan");
       if (tblK) {
         if (keb.riwayat && keb.riwayat.length > 0) {
@@ -634,7 +636,7 @@
         }
       }
 
-      // 3. Render Tabel Log Audit
+      // Render Tabel Log Audit
       const tblA = document.getElementById("tblLogAudit");
       if (tblA) {
         if (keb.audit && keb.audit.length > 0) {
@@ -654,7 +656,7 @@
         }
       }
 
-      // 4. Render KPI Summary
+      // Render KPI Summary
       if (data.kpiKebersihan && data.kpiKebersihan.summary) {
         const sum = data.kpiKebersihan.summary;
         const totalLaporanEl = document.getElementById("kpiTotalLaporan");
@@ -665,7 +667,6 @@
       }
     }
 
-    // Helper Konversi File ke Base64
     function toBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
