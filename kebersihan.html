@@ -208,30 +208,34 @@
           <div class="panel-header"><span>Form Audit Kebersihan (Supervisor / Auditor)</span></div>
           <div class="grid-2">
             <div class="form-group">
-              <label class="form-label">Staf Target Audit</label>
-              <input type="text" id="auditStafTarget" class="form-control" placeholder="Nama Staf yang diaudit">
+              <label class="form-label">Divisi Target Audit</label>
+              <select id="auditDivisiTarget" class="form-control" onchange="updateAuditFormOptions()">
+                <option value="TEKNISI">🔧 Teknisi / Service</option>
+                <option value="KASIR">💳 Kasir</option>
+                <option value="ADMIN 01">💻 Admin 01</option>
+                <option value="ADMIN 02">💻 Admin 02</option>
+                <option value="MARKETING 01">📢 Marketing 01</option>
+                <option value="MARKETING 02">📢 Marketing 02</option>
+                <option value="MARKETING 03">📢 Marketing 03</option>
+                <option value="GUDANG">📦 Gudang / Logistik</option>
+                <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
+                <option value="Promotor HP">📱 Promotor HP</option>
+                <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
+              </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Divisi Target</label>
-              <select id="auditDivisiTarget" class="form-control">
-                <option value="TEKNISI">Teknisi / Service</option>
-                <option value="KASIR">Kasir</option>
-                <option value="ADMIN 01">Admin 01</option>
-                <option value="ADMIN 02">Admin 02</option>
-                <option value="MARKETING 01">Marketing 01</option>
-                <option value="MARKETING 02">Marketing 02</option>
-                <option value="MARKETING 03">Marketing 03</option>
-                <option value="GUDANG">Gudang / Logistik</option>
-                <option value="Promotor Pembiayaan">Promotor Pembiayaan</option>
-                <option value="Promotor HP">Promotor HP</option>
-                <option value="Promotor INFINIX">Promotor INFINIX</option>
+              <label class="form-label">Staf Target Audit</label>
+              <select id="auditStafTargetSelect" class="form-control">
+                <!-- Diisi otomatis berdasarkan divisi target -->
               </select>
             </div>
           </div>
           <div class="grid-2">
             <div class="form-group">
-              <label class="form-label">Area Target</label>
-              <input type="text" id="auditAreaTarget" class="form-control" placeholder="Contoh: Meja Kasir / Rak Display">
+              <label class="form-label">Area Target Audit</label>
+              <select id="auditAreaTargetSelect" class="form-control">
+                <!-- Diisi otomatis berdasarkan divisi target -->
+              </select>
             </div>
             <div class="form-group">
               <label class="form-label">Hasil Audit</label>
@@ -387,6 +391,67 @@
       }
 
       updateAreaList();
+      updateAuditFormOptions();
+    }
+
+    // Update otomatis Staf Target dan Area Target pada Form Audit Kebersihan
+    function updateAuditFormOptions() {
+      const divSelect = document.getElementById("auditDivisiTarget");
+      const stafSelect = document.getElementById("auditStafTargetSelect");
+      const areaSelect = document.getElementById("auditAreaTargetSelect");
+      if (!divSelect || !stafSelect || !areaSelect) return;
+
+      const div = divSelect.value.trim().toUpperCase();
+
+      // 1. Cari daftar staf yang terdaftar di divisi ini dari cloudDivisiMap
+      stafSelect.innerHTML = "";
+      let matchedStaff = [];
+      Object.keys(cloudDivisiMap).forEach(uname => {
+        if (cloudDivisiMap[uname].trim().toUpperCase() === div) {
+          matchedStaff.push(uname);
+        }
+      });
+
+      if (matchedStaff.length > 0) {
+        matchedStaff.forEach(s => {
+          const el = document.createElement("option");
+          el.value = s;
+          el.innerText = s;
+          stafSelect.appendChild(el);
+        });
+      } else {
+        const el = document.createElement("option");
+        el.value = "-";
+        el.innerText = "-- Belum ada staf terdaftar di divisi ini --";
+        stafSelect.appendChild(el);
+      }
+
+      // 2. Cari daftar area yang terhubung dengan divisi ini
+      areaSelect.innerHTML = "";
+      let options = globalAreaMap[div] || [];
+
+      if (options.length === 0) {
+        if (div === "TEKNISI") {
+          options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
+        } else if (div === "KASIR") {
+          options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
+        } else if (div.startsWith("ADMIN")) {
+          options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
+        } else if (div.startsWith("MARKETING") || div.startsWith("PROMOTOR")) {
+          options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
+        } else if (div === "GUDANG") {
+          options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
+        } else {
+          options = ["Area Kerja General", "Lantai Utama"];
+        }
+      }
+
+      options.forEach(opt => {
+        const el = document.createElement("option");
+        el.value = opt;
+        el.innerText = opt;
+        areaSelect.appendChild(el);
+      });
     }
 
     // Fungsi Admin menyimpan pembagian divisi akun ke Cloud Sheet (MAP_DIVISI)
@@ -495,10 +560,8 @@
       const div = divSelect.value.trim().toUpperCase();
       areaSelect.innerHTML = "";
 
-      // Ambil area dari sheet AREA_KEBERSIHAN jika ada
       let options = globalAreaMap[div] || [];
 
-      // Fallback area bawaan jika sheet AREA_KEBERSIHAN belum diisi
       if (options.length === 0) {
         if (div === "TEKNISI") {
           options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
@@ -543,6 +606,7 @@
       if (data.areaKebersihanMap) {
         globalAreaMap = data.areaKebersihanMap;
         updateAreaList();
+        updateAuditFormOptions();
       }
 
       if (!data.kebersihan) return;
@@ -580,7 +644,7 @@
               <td><b>${a.auditor}</b></td>
               <td>${a.stafTarget}</td>
               <td>${a.areaTarget}</td>
-              <td><span class="badge-status ${a.status === 'BERSIH' ? 'badge-green' : 'badge-red'}">${a.status}</span></td>
+              <td><span class="badge-status ${a.status === 'BERSIH' || a.status === 'LULUS' ? 'badge-green' : 'badge-red'}">${a.status}</span></td>
               <td>${a.catatan || '-'}</td>
               <td>${a.urlFoto ? `<a href="${a.urlFoto}" target="_blank" style="color:#dc2626;">Lihat Foto</a>` : '-'}</td>
             </tr>
@@ -671,9 +735,11 @@
         return;
       }
 
-      const stafTarget = document.getElementById("auditStafTarget").value.trim();
-      if (!stafTarget) {
-        alert("Silakan isi nama staf target yang diaudit!");
+      const stafTarget = document.getElementById("auditStafTargetSelect").value;
+      const areaTarget = document.getElementById("auditAreaTargetSelect").value;
+
+      if (!stafTarget || stafTarget === "-") {
+        alert("Silakan pilih staf target yang diaudit!");
         return;
       }
 
@@ -690,7 +756,7 @@
           auditor: currentUser.nama || currentUser.username,
           stafTarget: stafTarget,
           divisiTarget: document.getElementById("auditDivisiTarget").value,
-          areaTarget: document.getElementById("auditAreaTarget").value,
+          areaTarget: areaTarget,
           statusAudit: document.getElementById("auditStatusResult").value,
           catatan: document.getElementById("auditCatatan").value,
           base64Foto: base64Foto
@@ -707,7 +773,6 @@
 
         if (result.success) {
           alert("Hasil audit kebersihan berhasil disimpan!");
-          document.getElementById("auditStafTarget").value = "";
           document.getElementById("auditCatatan").value = "";
           document.getElementById("auditFileFoto").value = "";
           fetchStats();
