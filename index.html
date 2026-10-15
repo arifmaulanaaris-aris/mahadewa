@@ -5,93 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Executive Dashboard mahadewa.id</title>
   
-  <!-- Google Font: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; 
-      margin: 0; 
-      padding: 0; 
-    }
-    body { 
-      background-color: #f8fafc; 
-      color: #1e293b; 
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px; 
-    }
-    .login-card { 
-      background: #ffffff; 
-      width: 100%; 
-      max-width: 360px; 
-      padding: 32px 24px; 
-      border-radius: 12px; 
-      border: 1px solid #cbd5e1; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-      text-align: center; 
-    }
-    .login-title { 
-      font-size: 22px; 
-      font-weight: 900; 
-      color: #dc2626; 
-      line-height: 1; 
-    }
-    .login-sub-brand { 
-      font-size: 11px; 
-      font-weight: 700; 
-      color: #64748b; 
-      margin-top: 4px; 
-      margin-bottom: 20px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
-    }
-    .login-input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      border: 1px solid #cbd5e1; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      margin-bottom: 12px; 
-      outline: none; 
-      background: #f8fafc; 
-      transition: all 0.2s;
-    }
-    .login-input:focus { 
-      border-color: #dc2626; 
-      background: #ffffff; 
-    }
-    .btn-login { 
-      width: 100%; 
-      background: #dc2626; 
-      color: white; 
-      border: none; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: 700; 
-      border-radius: 6px; 
-      cursor: pointer; 
-      transition: background 0.2s; 
-    }
-    .btn-login:hover { 
-      background: #b91c1c; 
-    }
-    .btn-login:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    .login-error { 
-      color: #dc2626; 
-      font-size: 11px; 
-      margin-top: 12px; 
-      font-weight: 700; 
-      display: none; 
-    }
+    * { box-sizing: border-box; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-card { background: #ffffff; width: 100%; max-width: 360px; padding: 32px 24px; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; }
+    .login-title { font-size: 22px; font-weight: 900; color: #dc2626; line-height: 1; }
+    .login-sub-brand { font-size: 11px; font-weight: 700; color: #64748b; margin-top: 4px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .login-input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 12px; outline: none; background: #f8fafc; }
+    .login-input:focus { border-color: #dc2626; background: #ffffff; }
+    .btn-login { width: 100%; background: #dc2626; color: white; border: none; padding: 10px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; }
+    .btn-login:hover { background: #b91c1c; }
+    .btn-login:disabled { background: #94a3b8; cursor: not-allowed; }
+    .login-error { color: #dc2626; font-size: 11px; margin-top: 12px; font-weight: 700; display: none; }
   </style>
 </head>
 <body>
@@ -101,27 +30,20 @@
     <div class="login-sub-brand">Cab. Palopo</div>
     
     <input type="text" id="userInput" class="login-input" placeholder="Username (contoh: arif / wiki)">
-    <input type="password" id="passInput" class="login-input" placeholder="Password" onkeyup="checkEnterKey(event)">
+    <input type="password" id="passInput" class="login-input" placeholder="Password" onkeyup="if(event.key==='Enter') performLogin()">
     
     <button id="btnLoginBtn" class="btn-login" onclick="performLogin()">Masuk System</button>
     <div id="loginError" class="login-error">Username / Password Salah!</div>
   </div>
 
+  <script src="auth.js"></script>
   <script>
-    // ⚠️ GANTI URL DI BAWAH DENGAN URL WEB APP DEPLOYMENT DARI GOOGLE APPS SCRIPT ANDA
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC_FaMmWcqzY4SZSFPA3UL2xwIaqpjRU-RYGKpWmkLyC559qKL2Dnx4dSqSXuKVevgqw/exec";
-
-    // Jika pengguna sudah pernah login sebelumnya, langsung arahkan ke halaman utama
     window.addEventListener("DOMContentLoaded", () => {
       const savedUser = localStorage.getItem("currentUser");
       if (savedUser) {
         redirectBasedOnAccess(JSON.parse(savedUser));
       }
     });
-
-    function checkEnterKey(e) {
-      if (e.key === "Enter") performLogin();
-    }
 
     function performLogin() {
       const u = document.getElementById("userInput").value.trim();
@@ -137,7 +59,6 @@
       btn.disabled = true;
       document.getElementById("loginError").style.display = "none";
 
-      // Mengirimkan permintaan autentikasi via JSONP ke Apps Script
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=onLoginResult&ts=${new Date().getTime()}`;
       document.body.appendChild(script);
@@ -150,10 +71,7 @@
       btn.disabled = false;
 
       if (res && res.success) {
-        // Simpan data kredensial & hak akses pengguna ke browser storage
         localStorage.setItem("currentUser", JSON.stringify(res.user));
-        
-        // Arahkan ke halaman sesuai izin akses dari sheet AKUN
         redirectBasedOnAccess(res.user);
       } else {
         const errDiv = document.getElementById("loginError");
@@ -165,7 +83,6 @@
     function redirectBasedOnAccess(user) {
       const a = user.akses || {};
 
-      // Cek prioritas halaman utama yang berhak dibuka pengguna
       if (a.kebersihan || a.auditKebersihan || a.kpiKebersihan) {
         window.location.href = "kebersihan.html";
       } else if (a.penjualan) {
@@ -175,7 +92,7 @@
       } else if (a.siplah) {
         window.location.href = "siplah.html";
       } else {
-        alert("Akun Anda terdaftar, tetapi belum memiliki izin akses ke menu manapun. Harap hubungi Admin.");
+        alert("Akun Anda belum diberikan izin akses menu. Hubungi Admin.");
         localStorage.removeItem("currentUser");
       }
     }
