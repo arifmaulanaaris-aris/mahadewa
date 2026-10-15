@@ -1,68 +1,48 @@
-// auth.js
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8RW9so1GSE3QVNzO4CTrgl366pHXAd_5umSI-IYOPsTgdgIkvw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6v_S4Gk66BspLzR1K5hC-Sg0eF2N9349884705342111/exec"; // Sesuaikan URL Apps Script Anda
 
 let currentUser = null;
 
 function checkAuthAndRenderNav() {
-  const savedUser = localStorage.getItem("currentUser");
-  
-  if (!savedUser) {
-    window.location.href = "index.html";
-    return null;
-  }
-  
-  try {
-    currentUser = JSON.parse(savedUser);
-  } catch (e) {
-    localStorage.removeItem("currentUser");
+  const session = localStorage.getItem("mahadewa_user");
+  if (!session) {
     window.location.href = "index.html";
     return null;
   }
 
-  // Ambil nama dari berbagai kemungkinan field nama yang dikirim backend
-  const displayName = currentUser.nama || currentUser.NAMA || currentUser.username || currentUser.USER_NAME || "User";
-  const displayRole = currentUser.role || currentUser.ROLE || "STAFF";
-  
-  // Tampilkan Nama & Role resmi di header badge
-  const userBadge = document.getElementById("userBadge");
-  if (userBadge) {
-    userBadge.innerText = `${displayName} (${displayRole})`;
+  currentUser = JSON.parse(session);
+
+  // Set User Badge di Header
+  const badge = document.getElementById("userBadge");
+  if (badge) {
+    badge.innerText = `${(currentUser.nama || currentUser.username).toUpperCase()} (${currentUser.role || 'STAFF'})`;
   }
 
-  // Atur visibilitas menu sidebar berdasarkan hak akses sheet AKUN
-  const akses = currentUser.akses || {};
-  
-  setNavVisibility("nav-kebersihan", akses.kebersihan);
-  setNavVisibility("nav-audit-kebersihan", akses.auditKebersihan);
-  setNavVisibility("nav-kpi-kebersihan", akses.kpiKebersihan);
-  setNavVisibility("nav-penjualan", akses.penjualan);
-  setNavVisibility("nav-marketing", akses.penjualan);
-  setNavVisibility("nav-keuangan", akses.keuanganMtk || akses.keuanganService);
-  setNavVisibility("nav-siplah", akses.siplah);
+  // Tampilkan / Sembunyikan Navigasi Menu berdasarkan Akses
+  const navPenjualan = document.getElementById("nav-penjualan");
+  const navKeuangan = document.getElementById("nav-keuangan");
+  const navSiplah = document.getElementById("nav-siplah");
+  const navKebersihan = document.getElementById("nav-kebersihan");
+  const navAdminUsers = document.getElementById("nav-admin-users");
+
+  const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
+
+  if (navPenjualan) navPenjualan.style.display = (isUserAdmin || currentUser.akses?.penjualan) ? "flex" : "none";
+  if (navKeuangan) navKeuangan.style.display = (isUserAdmin || currentUser.akses?.keuanganMtk || currentUser.akses?.keuanganService) ? "flex" : "none";
+  if (navSiplah) navSiplah.style.display = (isUserAdmin || currentUser.akses?.siplah) ? "flex" : "none";
+  if (navKebersihan) navKebersihan.style.display = (isUserAdmin || currentUser.akses?.kebersihan) ? "flex" : "none";
+  if (navAdminUsers) navAdminUsers.style.display = isUserAdmin ? "flex" : "none";
 
   return currentUser;
 }
 
-function setNavVisibility(id, isAllowed) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.style.display = isAllowed ? "flex" : "none";
-  }
-}
-
 function handleLogout() {
-  localStorage.clear();
-  sessionStorage.clear();
-  window.location.href = "index.html";
+  if (confirm("Apakah Anda yakin ingin keluar?")) {
+    localStorage.removeItem("mahadewa_user");
+    window.location.href = "index.html";
+  }
 }
 
 function showProfile() {
-  if (!currentUser) {
-    alert("Belum ada sesi login aktif.");
-    return;
-  }
-  const displayName = currentUser.nama || currentUser.NAMA || currentUser.username;
-  const displayRole = currentUser.role || currentUser.ROLE || "STAFF";
-  
-  alert(`=== PROFIL USER ===\n\nNama: ${displayName}\nUsername: ${currentUser.username || '-'}\nRole: ${displayRole}`);
+  if (!currentUser) return;
+  alert(`PROFIL SAYA:\nNama: ${currentUser.nama}\nUsername: ${currentUser.username}\nDevisi: ${currentUser.devisi || '-'}\nRole: ${currentUser.role}`);
 }
