@@ -8,181 +8,200 @@
   <!-- Google Font: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; 
-      margin: 0; 
-      padding: 0; 
+    * {
+      box-sizing: border-box;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    body { 
-      background-color: #f8fafc; 
-      color: #1e293b; 
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px; 
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
-    .login-card { 
-      background: #ffffff; 
-      width: 100%; 
-      max-width: 360px; 
-      padding: 32px 24px; 
-      border-radius: 12px; 
-      border: 1px solid #cbd5e1; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-      text-align: center; 
+    .login-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 380px;
+      padding: 32px 24px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      text-align: center;
     }
-    .login-title { 
-      font-size: 22px; 
-      font-weight: 900; 
-      color: #dc2626; 
-      line-height: 1; 
+    .brand-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #dc2626;
+      line-height: 1.1;
     }
-    .login-sub-brand { 
-      font-size: 11px; 
-      font-weight: 700; 
-      color: #64748b; 
-      margin-top: 4px; 
-      margin-bottom: 20px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 4px;
+      margin-bottom: 24px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .login-input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      border: 1px solid #cbd5e1; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      margin-bottom: 12px; 
-      outline: none; 
-      background: #f8fafc; 
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
       transition: all 0.2s;
     }
-    .login-input:focus { 
-      border-color: #dc2626; 
-      background: #ffffff; 
+    .form-control:focus {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
     }
-    .btn-login { 
-      width: 100%; 
-      background: #dc2626; 
-      color: white; 
-      border: none; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: 700; 
-      border-radius: 6px; 
-      cursor: pointer; 
-      transition: background 0.2s; 
+    .btn-login {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: background 0.2s;
     }
-    .btn-login:hover { 
-      background: #b91c1c; 
+    .btn-login:hover {
+      background: #b91c1c;
     }
     .btn-login:disabled {
       background: #94a3b8;
       cursor: not-allowed;
     }
-    .login-error { 
-      color: #dc2626; 
-      font-size: 11px; 
-      margin-top: 12px; 
-      font-weight: 700; 
-      display: none; 
+    .error-msg {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
   <div class="login-card">
-    <div class="login-title">mahadewa.id</div>
-    <div class="login-sub-brand">Cab. Palopo</div>
-    
-    <input type="text" id="userInput" class="login-input" placeholder="Username (contoh: arif / wiki)">
-    <input type="password" id="passInput" class="login-input" placeholder="Password" onkeyup="checkEnterKey(event)">
-    
-    <button id="btnLoginBtn" class="btn-login" onclick="performLogin()">Masuk System</button>
-    <div id="loginError" class="login-error">Username / Password Salah!</div>
+    <span class="brand-title">mahadewa.id</span>
+    <span class="brand-sub">Cab. Palopo - Portal Login</span>
+
+    <div id="errorAlert" class="error-msg"></div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Masukkan ID Login" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Masukkan Password" required autocomplete="current-password">
+      </div>
+      <button type="submit" id="btnLogin" class="btn-login">Masuk ke System</button>
+    </form>
   </div>
 
   <script src="auth.js"></script>
   <script>
-    // Memeriksa apakah sesi login pengguna sudah aktif
+    // Mencegah looping: Jika user sudah punya sesi valid, langsung arahkan ke kebersihan.html
     window.addEventListener("DOMContentLoaded", () => {
-      const savedUser = localStorage.getItem("currentUser");
-      if (savedUser) {
+      const session = localStorage.getItem("mahadewa_user");
+      if (session) {
         try {
-          const userObj = JSON.parse(savedUser);
-          if (userObj && userObj.username) {
-            redirectBasedOnAccess(userObj);
+          const user = JSON.parse(session);
+          if (user && user.username) {
+            window.location.href = "kebersihan.html";
           }
         } catch (e) {
-          localStorage.removeItem("currentUser");
+          localStorage.removeItem("mahadewa_user");
         }
       }
     });
 
-    function checkEnterKey(e) {
-      if (e.key === "Enter") performLogin();
+    function showError(msg) {
+      const errBox = document.getElementById("errorAlert");
+      errBox.innerText = msg;
+      errBox.style.display = "block";
     }
 
-    function performLogin() {
-      const u = document.getElementById("userInput").value.trim();
-      const p = document.getElementById("passInput").value.trim();
+    function hideError() {
+      const errBox = document.getElementById("errorAlert");
+      errBox.style.display = "none";
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      hideError();
+
+      const u = document.getElementById("inputUsername").value.trim();
+      const p = document.getElementById("inputPassword").value.trim();
+      const btn = document.getElementById("btnLogin");
 
       if (!u || !p) {
-        alert("Silakan isi Username dan Password!");
+        showError("Username dan Password wajib diisi!");
         return;
       }
 
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Memproses...";
+      btn.innerText = "Memverifikasi...";
       btn.disabled = true;
-      document.getElementById("loginError").style.display = "none";
 
-      // Memanggil fungsi login dari Google Apps Script secara JSONP
-      const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=onLoginResult&ts=${new Date().getTime()}`;
+      // Panggil API Backend Apps Script dengan JSONP callback
+      const callbackName = "onLoginResult_" + Math.floor(Math.random() * 100000);
+      window[callbackName] = function(res) {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+
+        btn.innerText = "Masuk ke System";
+        btn.disabled = false;
+
+        if (res && res.success) {
+          // Simpan data user lengkap dari Apps Script (termasuk devisi dan objek akses)
+          localStorage.setItem("mahadewa_user", JSON.stringify(res.user));
+          window.location.href = "kebersihan.html";
+        } else {
+          showError(res ? res.message : "Username atau Password salah!");
+        }
+      };
+
+      const script = document.createElement("script");
+      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=${callbackName}&ts=${new Date().getTime()}`;
+      script.onerror = function() {
+        delete window[callbackName];
+        btn.innerText = "Masuk ke System";
+        btn.disabled = false;
+        showError("Terjadi kesalahan koneksi ke server Apps Script.");
+      };
       document.body.appendChild(script);
-      document.body.removeChild(script);
-    }
-
-    function onLoginResult(res) {
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Masuk System";
-      btn.disabled = false;
-
-      if (res && res.success) {
-        // Simpan data kredensial & hak akses pengguna ke browser storage
-        localStorage.setItem("currentUser", JSON.stringify(res.user));
-        
-        // Arahkan ke halaman modul sesuai izin akses dari sheet AKUN
-        redirectBasedOnAccess(res.user);
-      } else {
-        const errDiv = document.getElementById("loginError");
-        errDiv.innerText = (res && res.message) ? res.message : "Username atau Password Salah!";
-        errDiv.style.display = "block";
-      }
-    }
-
-    function redirectBasedOnAccess(user) {
-      const a = user.akses || {};
-
-      // Cek prioritas halaman utama yang berhak dibuka pengguna
-      if (a.kebersihan || a.auditKebersihan || a.kpiKebersihan) {
-        window.location.href = "kebersihan.html";
-      } else if (a.penjualan) {
-        window.location.href = "penjualan.html";
-      } else if (a.keuanganMtk || a.keuanganService) {
-        window.location.href = "keuangan.html";
-      } else if (a.siplah) {
-        window.location.href = "siplah.html";
-      } else {
-        alert("Akun Anda terdaftar, tetapi belum memiliki izin akses ke menu manapun. Harap hubungi Admin.");
-        localStorage.removeItem("currentUser");
-      }
     }
   </script>
 </body>
