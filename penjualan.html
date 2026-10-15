@@ -2,13 +2,17 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Executive Dashboard mahadewa.id</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Penjualan - Executive Dashboard mahadewa.id</title>
   
   <!-- Google Font: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Chart.js & Datalabels Plugin CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
   <style>
     * { 
@@ -17,167 +21,436 @@
       margin: 0; 
       padding: 0; 
     }
-    body { 
-      background-color: #f8fafc; 
-      color: #1e293b; 
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px; 
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* HEADER */
+    header {
+      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
     }
-    .login-card { 
-      background: #ffffff; 
-      width: 100%; 
-      max-width: 360px; 
-      padding: 32px 24px; 
-      border-radius: 12px; 
-      border: 1px solid #cbd5e1; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-      text-align: center; 
+    .brand-section { display: flex; align-items: center; gap: 8px; }
+    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
+    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
+    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    
+    .header-user { display: flex; align-items: center; gap: 6px; }
+    .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
+    .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+
+    /* LAYOUT & SIDEBAR */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 4px; text-decoration: none;
+      transition: all 0.2s; text-align: left;
     }
-    .login-title { 
-      font-size: 22px; 
-      font-weight: 900; 
-      color: #dc2626; 
-      line-height: 1; 
-    }
-    .login-sub-brand { 
-      font-size: 11px; 
-      font-weight: 700; 
-      color: #64748b; 
-      margin-top: 4px; 
-      margin-bottom: 20px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
-    }
-    .login-input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      border: 1px solid #cbd5e1; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      margin-bottom: 12px; 
-      outline: none; 
-      background: #f8fafc; 
-      transition: all 0.2s;
-    }
-    .login-input:focus { 
-      border-color: #dc2626; 
-      background: #ffffff; 
-    }
-    .btn-login { 
-      width: 100%; 
-      background: #dc2626; 
-      color: white; 
-      border: none; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: 700; 
-      border-radius: 6px; 
-      cursor: pointer; 
-      transition: background 0.2s; 
-    }
-    .btn-login:hover { 
-      background: #b91c1c; 
-    }
-    .btn-login:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    .login-error { 
-      color: #dc2626; 
-      font-size: 11px; 
-      margin-top: 12px; 
-      font-weight: 700; 
-      display: none; 
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #dc2626; color: white; }
+
+    .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
+    .tab-page { display: block; }
+
+    /* KPI CARDS */
+    .top-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
+    .card.main-card { background: #dc2626; color: white; border: none; }
+    .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card.main-card .card-head { color: #fecaca; }
+    .card-val { font-size: 17px; font-weight: 900; color: #0f172a; line-height: 1.2; margin-top: 2px; }
+    .card.main-card .card-val { color: #ffffff; }
+    .card-avg { font-size: 10px; font-weight: 500; color: #64748b; margin-top: 6px; padding-top: 4px; border-top: 1px dashed #f1f5f9; }
+    .card.main-card .card-avg { color: #fee2e2; border-top-color: rgba(255,255,255,0.2); }
+
+    /* DASHBOARD PANELS & GRID */
+    .sales-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 16px; }
+    .box-panel.full-width { grid-column: span 2; }
+    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .chart-scroll-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .chart-wrapper { position: relative; width: 100%; height: 260px; min-width: 650px; }
+
+    /* TABLES */
+    .table-container { height: 280px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+    .custom-table tr:hover td { background: #f8fafc; }
+
+    /* BADGES */
+    .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-yellow { background: #fef9c3; color: #a16207; }
+    .badge-red { background: #fee2e2; color: #b91c1c; }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
+      .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
+      .top-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .card.main-card { grid-column: span 2; }
+      .sales-grid { grid-template-columns: 1fr; }
+      .box-panel.full-width { grid-column: span 1; }
     }
   </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <div class="login-title">mahadewa.id</div>
-    <div class="login-sub-brand">Cab. Palopo</div>
-    
-    <input type="text" id="userInput" class="login-input" placeholder="Username (contoh: arif / wiki)">
-    <input type="password" id="passInput" class="login-input" placeholder="Password" onkeyup="checkEnterKey(event)">
-    
-    <button id="btnLoginBtn" class="btn-login" onclick="performLogin()">Masuk System</button>
-    <div id="loginError" class="login-error">Username / Password Salah!</div>
+  <!-- HEADER -->
+  <header>
+    <div class="brand-section">
+      <div>
+        <span class="brand-name">mahadewa.id</span>
+        <span class="brand-sub">Cab. Palopo</span>
+      </div>
+      <div class="page-title-badge" id="headerPageTitle">Penjualan</div>
+    </div>
+    <div class="header-user">
+      <span class="user-name" id="userBadge">Guest</span>
+      <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
+      <button class="btn-badge-red" onclick="showProfile()">Profil</button>
+      <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">🧹 Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item active">📈 Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">💳 Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
+    </div>
+
+    <div class="content">
+      <div id="penjualan" class="tab-page">
+        
+        <!-- TOP KPI CARDS -->
+        <div class="top-cards">
+          <div class="card main-card">
+            <div class="card-top-row"><span class="card-head">Pencapaian Toko</span></div>
+            <div class="card-val" id="pPencapaianToko">Rp 0</div>
+            <div class="card-avg" id="pPencapaianTokoAvg">Avg: Rp 0 / hari</div>
+          </div>
+          <div class="card">
+            <div class="card-top-row"><span class="card-head">Total Invoice</span></div>
+            <div class="card-val" id="pTotalInv">0</div>
+            <div class="card-avg" id="pTotalInvAvg">Avg: 0 inv / hari</div>
+          </div>
+          <div class="card">
+            <div class="card-top-row"><span class="card-head">Marketing</span></div>
+            <div class="card-val" id="pMktVal">Rp 0</div>
+            <div class="card-avg" id="pMktValAvg">Avg: Rp 0 / hari</div>
+          </div>
+          <div class="card">
+            <div class="card-top-row"><span class="card-head">Admin</span></div>
+            <div class="card-val" id="pAdmVal">Rp 0</div>
+            <div class="card-avg" id="pAdmValAvg">Avg: Rp 0 / hari</div>
+          </div>
+          <div class="card">
+            <div class="card-top-row"><span class="card-head">Teknisi</span></div>
+            <div class="card-val" id="pTekVal">Rp 0</div>
+            <div class="card-avg" id="pTekValAvg">Avg: Rp 0 / hari</div>
+          </div>
+        </div>
+
+        <!-- SALES GRID -->
+        <div class="sales-grid">
+          <!-- OMZET HARIAN -->
+          <div class="box-panel full-width">
+            <div class="panel-header"><span>Daily Results (Omzet Harian)</span></div>
+            <div class="chart-scroll-wrapper"><div class="chart-wrapper"><canvas id="barDailyChart"></canvas></div></div>
+          </div>
+
+          <!-- MINGGUAN -->
+          <div class="box-panel">
+            <div class="panel-header"><span>Performa Penjualan Mingguan</span></div>
+            <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="min-width:100%;"><canvas id="barWeeklyChart"></canvas></div></div>
+          </div>
+
+          <!-- BULANAN -->
+          <div class="box-panel">
+            <div class="panel-header"><span>Performa Penjualan Bulanan</span></div>
+            <div class="table-container" style="height: 220px;">
+              <table class="custom-table">
+                <thead><tr><th>Bulan</th><th>Total Omzet</th></tr></thead>
+                <tbody id="tblMonthlyPerf"><tr><td colspan="2" style="text-align:center;">Memuat data...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- BY BRAND -->
+          <div class="box-panel">
+            <div class="panel-header"><span>Pencapaian By Brand</span></div>
+            <div class="chart-wrapper" style="min-width:100%;"><canvas id="pieBrandChart"></canvas></div>
+          </div>
+
+          <!-- BY DEPARTMENT -->
+          <div class="box-panel">
+            <div class="panel-header"><span>Pencapaian By Department</span></div>
+            <div class="chart-wrapper" style="min-width:100%;"><canvas id="barDeptChart"></canvas></div>
+          </div>
+
+          <!-- BEST SELLER -->
+          <div class="box-panel full-width">
+            <div class="panel-header">
+              <span>Top Best Seller Product</span>
+              <select id="bestSellerFilter" onchange="changeBestSellerSort(this.value)" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 11px;">
+                <option value="omzet">By Omzet (Rp)</option>
+                <option value="qty">By Qty (Pcs)</option>
+              </select>
+            </div>
+            <div class="table-container">
+              <table class="custom-table">
+                <thead><tr><th>Rank</th><th>Nama Produk</th><th>Qty</th><th>Total Omzet</th></tr></thead>
+                <tbody id="tblBestSeller"><tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- MARKETING PERFORMANCE -->
+        <div class="box-panel full-width">
+          <div class="panel-header"><span>Perbandingan Revenue & Proyeksi Marketing</span></div>
+          <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="height: 260px;"><canvas id="barMktPerfChart"></canvas></div></div>
+        </div>
+
+        <div class="box-panel full-width">
+          <div class="panel-header"><span>Tabel Kinerja Personal Marketing</span></div>
+          <div class="table-container">
+            <table class="custom-table">
+              <thead><tr><th>Personal</th><th>Pencapaian (ACH)</th><th>Target / Bln</th><th>Target Sisa / Hari</th><th>% ACH</th><th>Avg / Hari</th><th>Proyeksi Run Rate</th><th>% Proyeksi</th></tr></thead>
+              <tbody id="tblMktPerf"><tr><td colspan="8" style="text-align:center;">Memuat data...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
+  <!-- SCRIPT UTAMA -->
+  <script src="auth.js"></script>
   <script>
-    // ⚠️ GANTI URL DI BAWAH DENGAN URL WEB APP DEPLOYMENT DARI GOOGLE APPS SCRIPT ANDA
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC_FaMmWcqzY4SZSFPA3UL2xwIaqpjRU-RYGKpWmkLyC559qKL2Dnx4dSqSXuKVevgqw/exec";
+    const PALETTE_PIE = ['#dc2626', '#475569', '#cbd5e1', '#0f172a', '#94a3b8', '#64748b', '#e2e8f0'];
+    let barDailyInst = null, barWeeklyInst = null, pieBrandInst = null, barDeptInst = null, barMktPerfInst = null;
+    let rawBestSellerData = [];
 
-    // Jika pengguna sudah pernah login sebelumnya, langsung arahkan ke halaman utama
     window.addEventListener("DOMContentLoaded", () => {
-      const savedUser = localStorage.getItem("currentUser");
-      if (savedUser) {
-        redirectBasedOnAccess(JSON.parse(savedUser));
+      const user = checkAuthAndRenderNav();
+      if (user) {
+        initCharts();
+        fetchStats();
       }
     });
 
-    function checkEnterKey(e) {
-      if (e.key === "Enter") performLogin();
+    function formatRupiah(val) {
+      if (!val && val !== 0) return "Rp 0";
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
     }
 
-    function performLogin() {
-      const u = document.getElementById("userInput").value.trim();
-      const p = document.getElementById("passInput").value.trim();
-
-      if (!u || !p) {
-        alert("Silakan isi Username dan Password!");
-        return;
-      }
-
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Memproses...";
-      btn.disabled = true;
-      document.getElementById("loginError").style.display = "none";
-
-      // Mengirimkan permintaan autentikasi via JSONP ke Apps Script
+    function fetchStats() {
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=onLoginResult&ts=${new Date().getTime()}`;
+      script.src = `${SCRIPT_URL}?callback=renderUI&ts=${new Date().getTime()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
 
-    function onLoginResult(res) {
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Masuk System";
-      btn.disabled = false;
+    function renderUI(data) {
+      if (!data || !data.sales) return;
+      const s = data.sales;
 
-      if (res && res.success) {
-        // Simpan data kredensial & hak akses pengguna ke browser storage
-        localStorage.setItem("currentUser", JSON.stringify(res.user));
-        
-        // Arahkan ke halaman sesuai izin akses dari sheet AKUN
-        redirectBasedOnAccess(res.user);
-      } else {
-        const errDiv = document.getElementById("loginError");
-        errDiv.innerText = (res && res.message) ? res.message : "Username / Password Salah!";
-        errDiv.style.display = "block";
+      // 1. TOP CARDS
+      if (s.kpi) {
+        document.getElementById("pPencapaianToko").innerText = formatRupiah(s.kpi.pencapaianToko);
+        document.getElementById("pTotalInv").innerText = s.kpi.totalInvoice || 0;
+        document.getElementById("pMktVal").innerText = formatRupiah(s.kpi.pencapaianMarketing);
+        document.getElementById("pAdmVal").innerText = formatRupiah(s.kpi.pencapaianAdmin);
+        document.getElementById("pTekVal").innerText = formatRupiah(s.kpi.pencapaianTeknisi);
+
+        document.getElementById("pPencapaianTokoAvg").innerText = `Avg: ${formatRupiah(s.kpi.pencapaianTokoAvg || 0)} / hari`;
+        document.getElementById("pTotalInvAvg").innerText = `Avg: ${s.kpi.totalInvoiceAvg || 0} inv / hari`;
+        document.getElementById("pMktValAvg").innerText = `Avg: ${formatRupiah(s.kpi.pencapaianMarketingAvg || 0)} / hari`;
+        document.getElementById("pAdmValAvg").innerText = `Avg: ${formatRupiah(s.kpi.pencapaianAdminAvg || 0)} / hari`;
+        document.getElementById("pTekValAvg").innerText = `Avg: ${formatRupiah(s.kpi.pencapaianTeknisiAvg || 0)} / hari`;
+      }
+
+      // 2. DAILY RESULTS
+      if (s.dailyResults && barDailyInst) {
+        let full31Days = Array.from({ length: 31 }, (_, i) => String(i + 1));
+        let dataMap = {};
+
+        s.dailyResults.forEach(d => {
+          let rawTgl = d.tgl || d.tanggal || '';
+          let tglKey = String(rawTgl).replace(/[^0-9]/g, '');
+          let dayNum = parseInt(tglKey, 10);
+          if (dayNum >= 1 && dayNum <= 31) dataMap[dayNum] = Number(d.omzet) || 0;
+        });
+
+        barDailyInst.data.labels = full31Days;
+        barDailyInst.data.datasets[0].data = full31Days.map((_, idx) => dataMap[idx + 1] || 0);
+        barDailyInst.update();
+      }
+
+      // 3. MINGGUAN
+      if (s.weeklyResults && barWeeklyInst) {
+        barWeeklyInst.data.labels = s.weeklyResults.map(w => w.minggu || '-');
+        barWeeklyInst.data.datasets[0].data = s.weeklyResults.map(w => w.omzet);
+        barWeeklyInst.update();
+      }
+
+      // 4. BULANAN
+      if (s.monthlyPerformance && s.monthlyPerformance.length > 0) {
+        document.getElementById("tblMonthlyPerf").innerHTML = s.monthlyPerformance.map(m => `
+          <tr><td><b>${m.bulan}</b></td><td><b>${formatRupiah(m.omzet)}</b></td></tr>
+        `).join('');
+      }
+
+      // 5. BRAND
+      if (s.byBrand && pieBrandInst) {
+        pieBrandInst.data.labels = s.byBrand.map(b => b.brand);
+        pieBrandInst.data.datasets[0].data = s.byBrand.map(b => b.unit);
+        pieBrandInst.update();
+      }
+
+      // 6. DEPARTMENT
+      if (s.byDept && barDeptInst) {
+        barDeptInst.data.labels = s.byDept.map(d => d.dept);
+        barDeptInst.data.datasets[0].data = s.byDept.map(d => d.nilai);
+        barDeptInst.update();
+      }
+
+      // 7. BEST SELLER
+      if (s.bestSeller && s.bestSeller.length > 0) {
+        rawBestSellerData = s.bestSeller;
+        renderBestSellerTable('omzet');
+      }
+
+      // 8. MARKETING PERFORMANCE
+      if (s.mktPerformance && s.mktPerformance.length > 0) {
+        renderMktPerformance(s.mktPerformance);
       }
     }
 
-    function redirectBasedOnAccess(user) {
-      const a = user.akses || {};
+    function renderBestSellerTable(sortBy) {
+      if (!rawBestSellerData) return;
+      let sortedList = [...rawBestSellerData];
+      if (sortBy === 'qty') sortedList.sort((a, b) => b.qty - a.qty);
+      else sortedList.sort((a, b) => b.total - a.total);
 
-      // Cek prioritas halaman utama yang berhak dibuka pengguna
-      if (a.kebersihan || a.auditKebersihan || a.kpiKebersihan) {
-        window.location.href = "kebersihan.html";
-      } else if (a.penjualan) {
-        window.location.href = "penjualan.html";
-      } else if (a.keuanganMtk || a.keuanganService) {
-        window.location.href = "keuangan.html";
-      } else if (a.siplah) {
-        window.location.href = "siplah.html";
-      } else {
-        alert("Akun Anda terdaftar, tetapi belum memiliki izin akses ke menu manapun. Harap hubungi Admin.");
-        localStorage.removeItem("currentUser");
+      const container = document.getElementById("tblBestSeller");
+      if (container) {
+        container.innerHTML = sortedList.slice(0, 10).map((b, i) => `
+          <tr><td><b>#${i + 1}</b></td><td><b>${b.item}</b></td><td>${b.qty} Pcs</td><td><b>${formatRupiah(b.total)}</b></td></tr>
+        `).join('');
       }
+    }
+
+    function changeBestSellerSort(val) { renderBestSellerTable(val); }
+
+    function renderMktPerformance(list) {
+      let html = "";
+      let names = [], achData = [], targetData = [], runRateData = [];
+
+      list.forEach(item => {
+        names.push(item.nama); achData.push(item.ach); targetData.push(item.targetBln); runRateData.push(item.runRate);
+        let rawPct = parseFloat(item.pctRunRate || 0);
+        let pctVal = rawPct <= 10 ? rawPct * 100 : rawPct;
+        let badgeClass = pctVal < 90 ? "badge-red" : (pctVal < 100 ? "badge-yellow" : "badge-green");
+
+        html += `
+          <tr>
+            <td><b>${item.nama}</b></td><td>${formatRupiah(item.ach)}</td><td>${formatRupiah(item.targetBln)}</td>
+            <td style="color:${item.targetHari < 0 ? '#dc2626' : '#16a34a'}; font-weight:bold;">${formatRupiah(item.targetHari)}</td>
+            <td><b>${(item.pctAch * 100).toFixed(1)}%</b></td><td>${formatRupiah(item.avgHari)}</td><td><b>${formatRupiah(item.runRate)}</b></td>
+            <td><span class="badge-status ${badgeClass}">${(pctVal).toFixed(1)}%</span></td>
+          </tr>
+        `;
+      });
+
+      const container = document.getElementById("tblMktPerf");
+      if (container) container.innerHTML = html;
+
+      if (barMktPerfInst) {
+        barMktPerfInst.data.labels = names;
+        barMktPerfInst.data.datasets[0].data = achData;
+        barMktPerfInst.data.datasets[1].data = targetData;
+        barMktPerfInst.data.datasets[2].data = runRateData;
+        barMktPerfInst.update();
+      }
+    }
+
+    function initCharts() {
+      Chart.defaults.font.family = 'Roboto';
+
+      // GRAFIK OMZET HARIAN
+      barDailyInst = new Chart(document.getElementById('barDailyChart').getContext('2d'), {
+        type: 'bar',
+        plugins: [ChartDataLabels],
+        data: {
+          labels: Array.from({length: 31}, (_, i) => String(i + 1)),
+          datasets: [{
+            label: 'Omzet Harian',
+            data: Array(31).fill(0),
+            backgroundColor: '#8b0000',
+            borderRadius: 4,
+            barPercentage: 0.65
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            datalabels: {
+              anchor: 'end', align: 'top', color: '#000000', font: { weight: 'bold', size: 9 },
+              formatter: function(value) { return (!value || value === 0) ? '' : (value / 1000000).toFixed(1).replace('.', ',') + 'M'; }
+            }
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { callback: function(value) { return (value / 1000000).toFixed(0) + ' Jt'; } } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      // MINGGUAN
+      barWeeklyInst = new Chart(document.getElementById('barWeeklyChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['W1', 'W2', 'W3', 'W4', 'W5'], datasets: [{ label: 'Omzet', data: [0, 0, 0, 0, 0], backgroundColor: '#0f172a', borderRadius: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+
+      // BRAND
+      pieBrandInst = new Chart(document.getElementById('pieBrandChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: [], datasets: [{ data: [], backgroundColor: PALETTE_PIE, borderWidth: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+      });
+
+      // DEPARTMENT
+      barDeptInst = new Chart(document.getElementById('barDeptChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: [], datasets: [{ data: [], backgroundColor: PALETTE_PIE, borderWidth: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+      });
+
+      // MARKETING PERFORMANCE
+      barMktPerfInst = new Chart(document.getElementById('barMktPerfChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: [
+            { label: 'Pencapaian', data: [], backgroundColor: '#dc2626', borderRadius: 4 },
+            { label: 'Target', data: [], backgroundColor: '#cbd5e1', borderRadius: 4 },
+            { label: 'Proyeksi', data: [], backgroundColor: '#0f172a', borderRadius: 4 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
     }
   </script>
 </body>
