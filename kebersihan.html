@@ -2,13 +2,13 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Executive Dashboard mahadewa.id</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kebersihan - Executive Dashboard mahadewa.id</title>
   
   <!-- Google Font: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <style>
     * { 
@@ -17,168 +17,185 @@
       margin: 0; 
       padding: 0; 
     }
-    body { 
-      background-color: #f8fafc; 
-      color: #1e293b; 
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px; 
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* HEADER */
+    header {
+      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
     }
-    .login-card { 
-      background: #ffffff; 
-      width: 100%; 
-      max-width: 360px; 
-      padding: 32px 24px; 
-      border-radius: 12px; 
-      border: 1px solid #cbd5e1; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-      text-align: center; 
+    .brand-section { display: flex; align-items: center; gap: 8px; }
+    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
+    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
+    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    
+    .header-user { display: flex; align-items: center; gap: 6px; }
+    .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
+    .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+
+    /* LAYOUT & SIDEBAR */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 4px; text-decoration: none;
+      transition: all 0.2s; text-align: left;
     }
-    .login-title { 
-      font-size: 22px; 
-      font-weight: 900; 
-      color: #dc2626; 
-      line-height: 1; 
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #dc2626; color: white; }
+
+    .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
+
+    /* TAB NAV DALAM MODUL */
+    .sub-tab-nav { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+    .sub-tab-btn {
+      padding: 8px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc;
+      font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; transition: all 0.2s;
     }
-    .login-sub-brand { 
-      font-size: 11px; 
-      font-weight: 700; 
-      color: #64748b; 
-      margin-top: 4px; 
-      margin-bottom: 20px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
-    }
-    .login-input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      border: 1px solid #cbd5e1; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      margin-bottom: 12px; 
-      outline: none; 
-      background: #f8fafc; 
-      transition: all 0.2s;
-    }
-    .login-input:focus { 
-      border-color: #dc2626; 
-      background: #ffffff; 
-    }
-    .btn-login { 
-      width: 100%; 
-      background: #dc2626; 
-      color: white; 
-      border: none; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: 700; 
-      border-radius: 6px; 
-      cursor: pointer; 
-      transition: background 0.2s; 
-    }
-    .btn-login:hover { 
-      background: #b91c1c; 
-    }
-    .btn-login:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    .login-error { 
-      color: #dc2626; 
-      font-size: 11px; 
-      margin-top: 12px; 
-      font-weight: 700; 
-      display: none; 
+    .sub-tab-btn.active { background: #dc2626; color: white; border-color: #dc2626; }
+
+    /* CARDS & PANELS */
+    .top-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px; }
+    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
+    .card.main-card { background: #dc2626; color: white; border: none; }
+    .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+    .card.main-card .card-head { color: #fecaca; }
+    .card-val { font-size: 17px; font-weight: 900; color: #0f172a; margin-top: 2px; }
+    .card.main-card .card-val { color: #ffffff; }
+    .card-avg { font-size: 10px; font-weight: 500; color: #64748b; margin-top: 6px; padding-top: 4px; border-top: 1px dashed #f1f5f9; }
+
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; }
+
+    /* TABEL & FORMS */
+    .table-container { max-height: 320px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
+    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+
+    .area-card { background: #ffffff; border-radius: 10px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+    .area-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+    .cam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .cam-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px; text-align: center; }
+    .btn-cam { background: #dc2626; color: white; border: none; padding: 8px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
+    .preview-img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-top: 8px; display: none; }
+
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none; background: #fff; }
+    .btn-area-submit { width: 100%; background: #dc2626; color: white; border: none; padding: 10px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; margin-top: 12px; }
+
+    .area-status-badge { margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; text-align: center; display: none; }
+    .status-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .status-warning { background: #fef9c3; color: #a16207; border: 1px solid #fef08a; }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
+      .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
+      .top-cards { grid-template-columns: repeat(2, 1fr); }
+      .cam-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <div class="login-title">mahadewa.id</div>
-    <div class="login-sub-brand">Cab. Palopo</div>
-    
-    <input type="text" id="userInput" class="login-input" placeholder="Username (contoh: arif / wiki)">
-    <input type="password" id="passInput" class="login-input" placeholder="Password" onkeyup="checkEnterKey(event)">
-    
-    <button id="btnLoginBtn" class="btn-login" onclick="performLogin()">Masuk System</button>
-    <div id="loginError" class="login-error">Username / Password Salah!</div>
-  </div>
+  <!-- HEADER -->
+  <header>
+    <div class="brand-section">
+      <div>
+        <span class="brand-name">mahadewa.id</span>
+        <span class="brand-sub">Cab. Palopo</span>
+      </div>
+      <div class="page-title-badge" id="headerPageTitle">Kebersihan Toko</div>
+    </div>
+    <div class="header-user">
+      <span class="user-name" id="userBadge">Guest</span>
+      <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
+      <button class="btn-badge-red" onclick="showProfile()">Profil</button>
+      <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
+    </div>
+  </header>
 
-  <script>
-    // ⚠️ GANTI URL DI BAWAH DENGAN URL WEB APP DEPLOYMENT DARI GOOGLE APPS SCRIPT ANDA
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC_FaMmWcqzY4SZSFPA3UL2xwIaqpjRU-RYGKpWmkLyC559qKL2Dnx4dSqSXuKVevgqw/exec";
+  <div class="container">
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item active">🧹 Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">📈 Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">💳 Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
+    </div>
 
-    // Jika pengguna sudah pernah login sebelumnya, langsung arahkan ke halaman utama
-    window.addEventListener("DOMContentLoaded", () => {
-      const savedUser = localStorage.getItem("currentUser");
-      if (savedUser) {
-        redirectBasedOnAccess(JSON.parse(savedUser));
-      }
-    });
+    <div class="content">
+      
+      <!-- SUB TAB NAVIGASI MODUL KEBERSIHAN -->
+      <div class="sub-tab-nav">
+        <button id="subBtn-tugas" class="sub-tab-btn active" onclick="switchKebersihanSubTab('tugas')">📋 Tugas Kebersihan Staf</button>
+        <button id="subBtn-audit" class="sub-tab-btn" onclick="switchKebersihanSubTab('audit')">🔍 Audit Kebersihan Toko</button>
+        <button id="subBtn-kpi" class="sub-tab-btn" onclick="switchKebersihanSubTab('kpi')">📊 Progres & KPI Staf</button>
+      </div>
 
-    function checkEnterKey(e) {
-      if (e.key === "Enter") performLogin();
-    }
+      <!-- TAB 1: FORM KEBERSIHAN HARIAN -->
+      <div id="subTab-tugas" class="tab-page active">
+        <div style="background:#fef2f2; border:1px solid #fecaca; padding:12px; border-radius:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="font-size:14px; color:#dc2626;">Laporan Kebersihan Harian Staf</h3>
+            <p style="font-size:11px; color:#7f1d1d; margin-top:2px;">Area disesuaikan dengan divisi Anda. Pengiriman tanpa foto lengkap dikenakan denda Rp 15.000 per area.</p>
+          </div>
+          
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:12px; font-weight:bold; color:#dc2626;">Divisi Area:</label>
+            <select id="selDivisiArea" onchange="changeDivisiArea(this.value)" style="padding: 6px 10px; border-radius: 6px; border: 1px solid #dc2626; font-size: 12px; font-weight: bold; background: white; color: #dc2626; outline: none; cursor: pointer;">
+              <option value="TEKNISI">🔧 Teknisi / Service</option>
+              <option value="KASIR">💳 Kasir</option>
+              <option value="ADMIN 01">💻 Admin 01</option>
+              <option value="ADMIN 02">💻 Admin 02</option>
+              <option value="MARKETING 01">📢 Marketing 01</option>
+              <option value="MARKETING 02">📢 Marketing 02</option>
+              <option value="MARKETING 03">📢 Marketing 03</option>
+              <option value="GUDANG">📦 Gudang / Logistik</option>
+              <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
+              <option value="Promotor HP">📱 Promotor HP</option>
+              <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
+            </select>
+          </div>
+        </div>
 
-    function performLogin() {
-      const u = document.getElementById("userInput").value.trim();
-      const p = document.getElementById("passInput").value.trim();
+        <div id="areaCardsContainer">
+          <!-- Area Cards di-generate otomatis oleh JS -->
+        </div>
 
-      if (!u || !p) {
-        alert("Silakan isi Username dan Password!");
-        return;
-      }
+        <div class="box-panel">
+          <div class="panel-header"><span>Riwayat Kebersihan Staf</span></div>
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Tanggal & Jam</th>
+                  <th>Nama Staff</th>
+                  <th>Nama Area</th>
+                  <th>Foto Before / After</th>
+                  <th>Status</th>
+                  <th>Denda (Rp)</th>
+                </tr>
+              </thead>
+              <tbody id="tblRiwayatKebersihan">
+                <tr><td colspan="6" style="text-align:center;">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Memproses...";
-      btn.disabled = true;
-      document.getElementById("loginError").style.display = "none";
+      <!-- TAB 2: AUDIT KEBERSIHAN -->
+      <div id="subTab-audit" class="tab-page">
+        <div class="box-panel" style="border-top:4px solid #dc2626;">
+          <div class="panel-header"><span>📋 Form Audit Kebersihan Toko</span></div>
 
-      // Mengirimkan permintaan autentikasi via JSONP ke Apps Script
-      const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=onLoginResult&ts=${new Date().getTime()}`;
-      document.body.appendChild(script);
-      document.body.removeChild(script);
-    }
-
-    function onLoginResult(res) {
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Masuk System";
-      btn.disabled = false;
-
-      if (res && res.success) {
-        // Simpan data kredensial & hak akses pengguna ke browser storage
-        localStorage.setItem("currentUser", JSON.stringify(res.user));
-        
-        // Arahkan ke halaman sesuai izin akses dari sheet AKUN
-        redirectBasedOnAccess(res.user);
-      } else {
-        const errDiv = document.getElementById("loginError");
-        errDiv.innerText = (res && res.message) ? res.message : "Username / Password Salah!";
-        errDiv.style.display = "block";
-      }
-    }
-
-    function redirectBasedOnAccess(user) {
-      const a = user.akses || {};
-
-      // Cek prioritas halaman utama yang berhak dibuka pengguna
-      if (a.kebersihan || a.auditKebersihan || a.kpiKebersihan) {
-        window.location.href = "kebersihan.html";
-      } else if (a.penjualan) {
-        window.location.href = "penjualan.html";
-      } else if (a.keuanganMtk || a.keuanganService) {
-        window.location.href = "keuangan.html";
-      } else if (a.siplah) {
-        window.location.href = "siplah.html";
-      } else {
-        alert("Akun Anda terdaftar, tetapi belum memiliki izin akses ke menu manapun. Harap hubungi Admin.");
-        localStorage.removeItem("currentUser");
-      }
-    }
-  </script>
-</body>
-</html>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label class="form-label">Nama Auditor / Pengawas</label>
+              <input type="text" id="auditAuditorName" class
