@@ -288,16 +288,40 @@
     </div>
   </div>
 
-  <!-- SCRIPT UTAMA -->
+ <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       // 1. Periksa sesi autentikasi dan atur nav
       const user = checkAuthAndRenderNav();
       if (user) {
+        applyRoleRestrictions(user);
         fetchStats();
       }
     });
+
+    // Batasi akses perubahan Divisi Area berdasarkan Role User
+    function applyRoleRestrictions(user) {
+      const selectDivisi = document.getElementById("selectDivisiArea");
+      if (!selectDivisi) return;
+
+      const userRole = (user.role || "").toUpperCase();
+
+      // Jika role adalah STAFF, kunci dropdown pilihan divisi area
+      if (userRole === "STAFF") {
+        selectDivisi.disabled = true;
+        selectDivisi.style.backgroundColor = "#f1f5f9";
+        selectDivisi.style.cursor = "not-allowed";
+        selectDivisi.title = "Akses pemindahan divisi area hanya untuk Admin/Supervisor";
+      } else {
+        selectDivisi.disabled = false;
+        selectDivisi.style.backgroundColor = "#ffffff";
+        selectDivisi.style.cursor = "pointer";
+      }
+
+      // Perbarui opsi area kerja pertama kali
+      updateAreaList();
+    }
 
     function switchSubTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -310,6 +334,8 @@
     function updateAreaList() {
       const div = document.getElementById("selectDivisiArea").value;
       const areaSelect = document.getElementById("inputNamaArea");
+      if (!areaSelect) return;
+      
       areaSelect.innerHTML = "";
 
       let options = [];
@@ -343,47 +369,54 @@
 
       // 1. Render Tabel Riwayat Kebersihan
       const tblK = document.getElementById("tblRiwayatKebersihan");
-      if (keb.riwayat && keb.riwayat.length > 0) {
-        tblK.innerHTML = keb.riwayat.map(r => `
-          <tr>
-            <td>${r.tgl ? new Date(r.tgl).toLocaleString('id-ID') : '-'}</td>
-            <td><b>${r.nama}</b></td>
-            <td>${r.area}</td>
-            <td>
-              ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#dc2626; font-weight:bold;">Before</a>` : '-'} | 
-              ${r.urlAfter ? `<a href="${r.urlAfter}" target="_blank" style="color:#166534; font-weight:bold;">After</a>` : '-'}
-            </td>
-            <td><span class="badge-status ${r.status === 'LENGKAP' ? 'badge-green' : 'badge-red'}">${r.status}</span></td>
-            <td><b>${r.denda ? 'Rp ' + r.denda.toLocaleString('id-ID') : 'Rp 0'}</b></td>
-          </tr>
-        `).join('');
-      } else {
-        tblK.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada riwayat kebersihan.</td></tr>`;
+      if (tblK) {
+        if (keb.riwayat && keb.riwayat.length > 0) {
+          tblK.innerHTML = keb.riwayat.map(r => `
+            <tr>
+              <td>${r.tgl ? new Date(r.tgl).toLocaleString('id-ID') : '-'}</td>
+              <td><b>${r.nama}</b></td>
+              <td>${r.area}</td>
+              <td>
+                ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#dc2626; font-weight:bold;">Before</a>` : '-'} | 
+                ${r.urlAfter ? `<a href="${r.urlAfter}" target="_blank" style="color:#166534; font-weight:bold;">After</a>` : '-'}
+              </td>
+              <td><span class="badge-status ${r.status === 'LENGKAP' ? 'badge-green' : 'badge-red'}">${r.status}</span></td>
+              <td><b>${r.denda ? 'Rp ' + r.denda.toLocaleString('id-ID') : 'Rp 0'}</b></td>
+            </tr>
+          `).join('');
+        } else {
+          tblK.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada riwayat kebersihan.</td></tr>`;
+        }
       }
 
       // 2. Render Tabel Log Audit
       const tblA = document.getElementById("tblLogAudit");
-      if (keb.audit && keb.audit.length > 0) {
-        tblA.innerHTML = keb.audit.map(a => `
-          <tr>
-            <td>${a.waktu ? new Date(a.waktu).toLocaleString('id-ID') : '-'}</td>
-            <td><b>${a.auditor}</b></td>
-            <td>${a.stafTarget}</td>
-            <td>${a.areaTarget}</td>
-            <td><span class="badge-status ${a.status === 'BERSIH' ? 'badge-green' : 'badge-red'}">${a.status}</span></td>
-            <td>${a.catatan || '-'}</td>
-            <td>${a.urlFoto ? `<a href="${a.urlFoto}" target="_blank" style="color:#dc2626;">Lihat Foto</a>` : '-'}</td>
-          </tr>
-        `).join('');
-      } else {
-        tblA.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada temuan audit.</td></tr>`;
+      if (tblA) {
+        if (keb.audit && keb.audit.length > 0) {
+          tblA.innerHTML = keb.audit.map(a => `
+            <tr>
+              <td>${a.waktu ? new Date(a.waktu).toLocaleString('id-ID') : '-'}</td>
+              <td><b>${a.auditor}</b></td>
+              <td>${a.stafTarget}</td>
+              <td>${a.areaTarget}</td>
+              <td><span class="badge-status ${a.status === 'BERSIH' ? 'badge-green' : 'badge-red'}">${a.status}</span></td>
+              <td>${a.catatan || '-'}</td>
+              <td>${a.urlFoto ? `<a href="${a.urlFoto}" target="_blank" style="color:#dc2626;">Lihat Foto</a>` : '-'}</td>
+            </tr>
+          `).join('');
+        } else {
+          tblA.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada temuan audit.</td></tr>`;
+        }
       }
 
       // 3. Render KPI Summary
       if (data.kpiKebersihan && data.kpiKebersihan.summary) {
         const sum = data.kpiKebersihan.summary;
-        document.getElementById("kpiTotalLaporan").innerText = sum.totalLaporan || 0;
-        document.getElementById("kpiTotalDenda").innerText = "Rp " + (sum.totalDendaToko || 0).toLocaleString('id-ID');
+        const totalLaporanEl = document.getElementById("kpiTotalLaporan");
+        const totalDendaEl = document.getElementById("kpiTotalDenda");
+        
+        if (totalLaporanEl) totalLaporanEl.innerText = sum.totalLaporan || 0;
+        if (totalDendaEl) totalDendaEl.innerText = "Rp " + (sum.totalDendaToko || 0).toLocaleString('id-ID');
       }
     }
 
