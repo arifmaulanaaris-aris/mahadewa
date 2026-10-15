@@ -129,6 +129,7 @@
         <button id="nav-tugas-tab" class="tab-btn active" onclick="switchSubTab('tugas-staf', this)">📋 Tugas Kebersihan Staf</button>
         <button id="nav-audit-kebersihan" class="tab-btn" onclick="switchSubTab('audit-toko', this)">🔍 Audit Kebersihan Toko</button>
         <button id="nav-kpi-kebersihan" class="tab-btn" onclick="switchSubTab('kpi-staf', this)">📊 Progres & KPI Staf</button>
+        <button id="nav-kelola-divisi" class="tab-btn" style="display:none;" onclick="switchSubTab('kelola-divisi', this)">⚙️ Kelola Divisi Akun</button>
       </div>
 
       <!-- TAB 1: TUGAS KEBERSIHAN STAF -->
@@ -162,7 +163,7 @@
           <div class="form-group">
             <label class="form-label">Pilih Area Kerja</label>
             <select id="inputNamaArea" class="form-control">
-              <!-- Opsi diisi otomatis berdasarkan data dinamis / pilihan divisi -->
+              <!-- Opsi diisi otomatis berdasarkan pilihan divisi -->
             </select>
           </div>
           <div class="grid-2">
@@ -292,40 +293,160 @@
         </div>
       </div>
 
+      <!-- TAB 4: KELOLA DIVISI AKUN (KHUSUS ADMIN) -->
+      <div id="kelola-divisi" class="tab-content">
+        <div class="box-panel">
+          <div class="panel-header"><span>Atur Divisi Kebersihan Akun Staf</span></div>
+          <p style="font-size: 12px; color: #64748b; margin-bottom: 16px;">
+            Pilih nama user dan tentukan divisinya. Saat user tersebut login, divisi area kebersihannya akan otomatis disesuaikan.
+          </p>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Nama / Username Staf</label>
+              <input type="text" id="targetUsername" class="form-control" placeholder="Ketik Username (contoh: WIKI)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tetapkan Divisi Area</label>
+              <select id="targetDivisiSelect" class="form-control">
+                <option value="TEKNISI">🔧 Teknisi / Service</option>
+                <option value="KASIR">💳 Kasir</option>
+                <option value="ADMIN 01">💻 Admin 01</option>
+                <option value="ADMIN 02">💻 Admin 02</option>
+                <option value="MARKETING 01">📢 Marketing 01</option>
+                <option value="MARKETING 02">📢 Marketing 02</option>
+                <option value="MARKETING 03">📢 Marketing 03</option>
+                <option value="GUDANG">📦 Gudang / Logistik</option>
+                <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
+                <option value="Promotor HP">📱 Promotor HP</option>
+                <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-submit" onclick="simpanPembagianDivisi()">Simpan Pengaturan Divisi Akun</button>
+        </div>
+
+        <div class="box-panel">
+          <div class="panel-header"><span>Daftar Pembagian Divisi Akun Aktif</span></div>
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Username / Staf</th>
+                  <th>Divisi Area Ditentukan</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tblDaftarDivisiAkun">
+                <!-- Diisi via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
-    let globalAreaMap = {}; // Variabel penampung mapping area dari sheet AREA_KEBERSIHAN
-
     window.addEventListener("DOMContentLoaded", () => {
       // 1. Periksa sesi autentikasi dan render navigasi
       const user = checkAuthAndRenderNav();
       if (user) {
         applyRoleRestrictions(user);
+        renderDaftarDivisiWeb();
         fetchStats();
       }
     });
 
-    // Batasi akses perubahan Divisi Area berdasarkan Role User
+    // Ambil database pembagian divisi dari Web Storage
+    function getStoredDivisiMap() {
+      const saved = localStorage.getItem("webAccountDivisiMap");
+      return saved ? JSON.parse(saved) : {};
+    }
+
+    // Terapkan pembagian divisi ke dropdown berdasarkan user login
     function applyRoleRestrictions(user) {
       const selectDivisi = document.getElementById("selectDivisiArea");
+      const btnKelola = document.getElementById("nav-kelola-divisi");
       if (!selectDivisi) return;
 
       const userRole = (user.role || "").toUpperCase();
+      const uName = (user.username || user.nama || "").toUpperCase();
+
+      // Cek apakah user ini punya pembagian divisi khusus dari Web Admin
+      const map = getStoredDivisiMap();
+      if (map[uName]) {
+        selectDivisi.value = map[uName];
+      }
 
       // Kunci dropdown divisi jika role adalah STAFF
       if (userRole === "STAFF") {
         selectDivisi.disabled = true;
-        selectDivisi.title = "Akses pemindahan divisi area hanya untuk Admin/Supervisor";
+        selectDivisi.title = "Divisi area kebersihan telah ditentukan oleh Admin.";
+        if (btnKelola) btnKelola.style.display = "none";
       } else {
         selectDivisi.disabled = false;
+        if (btnKelola) btnKelola.style.display = "block"; // Buka tab kelola untuk Admin
       }
 
-      // Perbarui opsi area kerja
       updateAreaList();
+    }
+
+    // Fungsi Admin menyimpan pembagian divisi akun via website
+    function simpanPembagianDivisi() {
+      const targetUser = document.getElementById("targetUsername").value.trim().toUpperCase();
+      const targetDiv = document.getElementById("targetDivisiSelect").value;
+
+      if (!targetUser) {
+        alert("Harap masukkan Username Staf!");
+        return;
+      }
+
+      const map = getStoredDivisiMap();
+      map[targetUser] = targetDiv;
+      localStorage.setItem("webAccountDivisiMap", JSON.stringify(map));
+
+      alert(`Berhasil! Akun '${targetUser}' sekarang ditetapkan ke divisi '${targetDiv}'.`);
+      document.getElementById("targetUsername").value = "";
+      
+      renderDaftarDivisiWeb();
+
+      // Jika user yang diubah adalah user yang sedang login sekarang, langsung perbarui tampilannya
+      if (currentUser && (currentUser.username || "").toUpperCase() === targetUser) {
+        applyRoleRestrictions(currentUser);
+      }
+    }
+
+    function hapusDivisiAkun(uname) {
+      if (confirm(`Hapus aturan divisi untuk akun ${uname}?`)) {
+        const map = getStoredDivisiMap();
+        delete map[uname];
+        localStorage.setItem("webAccountDivisiMap", JSON.stringify(map));
+        renderDaftarDivisiWeb();
+      }
+    }
+
+    function renderDaftarDivisiWeb() {
+      const tbl = document.getElementById("tblDaftarDivisiAkun");
+      if (!tbl) return;
+
+      const map = getStoredDivisiMap();
+      const keys = Object.keys(map);
+
+      if (keys.length === 0) {
+        tbl.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada akun yang dikategorikan.</td></tr>`;
+        return;
+      }
+
+      tbl.innerHTML = keys.map(k => `
+        <tr>
+          <td><b>${k}</b></td>
+          <td><span class="badge-status badge-green">${map[k]}</span></td>
+          <td><button class="btn-badge-red" onclick="hapusDivisiAkun('${k}')">Hapus</button></td>
+        </tr>
+      `).join('');
     }
 
     function switchSubTab(tabId, btn) {
@@ -344,24 +465,19 @@
       const div = divSelect.value.trim().toUpperCase();
       areaSelect.innerHTML = "";
 
-      // 1. Utama: Ambil dari data spreadsheet (sheet AREA_KEBERSIHAN)
-      let options = globalAreaMap[div] || [];
-
-      // 2. Fallback jika sheet AREA_KEBERSIHAN belum diisi atau data belum masuk
-      if (options.length === 0) {
-        if (div === "TEKNISI") {
-          options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
-        } else if (div === "KASIR") {
-          options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
-        } else if (div.startsWith("ADMIN")) {
-          options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
-        } else if (div.startsWith("MARKETING") || div.startsWith("PROMOTOR")) {
-          options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
-        } else if (div === "GUDANG") {
-          options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
-        } else {
-          options = ["Area Kerja General", "Lantai Utama"];
-        }
+      let options = [];
+      if (div === "TEKNISI") {
+        options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
+      } else if (div === "KASIR") {
+        options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
+      } else if (div.startsWith("ADMIN")) {
+        options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
+      } else if (div.startsWith("MARKETING") || div.startsWith("PROMOTOR")) {
+        options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
+      } else if (div === "GUDANG") {
+        options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
+      } else {
+        options = ["Area Kerja General", "Lantai Utama"];
       }
 
       options.forEach(opt => {
@@ -380,15 +496,8 @@
     }
 
     function renderUI(data) {
-      if (!data) return;
+      if (!data || !data.kebersihan) return;
 
-      // Ambil mapping area dari Google Sheets jika tersedia
-      if (data.areaKebersihanMap) {
-        globalAreaMap = data.areaKebersihanMap;
-        updateAreaList();
-      }
-
-      if (!data.kebersihan) return;
       const keb = data.kebersihan;
 
       // 1. Render Tabel Riwayat Kebersihan
