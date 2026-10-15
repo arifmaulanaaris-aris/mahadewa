@@ -50,12 +50,11 @@ function setNavVisibility(id, isAllowed) {
 
 // FUNGSI LOGOUT (TOMBOL KELUAR)
 function handleLogout() {
-  // Hapus semua data sesi tersimpan
   localStorage.clear();
   sessionStorage.clear();
   
-  // Lempar kembali ke halaman login (index.html)
-  window.location.href = "index.html";
+  // Memaksa browser pindah ke index.html
+  window.location.replace("./index.html");
 }
 
 // FUNGSI TAMPILKAN PROFIL
