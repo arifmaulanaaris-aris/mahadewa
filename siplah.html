@@ -2,13 +2,13 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Executive Dashboard mahadewa.id</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SIPLah Tertunda - Executive Dashboard mahadewa.id</title>
   
   <!-- Google Font: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <style>
     * { 
@@ -17,168 +17,186 @@
       margin: 0; 
       padding: 0; 
     }
-    body { 
-      background-color: #f8fafc; 
-      color: #1e293b; 
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px; 
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* HEADER */
+    header {
+      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
     }
-    .login-card { 
-      background: #ffffff; 
-      width: 100%; 
-      max-width: 360px; 
-      padding: 32px 24px; 
-      border-radius: 12px; 
-      border: 1px solid #cbd5e1; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-      text-align: center; 
+    .brand-section { display: flex; align-items: center; gap: 8px; }
+    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
+    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
+    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    
+    .header-user { display: flex; align-items: center; gap: 6px; }
+    .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
+    .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+
+    /* LAYOUT & SIDEBAR */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 4px; text-decoration: none;
+      transition: all 0.2s; text-align: left;
     }
-    .login-title { 
-      font-size: 22px; 
-      font-weight: 900; 
-      color: #dc2626; 
-      line-height: 1; 
-    }
-    .login-sub-brand { 
-      font-size: 11px; 
-      font-weight: 700; 
-      color: #64748b; 
-      margin-top: 4px; 
-      margin-bottom: 20px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
-    }
-    .login-input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      border: 1px solid #cbd5e1; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      margin-bottom: 12px; 
-      outline: none; 
-      background: #f8fafc; 
-      transition: all 0.2s;
-    }
-    .login-input:focus { 
-      border-color: #dc2626; 
-      background: #ffffff; 
-    }
-    .btn-login { 
-      width: 100%; 
-      background: #dc2626; 
-      color: white; 
-      border: none; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: 700; 
-      border-radius: 6px; 
-      cursor: pointer; 
-      transition: background 0.2s; 
-    }
-    .btn-login:hover { 
-      background: #b91c1c; 
-    }
-    .btn-login:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    .login-error { 
-      color: #dc2626; 
-      font-size: 11px; 
-      margin-top: 12px; 
-      font-weight: 700; 
-      display: none; 
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #dc2626; color: white; }
+
+    .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
+    .tab-page { display: block; }
+
+    /* KPI CARDS */
+    .top-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .card { background: #ffffff; border-radius: 8px; padding: 14px 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
+    .card.main-card { background: #dc2626; color: white; border: none; }
+    .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card.main-card .card-head { color: #fecaca; }
+    .card-val { font-size: 18px; font-weight: 900; color: #0f172a; line-height: 1.2; margin-top: 2px; }
+    .card.main-card .card-val { color: #ffffff; }
+
+    /* PANELS & TABLES */
+    .sales-grid { display: flex; flex-direction: column; gap: 16px; }
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; overflow: hidden; }
+    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .table-container { overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+    .custom-table tr:hover td { background: #f8fafc; }
+
+    /* BADGES */
+    .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
+    .badge-yellow { background: #fef9c3; color: #a16207; }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
+      .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
+      .top-cards { grid-template-columns: 1fr; gap: 8px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <div class="login-title">mahadewa.id</div>
-    <div class="login-sub-brand">Cab. Palopo</div>
-    
-    <input type="text" id="userInput" class="login-input" placeholder="Username (contoh: arif / wiki)">
-    <input type="password" id="passInput" class="login-input" placeholder="Password" onkeyup="checkEnterKey(event)">
-    
-    <button id="btnLoginBtn" class="btn-login" onclick="performLogin()">Masuk System</button>
-    <div id="loginError" class="login-error">Username / Password Salah!</div>
+  <!-- HEADER -->
+  <header>
+    <div class="brand-section">
+      <div>
+        <span class="brand-name">mahadewa.id</span>
+        <span class="brand-sub">Cab. Palopo</span>
+      </div>
+      <div class="page-title-badge" id="headerPageTitle">SIPLah Tertunda</div>
+    </div>
+    <div class="header-user">
+      <span class="user-name" id="userBadge">Guest</span>
+      <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
+      <button class="btn-badge-red" onclick="showProfile()">Profil</button>
+      <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">🧹 Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">📈 Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">💳 Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item active">📑 SIPLah Tertunda</a>
+    </div>
+
+    <div class="content">
+      <div id="siplah-tertunda" class="tab-page">
+        
+        <!-- TOP KPI CARDS -->
+        <div class="top-cards">
+          <div class="card main-card">
+            <div class="card-top-row"><span class="card-head">Total SIPLah Tertunda</span></div>
+            <div class="card-val" id="sipTotalNilai">Rp 0</div>
+          </div>
+          <div class="card">
+            <div class="card-top-row"><span class="card-head">Total Harga JL MSK</span></div>
+            <div class="card-val" id="sipTotalMsk">Rp 0</div>
+          </div>
+          <div class="card">
+            <div class="card-top-row"><span class="card-head">Total Transaksi / Sekolah</span></div>
+            <div class="card-val" id="sipTotalTrx">0</div>
+          </div>
+        </div>
+
+        <div class="sales-grid">
+          <!-- REKAP PER MARKETING -->
+          <div class="box-panel">
+            <div class="panel-header"><span>Rekap Piutang SIPLah Per Marketing</span></div>
+            <div class="table-container" style="max-height: 240px;">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Marketing</th>
+                    <th>Jml Sekolah</th>
+                    <th>Total Keseluruhan</th>
+                    <th>Harga JL MSK</th>
+                  </tr>
+                </thead>
+                <tbody id="tblSiplahMkt">
+                  <tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- DETAIL SELURUH TRANSAKSI -->
+          <div class="box-panel">
+            <div class="panel-header"><span>Rincian Seluruh Transaksi SIPLah Tertunda</span></div>
+            <div class="table-container" style="max-height: 420px;">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>No. Dok</th>
+                    <th>SO MSK</th>
+                    <th>Harga JL MSK</th>
+                    <th>Nama Sekolah / User</th>
+                    <th>Catatan</th>
+                    <th>Posisi Uang</th>
+                    <th>Marketing</th>
+                  </tr>
+                </thead>
+                <tbody id="tblSiplahDetail">
+                  <tr><td colspan="7" style="text-align:center;">Memuat rincian data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
+  <!-- SCRIPT UTAMA -->
+  <script src="auth.js"></script>
   <script>
-    // ⚠️ GANTI URL DI BAWAH DENGAN URL WEB APP DEPLOYMENT DARI GOOGLE APPS SCRIPT ANDA
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC_FaMmWcqzY4SZSFPA3UL2xwIaqpjRU-RYGKpWmkLyC559qKL2Dnx4dSqSXuKVevgqw/exec";
-
-    // Jika pengguna sudah pernah login sebelumnya, langsung arahkan ke halaman utama
     window.addEventListener("DOMContentLoaded", () => {
-      const savedUser = localStorage.getItem("currentUser");
-      if (savedUser) {
-        redirectBasedOnAccess(JSON.parse(savedUser));
+      const user = checkAuthAndRenderNav();
+      if (user) {
+        fetchStats();
       }
     });
 
-    function checkEnterKey(e) {
-      if (e.key === "Enter") performLogin();
+    function formatRupiah(val) {
+      if (!val && val !== 0) return "Rp 0";
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
     }
 
-    function performLogin() {
-      const u = document.getElementById("userInput").value.trim();
-      const p = document.getElementById("passInput").value.trim();
-
-      if (!u || !p) {
-        alert("Silakan isi Username dan Password!");
-        return;
-      }
-
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Memproses...";
-      btn.disabled = true;
-      document.getElementById("loginError").style.display = "none";
-
-      // Mengirimkan permintaan autentikasi via JSONP ke Apps Script
+    function fetchStats() {
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=onLoginResult&ts=${new Date().getTime()}`;
+      script.src = `${SCRIPT_URL}?callback=renderUI&ts=${new Date().getTime()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
 
-    function onLoginResult(res) {
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Masuk System";
-      btn.disabled = false;
-
-      if (res && res.success) {
-        // Simpan data kredensial & hak akses pengguna ke browser storage
-        localStorage.setItem("currentUser", JSON.stringify(res.user));
-        
-        // Arahkan ke halaman sesuai izin akses dari sheet AKUN
-        redirectBasedOnAccess(res.user);
-      } else {
-        const errDiv = document.getElementById("loginError");
-        errDiv.innerText = (res && res.message) ? res.message : "Username / Password Salah!";
-        errDiv.style.display = "block";
-      }
-    }
-
-    function redirectBasedOnAccess(user) {
-      const a = user.akses || {};
-
-      // Cek prioritas halaman utama yang berhak dibuka pengguna
-      if (a.kebersihan || a.auditKebersihan || a.kpiKebersihan) {
-        window.location.href = "kebersihan.html";
-      } else if (a.penjualan) {
-        window.location.href = "penjualan.html";
-      } else if (a.keuanganMtk || a.keuanganService) {
-        window.location.href = "keuangan.html";
-      } else if (a.siplah) {
-        window.location.href = "siplah.html";
-      } else {
-        alert("Akun Anda terdaftar, tetapi belum memiliki izin akses ke menu manapun. Harap hubungi Admin.");
-        localStorage.removeItem("currentUser");
-      }
-    }
-  </script>
-</body>
-</html>
+    function render
