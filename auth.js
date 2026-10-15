@@ -1,5 +1,5 @@
 // auth.js
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC_FaMmWcqzY4SZSFPA3UL2xwIaqpjRU-RYGKpWmkLyC559qKL2Dnx4dSqSXuKVevgqw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8RW9so1GSE3QVNzO4CTrgl366pHXAd_5umSI-IYOPsTgdgIkvw/exec";
 
 let currentUser = null;
 
