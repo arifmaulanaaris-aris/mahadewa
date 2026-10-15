@@ -93,7 +93,7 @@
       <div class="page-title-badge" id="headerPageTitle">SIPLah Tertunda</div>
     </div>
     <div class="header-user">
-      <span class="user-name" id="userBadge">Guest</span>
+      <span class="user-name" id="userBadge">Memuat...</span>
       <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
       <button class="btn-badge-red" onclick="showProfile()">Profil</button>
       <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
@@ -200,4 +200,52 @@
       document.body.removeChild(script);
     }
 
-    function render
+    function renderUI(data) {
+      if (!data || !data.siplah) return;
+      const sip = data.siplah;
+
+      // 1. TOP CARDS
+      document.getElementById("sipTotalNilai").innerText = formatRupiah(sip.totalKeseluruhan || 0);
+      document.getElementById("sipTotalMsk").innerText = formatRupiah(sip.totalHargaMsk || 0);
+      document.getElementById("sipTotalTrx").innerText = (sip.totalTransaksi || 0) + " Transaksi";
+
+      // 2. REKAP PER MARKETING
+      const tblMkt = document.getElementById("tblSiplahMkt");
+      if (tblMkt) {
+        if (sip.byMarketing && sip.byMarketing.length > 0) {
+          tblMkt.innerHTML = sip.byMarketing.map(m => `
+            <tr>
+              <td><b>${m.marketing}</b></td>
+              <td>${m.jmlSekolah} Sekolah</td>
+              <td><b>${formatRupiah(m.totalNilai)}</b></td>
+              <td>${formatRupiah(m.totalMsk)}</td>
+            </tr>
+          `).join('');
+        } else {
+          tblMkt.innerHTML = `<tr><td colspan="4" style="text-align:center;">Belum ada rekap per marketing.</td></tr>`;
+        }
+      }
+
+      // 3. DETAIL TRANSAKSI
+      const tblDetail = document.getElementById("tblSiplahDetail");
+      if (tblDetail) {
+        if (sip.listDetail && sip.listDetail.length > 0) {
+          tblDetail.innerHTML = sip.listDetail.map(d => `
+            <tr>
+              <td><b>${d.noDok}</b></td>
+              <td>${d.soMsk}</td>
+              <td>${formatRupiah(d.hargaMsk)}</td>
+              <td><b>${d.user}</b></td>
+              <td>${d.catatan}</td>
+              <td><span class="badge-status badge-yellow">${d.posUang}</span></td>
+              <td>${d.marketing}</td>
+            </tr>
+          `).join('');
+        } else {
+          tblDetail.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada rincian data SIPLah tertunda.</td></tr>`;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
