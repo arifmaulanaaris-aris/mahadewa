@@ -3,12 +3,10 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8
 
 let currentUser = null;
 
-// Fungsi untuk memeriksa autentikasi sesi login saat halaman dimuat
 function checkAuthAndRenderNav() {
   const savedUser = localStorage.getItem("currentUser");
   
   if (!savedUser) {
-    // Jika tidak ada data login, paksa kembali ke index.html
     window.location.href = "index.html";
     return null;
   }
@@ -20,11 +18,15 @@ function checkAuthAndRenderNav() {
     window.location.href = "index.html";
     return null;
   }
+
+  // Ambil nama dari berbagai kemungkinan field nama yang dikirim backend
+  const displayName = currentUser.nama || currentUser.NAMA || currentUser.username || currentUser.USER_NAME || "User";
+  const displayRole = currentUser.role || currentUser.ROLE || "STAFF";
   
-  // Tampilkan nama & role di header badge jika elemen tersedia
+  // Tampilkan Nama & Role resmi di header badge
   const userBadge = document.getElementById("userBadge");
   if (userBadge) {
-    userBadge.innerText = `${currentUser.nama} (${currentUser.role})`;
+    userBadge.innerText = `${displayName} (${displayRole})`;
   }
 
   // Atur visibilitas menu sidebar berdasarkan hak akses sheet AKUN
@@ -48,20 +50,19 @@ function setNavVisibility(id, isAllowed) {
   }
 }
 
-// FUNGSI LOGOUT (TOMBOL KELUAR)
 function handleLogout() {
   localStorage.clear();
   sessionStorage.clear();
-  
-  // Memaksa browser pindah ke index.html
-  window.location.replace("./index.html");
+  window.location.href = "index.html";
 }
 
-// FUNGSI TAMPILKAN PROFIL
 function showProfile() {
   if (!currentUser) {
     alert("Belum ada sesi login aktif.");
     return;
   }
-  alert(`=== PROFIL USER ===\n\nNama: ${currentUser.nama}\nUsername: ${currentUser.username}\nRole: ${currentUser.role}`);
+  const displayName = currentUser.nama || currentUser.NAMA || currentUser.username;
+  const displayRole = currentUser.role || currentUser.ROLE || "STAFF";
+  
+  alert(`=== PROFIL USER ===\n\nNama: ${displayName}\nUsername: ${currentUser.username || '-'}\nRole: ${displayRole}`);
 }
