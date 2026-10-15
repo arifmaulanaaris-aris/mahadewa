@@ -1,1 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Akun - Executive Dashboard mahadewa.id</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
+  <style>
+    * { box-sizing: border-box; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header {
+      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    }
+    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; }
+    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; }
+    
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px;
+    }
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #dc2626; color: white; }
+
+    .content { flex: 1; padding: 20px 24px; }
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+    .panel-header { font-size: 14px; font-weight: 900; color: #334155; margin-bottom: 16px; text-transform: uppercase; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; }
+    .form-control:focus { border-color: #dc2626; }
+
+    .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; }
+
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 12px; }
+    .btn-submit:hover { background: #b91c1c; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <span class="brand-name">mahadewa.id</span>
+      <span class="brand-sub">Cab. Palopo</span>
+    </div>
+    <div>
+      <span id="userBadge" style="font-size: 12px; font-weight: 700; margin-right: 12px;">Memuat...</span>
+      <button onclick="handleLogout()" style="padding: 5px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 11px; font-weight: 700;">Keluar</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">🧹 Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">📈 Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">💳 Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
+      <a id="nav-admin-users" href="admin_users.html" class="menu-item active">👤 Kelola Akun & Akses</a>
+    </div>
+
+    <div class="content">
+      <div class="box-panel">
+        <div class="panel-header">➕ Buat Akun Pengguna Baru</div>
+        
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Username (ID Login)</label>
+            <input type="text" id="newUsername" class="form-control" placeholder="Contoh: BONTING">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="newPassword" class="form-control" placeholder="Password akun">
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" id="newNama" class="form-control" placeholder="Nama Lengkap Staf">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kategori Devisi</label>
+            <select id="newDevisi" class="form-control">
+              <option value="TEKNISI">🔧 TEKNISI</option>
+              <option value="KASIR">💳 KASIR</option>
+              <option value="ADMIN 01">💻 ADMIN 01</option>
+              <option value="ADMIN 02">💻 ADMIN 02</option>
+              <option value="MARKETING 01">📢 MARKETING 01</option>
+              <option value="MARKETING 02">📢 MARKETING 02</option>
+              <option value="MARKETING 03">📢 MARKETING 03</option>
+              <option value="GUDANG">📦 GUDANG</option>
+              <option value="PROMOTOR HP">📱 PROMOTOR HP</option>
+              <option value="PROMOTOR INFINIX">📱 PROMOTOR INFINIX</option>
+              <option value="PROMOTOR PEMBIAYAAN">🤝 PROMOTOR PEMBIAYAAN</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Role Akses</label>
+            <select id="newRole" class="form-control">
+              <option value="STAFF">STAFF (Terbatas)</option>
+              <option value="ADMIN">ADMIN (Akses Penuh)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="panel-header" style="margin-top: 16px; font-size: 12px;">Pilih Hak Akses Halaman/Menu:</div>
+        <div class="grid-3">
+          <label class="checkbox-group"><input type="checkbox" id="chkPenjualan" checked> Menu Penjualan</label>
+          <label class="checkbox-group"><input type="checkbox" id="chkKeuanganMtk"> Menu Keuangan MTK</label>
+          <label class="checkbox-group"><input type="checkbox" id="chkKeuanganService"> Menu Keuangan Service</label>
+          <label class="checkbox-group"><input type="checkbox" id="chkSiplah"> Menu SIPLah Tertunda</label>
+          <label class="checkbox-group"><input type="checkbox" id="chkKebersihan" checked> Menu Kebersihan Toko</label>
+          <label class="checkbox-group"><input type="checkbox" id="chkKpiKebersihan" checked> Dashboard KPI Kebersihan</label>
+          <label class="checkbox-group"><input type="checkbox" id="chkAuditKebersihan"> Menu Audit Kebersihan</label>
+        </div>
+
+        <button id="btnSimpanAkun" class="btn-submit" onclick="submitAkunBaru()">Simpan Akun Baru ke Spreadsheet</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const user = checkAuthAndRenderNav();
+      if (user && (user.role || "").toUpperCase() !== "ADMIN") {
+        alert("Akses Ditolak! Halaman ini khusus untuk ADMIN.");
+        window.location.href = "kebersihan.html";
+      }
+    });
+
+    async function submitAkunBaru() {
+      const username = document.getElementById("newUsername").value.trim();
+      const password = document.getElementById("newPassword").value.trim();
+      const nama = document.getElementById("newNama").value.trim();
+      const devisi = document.getElementById("newDevisi").value;
+      const role = document.getElementById("newRole").value;
+
+      if (!username || !password || !nama) {
+        alert("Harap isi Username, Password, dan Nama Lengkap!");
+        return;
+      }
+
+      const btn = document.getElementById("btnSimpanAkun");
+      btn.innerText = "Memproses Pengiriman...";
+      btn.disabled = true;
+
+      const payload = {
+        action: "simpanAkunBaru",
+        username: username,
+        password: password,
+        nama: nama,
+        devisi: devisi,
+        role: role,
+        akses: {
+          penjualan: document.getElementById("chkPenjualan").checked,
+          keuanganMtk: document.getElementById("chkKeuanganMtk").checked,
+          keuanganService: document.getElementById("chkKeuanganService").checked,
+          siplah: document.getElementById("chkSiplah").checked,
+          kebersihan: document.getElementById("chkKebersihan").checked,
+          kpiKebersihan: document.getElementById("chkKpiKebersihan").checked,
+          auditKebersihan: document.getElementById("chkAuditKebersihan").checked
+        }
+      };
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        btn.innerText = "Simpan Akun Baru ke Spreadsheet";
+        btn.disabled = false;
+
+        if (result.success) {
+          alert("Selamat! Akun baru berhasil ditambahkan ke sheet AKUN.");
+          document.getElementById("newUsername").value = "";
+          document.getElementById("newPassword").value = "";
+          document.getElementById("newNama").value = "";
+        } else {
+          alert("Gagal: " + result.message);
+        }
+      } catch (e) {
+        btn.innerText = "Simpan Akun Baru ke Spreadsheet";
+        btn.disabled = false;
+        alert("Terjadi kesalahan koneksi saat menyimpan akun.");
+      }
+    }
+  </script>
+</body>
+</html>
