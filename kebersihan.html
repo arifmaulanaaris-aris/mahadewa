@@ -293,17 +293,17 @@
         </div>
       </div>
 
-      <!-- TAB 4: KELOLA DIVISI AKUN (KHUSUS ADMIN) -->
+      <!-- TAB 4: KELOLA DIVISI AKUN (PERMANEN CLOUD SPREADSHEET) -->
       <div id="kelola-divisi" class="tab-content">
         <div class="box-panel">
-          <div class="panel-header"><span>Atur Divisi Kebersihan Akun Staf</span></div>
+          <div class="panel-header"><span>Atur Divisi Kebersihan Akun Staf (Tersimpan Permanen di Cloud)</span></div>
           <p style="font-size: 12px; color: #64748b; margin-bottom: 16px;">
-            Pilih nama user dan tentukan divisinya. Saat user tersebut login, divisi area kebersihannya akan otomatis disesuaikan.
+            Pilih nama user dan tentukan divisinya. Data ini tersimpan di Google Sheets (`MAP_DIVISI`) dan tidak akan terhapus saat logout.
           </p>
           <div class="grid-2">
             <div class="form-group">
               <label class="form-label">Nama / Username Staf</label>
-              <input type="text" id="targetUsername" class="form-control" placeholder="Ketik Username (contoh: WIKI)">
+              <input type="text" id="targetUsername" class="form-control" placeholder="Ketik Username (contoh: NURAFIAT S.M)">
             </div>
             <div class="form-group">
               <label class="form-label">Tetapkan Divisi Area</label>
@@ -322,7 +322,7 @@
               </select>
             </div>
           </div>
-          <button class="btn-submit" onclick="simpanPembagianDivisi()">Simpan Pengaturan Divisi Akun</button>
+          <button id="btnSimpanMapDivisi" class="btn-submit" onclick="simpanPembagianDivisi()">Simpan Pengaturan Divisi Akun</button>
         </div>
 
         <div class="box-panel">
@@ -337,7 +337,7 @@
                 </tr>
               </thead>
               <tbody id="tblDaftarDivisiAkun">
-                <!-- Diisi via JS -->
+                <tr><td colspan="3" style="text-align:center;">Memuat data pembagian divisi...</td></tr>
               </tbody>
             </table>
           </div>
@@ -350,21 +350,17 @@
   <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
+    let cloudDivisiMap = {}; // Menampung data mapping divisi dari sheet MAP_DIVISI
+    let globalAreaMap = {};  // Menampung data mapping area dari sheet AREA_KEBERSIHAN
+
     window.addEventListener("DOMContentLoaded", () => {
       // 1. Periksa sesi autentikasi dan render navigasi
       const user = checkAuthAndRenderNav();
       if (user) {
         applyRoleRestrictions(user);
-        renderDaftarDivisiWeb();
         fetchStats();
       }
     });
-
-    // Ambil database pembagian divisi dari Web Storage
-    function getStoredDivisiMap() {
-      const saved = localStorage.getItem("webAccountDivisiMap");
-      return saved ? JSON.parse(saved) : {};
-    }
 
     // Terapkan pembagian divisi ke dropdown berdasarkan user login
     function applyRoleRestrictions(user) {
@@ -375,10 +371,9 @@
       const userRole = (user.role || "").toUpperCase();
       const uName = (user.username || user.nama || "").toUpperCase();
 
-      // Cek apakah user ini punya pembagian divisi khusus dari Web Admin
-      const map = getStoredDivisiMap();
-      if (map[uName]) {
-        selectDivisi.value = map[uName];
+      // Cek apakah user ini punya pembagian divisi di Cloud Sheet
+      if (cloudDivisiMap[uName]) {
+        selectDivisi.value = cloudDivisiMap[uName];
       }
 
       // Kunci dropdown divisi jika role adalah STAFF
@@ -388,14 +383,14 @@
         if (btnKelola) btnKelola.style.display = "none";
       } else {
         selectDivisi.disabled = false;
-        if (btnKelola) btnKelola.style.display = "block"; // Buka tab kelola untuk Admin
+        if (btnKelola) btnKelola.style.display = "block"; // Tampilkan tab Kelola Divisi untuk ADMIN
       }
 
       updateAreaList();
     }
 
-    // Fungsi Admin menyimpan pembagian divisi akun via website
-    function simpanPembagianDivisi() {
+    // Fungsi Admin menyimpan pembagian divisi akun ke Cloud Sheet (MAP_DIVISI)
+    async function simpanPembagianDivisi() {
       const targetUser = document.getElementById("targetUsername").value.trim().toUpperCase();
       const targetDiv = document.getElementById("targetDivisiSelect").value;
 
@@ -404,27 +399,63 @@
         return;
       }
 
-      const map = getStoredDivisiMap();
-      map[targetUser] = targetDiv;
-      localStorage.setItem("webAccountDivisiMap", JSON.stringify(map));
+      const btn = document.getElementById("btnSimpanMapDivisi");
+      btn.innerText = "Menyimpan ke Cloud...";
+      btn.disabled = true;
 
-      alert(`Berhasil! Akun '${targetUser}' sekarang ditetapkan ke divisi '${targetDiv}'.`);
-      document.getElementById("targetUsername").value = "";
-      
-      renderDaftarDivisiWeb();
+      try {
+        const payload = {
+          action: "simpanMapDivisi",
+          username: targetUser,
+          divisi: targetDiv,
+          isDelete: false
+        };
 
-      // Jika user yang diubah adalah user yang sedang login sekarang, langsung perbarui tampilannya
-      if (currentUser && (currentUser.username || "").toUpperCase() === targetUser) {
-        applyRoleRestrictions(currentUser);
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        btn.innerText = "Simpan Pengaturan Divisi Akun";
+        btn.disabled = false;
+
+        if (result.success) {
+          alert(`Berhasil! Pembagian divisi '${targetDiv}' untuk '${targetUser}' tersimpan permanen.`);
+          document.getElementById("targetUsername").value = "";
+          fetchStats(); // Refresh data dari spreadsheet
+        } else {
+          alert("Gagal menyimpan ke server.");
+        }
+      } catch (e) {
+        btn.innerText = "Simpan Pengaturan Divisi Akun";
+        btn.disabled = false;
+        alert("Terjadi kesalahan pengiriman data ke server.");
       }
     }
 
-    function hapusDivisiAkun(uname) {
+    async function hapusDivisiAkun(uname) {
       if (confirm(`Hapus aturan divisi untuk akun ${uname}?`)) {
-        const map = getStoredDivisiMap();
-        delete map[uname];
-        localStorage.setItem("webAccountDivisiMap", JSON.stringify(map));
-        renderDaftarDivisiWeb();
+        try {
+          const payload = {
+            action: "simpanMapDivisi",
+            username: uname,
+            isDelete: true
+          };
+
+          const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+
+          if (result.success) {
+            alert(`Aturan divisi untuk '${uname}' berhasil dihapus.`);
+            fetchStats();
+          }
+        } catch (e) {
+          alert("Gagal menghapus data.");
+        }
       }
     }
 
@@ -432,8 +463,7 @@
       const tbl = document.getElementById("tblDaftarDivisiAkun");
       if (!tbl) return;
 
-      const map = getStoredDivisiMap();
-      const keys = Object.keys(map);
+      const keys = Object.keys(cloudDivisiMap);
 
       if (keys.length === 0) {
         tbl.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada akun yang dikategorikan.</td></tr>`;
@@ -443,7 +473,7 @@
       tbl.innerHTML = keys.map(k => `
         <tr>
           <td><b>${k}</b></td>
-          <td><span class="badge-status badge-green">${map[k]}</span></td>
+          <td><span class="badge-status badge-green">${cloudDivisiMap[k]}</span></td>
           <td><button class="btn-badge-red" onclick="hapusDivisiAkun('${k}')">Hapus</button></td>
         </tr>
       `).join('');
@@ -465,19 +495,24 @@
       const div = divSelect.value.trim().toUpperCase();
       areaSelect.innerHTML = "";
 
-      let options = [];
-      if (div === "TEKNISI") {
-        options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
-      } else if (div === "KASIR") {
-        options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
-      } else if (div.startsWith("ADMIN")) {
-        options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
-      } else if (div.startsWith("MARKETING") || div.startsWith("PROMOTOR")) {
-        options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
-      } else if (div === "GUDANG") {
-        options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
-      } else {
-        options = ["Area Kerja General", "Lantai Utama"];
+      // Ambil area dari sheet AREA_KEBERSIHAN jika ada
+      let options = globalAreaMap[div] || [];
+
+      // Fallback area bawaan jika sheet AREA_KEBERSIHAN belum diisi
+      if (options.length === 0) {
+        if (div === "TEKNISI") {
+          options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
+        } else if (div === "KASIR") {
+          options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Kasir"];
+        } else if (div.startsWith("ADMIN")) {
+          options = ["Meja Kerja Admin", "Komputer & Printer Admin", "Arsip Dokumen", "Lantai Admin"];
+        } else if (div.startsWith("MARKETING") || div.startsWith("PROMOTOR")) {
+          options = ["Area Display Laptop / HP", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
+        } else if (div === "GUDANG") {
+          options = ["Rak Stok Barang", "Area Unboxing / Packing", "Lantai Gudang"];
+        } else {
+          options = ["Area Kerja General", "Lantai Utama"];
+        }
       }
 
       options.forEach(opt => {
@@ -496,11 +531,24 @@
     }
 
     function renderUI(data) {
-      if (!data || !data.kebersihan) return;
+      if (!data) return;
 
+      // 1. Update data map divisi & area dari Google Sheets
+      if (data.mapDivisi) {
+        cloudDivisiMap = data.mapDivisi;
+        renderDaftarDivisiWeb();
+        if (currentUser) applyRoleRestrictions(currentUser);
+      }
+
+      if (data.areaKebersihanMap) {
+        globalAreaMap = data.areaKebersihanMap;
+        updateAreaList();
+      }
+
+      if (!data.kebersihan) return;
       const keb = data.kebersihan;
 
-      // 1. Render Tabel Riwayat Kebersihan
+      // 2. Render Tabel Riwayat Kebersihan
       const tblK = document.getElementById("tblRiwayatKebersihan");
       if (tblK) {
         if (keb.riwayat && keb.riwayat.length > 0) {
@@ -522,7 +570,7 @@
         }
       }
 
-      // 2. Render Tabel Log Audit
+      // 3. Render Tabel Log Audit
       const tblA = document.getElementById("tblLogAudit");
       if (tblA) {
         if (keb.audit && keb.audit.length > 0) {
@@ -542,7 +590,7 @@
         }
       }
 
-      // 3. Render KPI Summary
+      // 4. Render KPI Summary
       if (data.kpiKebersihan && data.kpiKebersihan.summary) {
         const sum = data.kpiKebersihan.summary;
         const totalLaporanEl = document.getElementById("kpiTotalLaporan");
