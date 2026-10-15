@@ -46,58 +46,50 @@
     .menu-item.active { background: #dc2626; color: white; }
 
     .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
-    .tab-page { display: none; }
-    .tab-page.active { display: block; }
 
-    /* TAB NAV DALAM MODUL */
-    .sub-tab-nav { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
-    .sub-tab-btn {
-      padding: 8px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc;
-      font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; transition: all 0.2s;
+    /* SUB NAV TABS */
+    .sub-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+    .tab-btn {
+      padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #64748b;
+      background: #f1f5f9; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s;
     }
-    .sub-tab-btn.active { background: #dc2626; color: white; border-color: #dc2626; }
+    .tab-btn.active { background: #dc2626; color: white; border-color: #dc2626; }
 
-    /* CARDS & PANELS */
-    .top-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px; }
-    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
-    .card.main-card { background: #dc2626; color: white; border: none; }
-    .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
-    .card.main-card .card-head { color: #fecaca; }
-    .card-val { font-size: 17px; font-weight: 900; color: #0f172a; margin-top: 2px; }
-    .card.main-card .card-val { color: #ffffff; }
-    .card-avg { font-size: 10px; font-weight: 500; color: #64748b; margin-top: 6px; padding-top: 4px; border-top: 1px dashed #f1f5f9; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
+    /* PANELS & TABLES */
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; }
+    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* TABEL & FORMS */
-    .table-container { max-height: 320px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
-    .custom-table { width: 100%; border-collapse: collapse; min-width: 500px; }
-    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
-    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
-
-    .area-card { background: #ffffff; border-radius: 10px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-    .area-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
-    .cam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .cam-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px; text-align: center; }
-    .btn-cam { background: #dc2626; color: white; border: none; padding: 8px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
-    .preview-img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-top: 8px; display: none; }
+    .alert-banner { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 12px 16px; border-radius: 8px; font-size: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
 
     .form-group { margin-bottom: 12px; }
-    .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
-    .form-control { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none; background: #fff; }
-    .btn-area-submit { width: 100%; background: #dc2626; color: white; border: none; padding: 10px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; margin-top: 12px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #ffffff; }
+    .form-control:focus { border-color: #dc2626; }
 
-    .area-status-badge { margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; text-align: center; display: none; }
-    .status-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .status-warning { background: #fef9c3; color: #a16207; border: 1px solid #fef08a; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .table-container { overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+    .custom-table tr:hover td { background: #f8fafc; }
+
+    /* BADGES */
+    .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-red { background: #fef2f2; color: #991b1b; }
+
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 10px 16px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 8px; }
+    .btn-submit:hover { background: #b91c1c; }
 
     @media (max-width: 768px) {
       .container { flex-direction: column; }
       .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
       .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
-      .top-cards { grid-template-columns: repeat(2, 1fr); }
-      .cam-grid { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -113,7 +105,7 @@
       <div class="page-title-badge" id="headerPageTitle">Kebersihan Toko</div>
     </div>
     <div class="header-user">
-      <span class="user-name" id="userBadge">Guest</span>
+      <span class="user-name" id="userBadge">Memuat...</span>
       <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
       <button class="btn-badge-red" onclick="showProfile()">Profil</button>
       <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
@@ -130,52 +122,72 @@
     </div>
 
     <div class="content">
-      
-      <!-- SUB TAB NAVIGASI MODUL KEBERSIHAN -->
-      <div class="sub-tab-nav">
-        <button id="subBtn-tugas" class="sub-tab-btn active" onclick="switchKebersihanSubTab('tugas')">📋 Tugas Kebersihan Staf</button>
-        <button id="subBtn-audit" class="sub-tab-btn" onclick="switchKebersihanSubTab('audit')">🔍 Audit Kebersihan Toko</button>
-        <button id="subBtn-kpi" class="sub-tab-btn" onclick="switchKebersihanSubTab('kpi')">📊 Progres & KPI Staf</button>
+      <!-- SUB NAVIGATION TABS -->
+      <div class="sub-tabs">
+        <button id="nav-tugas-tab" class="tab-btn active" onclick="switchSubTab('tugas-staf', this)">📋 Tugas Kebersihan Staf</button>
+        <button id="nav-audit-kebersihan" class="tab-btn" onclick="switchSubTab('audit-toko', this)">🔍 Audit Kebersihan Toko</button>
+        <button id="nav-kpi-kebersihan" class="tab-btn" onclick="switchSubTab('kpi-staf', this)">📊 Progres & KPI Staf</button>
       </div>
 
-      <!-- TAB 1: FORM KEBERSIHAN HARIAN -->
-      <div id="subTab-tugas" class="tab-page active">
-        <div style="background:#fef2f2; border:1px solid #fecaca; padding:12px; border-radius:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <!-- TAB 1: TUGAS KEBERSIHAN STAF -->
+      <div id="tugas-staf" class="tab-content active">
+        <div class="alert-banner">
           <div>
-            <h3 style="font-size:14px; color:#dc2626;">Laporan Kebersihan Harian Staf</h3>
-            <p style="font-size:11px; color:#7f1d1d; margin-top:2px;">Area disesuaikan dengan divisi Anda. Pengiriman tanpa foto lengkap dikenakan denda Rp 15.000 per area.</p>
+            <b>Laporan Kebersihan Harian Staf</b><br>
+            <span style="font-size: 11px;">Area disesuaikan dengan divisi Anda. Pengiriman tanpa foto lengkap dikenakan denda Rp 15.000 per area.</span>
           </div>
-          
-          <div style="display:flex; align-items:center; gap:8px;">
-            <label style="font-size:12px; font-weight:bold; color:#dc2626;">Divisi Area:</label>
-            <select id="selDivisiArea" onchange="changeDivisiArea(this.value)" style="padding: 6px 10px; border-radius: 6px; border: 1px solid #dc2626; font-size: 12px; font-weight: bold; background: white; color: #dc2626; outline: none; cursor: pointer;">
-              <option value="TEKNISI">🔧 Teknisi / Service</option>
-              <option value="KASIR">💳 Kasir</option>
-              <option value="ADMIN 01">💻 Admin 01</option>
-              <option value="ADMIN 02">💻 Admin 02</option>
-              <option value="MARKETING 01">📢 Marketing 01</option>
-              <option value="MARKETING 02">📢 Marketing 02</option>
-              <option value="MARKETING 03">📢 Marketing 03</option>
-              <option value="GUDANG">📦 Gudang / Logistik</option>
-              <option value="Promotor Pembiayaan">🤝 Promotor Pembiayaan</option>
-              <option value="Promotor HP">📱 Promotor HP</option>
-              <option value="Promotor INFINIX">📱 Promotor INFINIX</option>
+          <div>
+            <span class="form-label" style="color: #991b1b; margin-bottom: 2px;">Divisi Area:</span>
+            <select id="selectDivisiArea" class="form-control" style="width: auto; padding: 4px 8px;" onchange="updateAreaList()">
+              <option value="Teknisi">🛠️ Teknisi / Service</option>
+              <option value="Admin">💻 Admin / Kasir</option>
+              <option value="Marketing">📢 Marketing / Sales</option>
             </select>
           </div>
         </div>
 
-        <div id="areaCardsContainer">
-          <!-- Area Cards di-generate otomatis oleh JS -->
+        <!-- FORM UPLOAD FOTO KEBERSIHAN -->
+        <div class="box-panel">
+          <div class="panel-header"><span>Form Kirim Laporan Kebersihan</span></div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Pilih Area Kerja</label>
+              <select id="inputNamaArea" class="form-control">
+                <option value="Meja Service Teknisi">Meja Service Teknisi</option>
+                <option value="Rak Sparepart">Rak Sparepart</option>
+                <option value="Lantai Area Service">Lantai Area Service</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status Kebersihan</label>
+              <select id="inputStatusKebersihan" class="form-control">
+                <option value="Selesai">Selesai Dibersihkan</option>
+                <option value="Proses">Sedang Proses</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Foto Before (Sebelum)</label>
+              <input type="file" id="fileBefore" class="form-control" accept="image/*">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Foto After (Sesudah)</label>
+              <input type="file" id="fileAfter" class="form-control" accept="image/*">
+            </div>
+          </div>
+          <button id="btnSubmitLaporan" class="btn-submit" onclick="submitLaporanKebersihan()">Kirim Laporan Foto</button>
         </div>
 
+        <!-- RIWAYAT KEBERSIHAN STAF -->
         <div class="box-panel">
           <div class="panel-header"><span>Riwayat Kebersihan Staf</span></div>
-          <div class="table-container">
+          <div class="table-container" style="max-height: 350px;">
             <table class="custom-table">
               <thead>
                 <tr>
                   <th>Tanggal & Jam</th>
-                  <th>Nama Staff</th>
+                  <th>Nama Staf</th>
                   <th>Nama Area</th>
                   <th>Foto Before / After</th>
                   <th>Status</th>
@@ -190,12 +202,305 @@
         </div>
       </div>
 
-      <!-- TAB 2: AUDIT KEBERSIHAN -->
-      <div id="subTab-audit" class="tab-page">
-        <div class="box-panel" style="border-top:4px solid #dc2626;">
-          <div class="panel-header"><span>📋 Form Audit Kebersihan Toko</span></div>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+      <!-- TAB 2: AUDIT KEBERSIHAN TOKO -->
+      <div id="audit-toko" class="tab-content">
+        <div class="box-panel">
+          <div class="panel-header"><span>Form Audit Kebersihan (Supervisor / Auditor)</span></div>
+          <div class="grid-2">
             <div class="form-group">
-              <label class="form-label">Nama Auditor / Pengawas</label>
-              <input type="text" id="auditAuditorName" class
+              <label class="form-label">Staf Target Audit</label>
+              <input type="text" id="auditStafTarget" class="form-control" placeholder="Nama Staf yang diaudit">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Divisi Target</label>
+              <select id="auditDivisiTarget" class="form-control">
+                <option value="Teknisi">Teknisi</option>
+                <option value="Admin">Admin</option>
+                <option value="Marketing">Marketing</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Area Target</label>
+              <input type="text" id="auditAreaTarget" class="form-control" placeholder="Contoh: Meja Kasir / Rak Display">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hasil Audit</label>
+              <select id="auditStatusResult" class="form-control">
+                <option value="BERSIH">✅ BERSIH (Lolos Audit)</option>
+                <option value="KOTOR">❌ KOTOR (Dena Rp 15.000)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Catatan Audit / Temuan</label>
+            <input type="text" id="auditCatatan" class="form-control" placeholder="Berikan catatan jika ada area yang kotor...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Foto Bukti Audit</label>
+            <input type="file" id="auditFileFoto" class="form-control" accept="image/*">
+          </div>
+          <button id="btnSubmitAudit" class="btn-submit" onclick="submitAuditKebersihan()">Kirim Hasil Audit</button>
+        </div>
+
+        <div class="box-panel">
+          <div class="panel-header"><span>Log Temuan Audit</span></div>
+          <div class="table-container" style="max-height: 300px;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Waktu</th>
+                  <th>Auditor</th>
+                  <th>Staf Target</th>
+                  <th>Area</th>
+                  <th>Status</th>
+                  <th>Catatan</th>
+                  <th>Foto</th>
+                </tr>
+              </thead>
+              <tbody id="tblLogAudit">
+                <tr><td colspan="7" style="text-align:center;">Memuat data audit...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: PROGRES & KPI STAF -->
+      <div id="kpi-staf" class="tab-content">
+        <div class="box-panel">
+          <div class="panel-header"><span>Ringkasan Performance Kebersihan Toko</span></div>
+          <p style="font-size: 13px; color: #475569; margin-bottom: 12px;">Monitoring kepatuhan kebersihan seluruh divisi staf cabang Palopo.</p>
+          <div class="grid-2">
+            <div style="background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center;">
+              <div style="font-size: 11px; font-weight: 700; color: #64748b;">TOTAL LAPORAN MASUK</div>
+              <div id="kpiTotalLaporan" style="font-size: 24px; font-weight: 900; color: #0f172a; margin-top: 4px;">0</div>
+            </div>
+            <div style="background: #fef2f2; padding: 16px; border-radius: 8px; border: 1px solid #fecaca; text-align: center;">
+              <div style="font-size: 11px; font-weight: 700; color: #991b1b;">ESTIMASI TOTAL DENDA</div>
+              <div id="kpiTotalDenda" style="font-size: 24px; font-weight: 900; color: #dc2626; margin-top: 4px;">Rp 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT UTAMA -->
+  <script src="auth.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      // 1. Periksa sesi autentikasi dan atur nav
+      const user = checkAuthAndRenderNav();
+      if (user) {
+        fetchStats();
+      }
+    });
+
+    function switchSubTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function updateAreaList() {
+      const div = document.getElementById("selectDivisiArea").value;
+      const areaSelect = document.getElementById("inputNamaArea");
+      areaSelect.innerHTML = "";
+
+      let options = [];
+      if (div === "Teknisi") {
+        options = ["Meja Service Teknisi", "Rak Sparepart", "Lantai Area Service", "Peralatan Solder & Tool"];
+      } else if (div === "Admin") {
+        options = ["Meja Kasir Utama", "Komputer & Printer Kasir", "Area Etalase Depan", "Lantai Admin"];
+      } else {
+        options = ["Area Display Laptop", "Meja Guest Marketing", "Brosur & Price Tag", "Lantai Showroom"];
+      }
+
+      options.forEach(opt => {
+        const el = document.createElement("option");
+        el.value = opt;
+        el.innerText = opt;
+        areaSelect.appendChild(el);
+      });
+    }
+
+    function fetchStats() {
+      const script = document.createElement('script');
+      script.src = `${SCRIPT_URL}?callback=renderUI&ts=${new Date().getTime()}`;
+      document.body.appendChild(script);
+      document.body.removeChild(script);
+    }
+
+    function renderUI(data) {
+      if (!data || !data.kebersihan) return;
+
+      const keb = data.kebersihan;
+
+      // 1. Render Tabel Riwayat Kebersihan
+      const tblK = document.getElementById("tblRiwayatKebersihan");
+      if (keb.riwayat && keb.riwayat.length > 0) {
+        tblK.innerHTML = keb.riwayat.map(r => `
+          <tr>
+            <td>${r.tgl ? new Date(r.tgl).toLocaleString('id-ID') : '-'}</td>
+            <td><b>${r.nama}</b></td>
+            <td>${r.area}</td>
+            <td>
+              ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#dc2626; font-weight:bold;">Before</a>` : '-'} | 
+              ${r.urlAfter ? `<a href="${r.urlAfter}" target="_blank" style="color:#166534; font-weight:bold;">After</a>` : '-'}
+            </td>
+            <td><span class="badge-status ${r.status === 'LENGKAP' ? 'badge-green' : 'badge-red'}">${r.status}</span></td>
+            <td><b>${r.denda ? 'Rp ' + r.denda.toLocaleString('id-ID') : 'Rp 0'}</b></td>
+          </tr>
+        `).join('');
+      } else {
+        tblK.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada riwayat kebersihan.</td></tr>`;
+      }
+
+      // 2. Render Tabel Log Audit
+      const tblA = document.getElementById("tblLogAudit");
+      if (keb.audit && keb.audit.length > 0) {
+        tblA.innerHTML = keb.audit.map(a => `
+          <tr>
+            <td>${a.waktu ? new Date(a.waktu).toLocaleString('id-ID') : '-'}</td>
+            <td><b>${a.auditor}</b></td>
+            <td>${a.stafTarget}</td>
+            <td>${a.areaTarget}</td>
+            <td><span class="badge-status ${a.status === 'BERSIH' ? 'badge-green' : 'badge-red'}">${a.status}</span></td>
+            <td>${a.catatan || '-'}</td>
+            <td>${a.urlFoto ? `<a href="${a.urlFoto}" target="_blank" style="color:#dc2626;">Lihat Foto</a>` : '-'}</td>
+          </tr>
+        `).join('');
+      } else {
+        tblA.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada temuan audit.</td></tr>`;
+      }
+
+      // 3. Render KPI Summary
+      if (data.kpiKebersihan && data.kpiKebersihan.summary) {
+        const sum = data.kpiKebersihan.summary;
+        document.getElementById("kpiTotalLaporan").innerText = sum.totalLaporan || 0;
+        document.getElementById("kpiTotalDenda").innerText = "Rp " + (sum.totalDendaToko || 0).toLocaleString('id-ID');
+      }
+    }
+
+    // Helper Konversi File ke Base64
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    async function submitLaporanKebersihan() {
+      if (!currentUser) {
+        alert("Sesi login Anda tidak valid. Silakan login ulang.");
+        return;
+      }
+
+      const fileB = document.getElementById("fileBefore").files[0];
+      const fileA = document.getElementById("fileAfter").files[0];
+
+      const btn = document.getElementById("btnSubmitLaporan");
+      btn.innerText = "Mengirim...";
+      btn.disabled = true;
+
+      try {
+        const base64Before = fileB ? await toBase64(fileB) : "";
+        const base64After = fileA ? await toBase64(fileA) : "";
+
+        const payload = {
+          action: "simpanKebersihanArea",
+          namaStaf: currentUser.nama || currentUser.username,
+          namaArea: document.getElementById("inputNamaArea").value,
+          base64Before: base64Before,
+          base64After: base64After
+        };
+
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        btn.innerText = "Kirim Laporan Foto";
+        btn.disabled = false;
+
+        if (result.success) {
+          alert("Laporan kebersihan berhasil dikirim!");
+          document.getElementById("fileBefore").value = "";
+          document.getElementById("fileAfter").value = "";
+          fetchStats();
+        } else {
+          alert("Gagal mengirim laporan: " + (result.message || "Error server"));
+        }
+      } catch (err) {
+        btn.innerText = "Kirim Laporan Foto";
+        btn.disabled = false;
+        alert("Terjadi kesalahan saat mengunggah foto. Pastikan koneksi internet stabil.");
+      }
+    }
+
+    async function submitAuditKebersihan() {
+      if (!currentUser) {
+        alert("Sesi login Anda tidak valid.");
+        return;
+      }
+
+      const stafTarget = document.getElementById("auditStafTarget").value.trim();
+      if (!stafTarget) {
+        alert("Silakan isi nama staf target yang diaudit!");
+        return;
+      }
+
+      const fileFoto = document.getElementById("auditFileFoto").files[0];
+      const btn = document.getElementById("btnSubmitAudit");
+      btn.innerText = "Mengirim...";
+      btn.disabled = true;
+
+      try {
+        const base64Foto = fileFoto ? await toBase64(fileFoto) : "";
+
+        const payload = {
+          action: "simpanAuditKebersihan",
+          auditor: currentUser.nama || currentUser.username,
+          stafTarget: stafTarget,
+          divisiTarget: document.getElementById("auditDivisiTarget").value,
+          areaTarget: document.getElementById("auditAreaTarget").value,
+          statusAudit: document.getElementById("auditStatusResult").value,
+          catatan: document.getElementById("auditCatatan").value,
+          base64Foto: base64Foto
+        };
+
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        btn.innerText = "Kirim Hasil Audit";
+        btn.disabled = false;
+
+        if (result.success) {
+          alert("Hasil audit kebersihan berhasil disimpan!");
+          document.getElementById("auditStafTarget").value = "";
+          document.getElementById("auditCatatan").value = "";
+          document.getElementById("auditFileFoto").value = "";
+          fetchStats();
+        } else {
+          alert("Gagal menyimpan audit.");
+        }
+      } catch (err) {
+        btn.innerText = "Kirim Hasil Audit";
+        btn.disabled = false;
+        alert("Terjadi kesalahan pengiriman audit.");
+      }
+    }
+  </script>
+</body>
+</html>
