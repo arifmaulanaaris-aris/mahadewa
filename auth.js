@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6v_S4Gk66BspLzR1K5hC-Sg0eF2N9349884705342111/exec"; // Sesuaikan URL Apps Script Anda
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8RW9so1GSE3QVNzO4CTrgl366pHXAd_5umSI-IYOPsTgdgIkvw/exec"; // Sesuaikan URL Apps Script Anda
 
 let currentUser = null;
 
