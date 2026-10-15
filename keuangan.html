@@ -2,13 +2,13 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Executive Dashboard mahadewa.id</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Keuangan - Executive Dashboard mahadewa.id</title>
   
   <!-- Google Font: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <style>
     * { 
@@ -17,167 +17,299 @@
       margin: 0; 
       padding: 0; 
     }
-    body { 
-      background-color: #f8fafc; 
-      color: #1e293b; 
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px; 
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* HEADER */
+    header {
+      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
     }
-    .login-card { 
-      background: #ffffff; 
-      width: 100%; 
-      max-width: 360px; 
-      padding: 32px 24px; 
-      border-radius: 12px; 
-      border: 1px solid #cbd5e1; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-      text-align: center; 
+    .brand-section { display: flex; align-items: center; gap: 8px; }
+    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
+    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
+    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    
+    .header-user { display: flex; align-items: center; gap: 6px; }
+    .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
+    .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+
+    /* LAYOUT & SIDEBAR */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 4px; text-decoration: none;
+      transition: all 0.2s; text-align: left;
     }
-    .login-title { 
-      font-size: 22px; 
-      font-weight: 900; 
-      color: #dc2626; 
-      line-height: 1; 
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #dc2626; color: white; }
+
+    .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
+
+    /* SUB TAB NAVIGASI KEUANGAN */
+    .sub-tab-nav { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+    .sub-tab-btn {
+      padding: 8px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc;
+      font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; transition: all 0.2s;
     }
-    .login-sub-brand { 
-      font-size: 11px; 
-      font-weight: 700; 
-      color: #64748b; 
-      margin-top: 4px; 
-      margin-bottom: 20px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
-    }
-    .login-input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      border: 1px solid #cbd5e1; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      margin-bottom: 12px; 
-      outline: none; 
-      background: #f8fafc; 
-      transition: all 0.2s;
-    }
-    .login-input:focus { 
-      border-color: #dc2626; 
-      background: #ffffff; 
-    }
-    .btn-login { 
-      width: 100%; 
-      background: #dc2626; 
-      color: white; 
-      border: none; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: 700; 
-      border-radius: 6px; 
-      cursor: pointer; 
-      transition: background 0.2s; 
-    }
-    .btn-login:hover { 
-      background: #b91c1c; 
-    }
-    .btn-login:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    .login-error { 
-      color: #dc2626; 
-      font-size: 11px; 
-      margin-top: 12px; 
-      font-weight: 700; 
-      display: none; 
+    .sub-tab-btn.active { background: #dc2626; color: white; border-color: #dc2626; }
+
+    /* FINANCE KPI CARDS */
+    .finance-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
+    .card.main-card { background: #dc2626; color: white; border: none; }
+    .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card.main-card .card-head { color: #fecaca; }
+    .card-val { font-size: 17px; font-weight: 900; color: #0f172a; line-height: 1.2; margin-top: 2px; }
+    .card.main-card .card-val { color: #ffffff; }
+
+    /* PANELS & TABLES */
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .table-container { height: 380px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+    .custom-table tr:hover td { background: #f8fafc; }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
+      .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
+      .finance-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .card.main-card { grid-column: span 2; }
     }
   </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <div class="login-title">mahadewa.id</div>
-    <div class="login-sub-brand">Cab. Palopo</div>
-    
-    <input type="text" id="userInput" class="login-input" placeholder="Username (contoh: arif / wiki)">
-    <input type="password" id="passInput" class="login-input" placeholder="Password" onkeyup="checkEnterKey(event)">
-    
-    <button id="btnLoginBtn" class="btn-login" onclick="performLogin()">Masuk System</button>
-    <div id="loginError" class="login-error">Username / Password Salah!</div>
+  <!-- HEADER -->
+  <header>
+    <div class="brand-section">
+      <div>
+        <span class="brand-name">mahadewa.id</span>
+        <span class="brand-sub">Cab. Palopo</span>
+      </div>
+      <div class="page-title-badge" id="headerPageTitle">Keuangan</div>
+    </div>
+    <div class="header-user">
+      <span class="user-name" id="userBadge">Guest</span>
+      <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
+      <button class="btn-badge-red" onclick="showProfile()">Profil</button>
+      <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">🧹 Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">📈 Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item active">💳 Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
+    </div>
+
+    <div class="content">
+      
+      <!-- SUB TAB NAVIGASI KEUANGAN -->
+      <div class="sub-tab-nav">
+        <button id="subBtn-mtk" class="sub-tab-btn active" onclick="switchKeuanganSubTab('mtk')">💳 Keuangan MTK (Kasir)</button>
+        <button id="subBtn-service" class="sub-tab-btn" onclick="switchKeuanganSubTab('service')">🔧 Keuangan Service</button>
+      </div>
+
+      <!-- TAB 1: KEUANGAN MTK (KASIR) -->
+      <div id="subTab-mtk" class="tab-page active">
+        <div class="finance-cards">
+          <div class="card main-card" style="grid-column: span 2;">
+            <div class="card-top-row"><span class="card-head">Total Penjualan (KASIR)</span></div>
+            <div class="card-val" id="kTotalPenjualan">Rp 0</div>
+          </div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Transfer</span></div><div class="card-val" id="kTotalTransfer">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">QRIS / EDC</span></div><div class="card-val" id="kTotalQrisEdc">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Pembiayaan</span></div><div class="card-val" id="kTotalPembiayaan">Rp 0</div></div>
+          <div class="card" style="border-color: #cbd5e1; background: #f8fafc;"><div class="card-top-row"><span class="card-head" style="color: #0284c7;">Pembayaran TNT</span></div><div class="card-val" id="kTotalTnt" style="color: #0369a1;">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">DP / PP</span></div><div class="card-val" id="kTotalDpPp">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Tunai</span></div><div class="card-val" id="kTotalTunai">Rp 0</div></div>
+          <div class="card" style="border-color: #fca5a5; background: #fff5f5;"><div class="card-top-row"><span class="card-head" style="color: #dc2626;">Total Piutang</span></div><div class="card-val" id="kTotalPiutang" style="color: #dc2626;">Rp 0</div></div>
+        </div>
+
+        <div class="box-panel">
+          <div class="panel-header"><span>Breakdown Keuangan Harian MTK (Sheet KASIR)</span></div>
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Total Penjualan</th>
+                  <th>Transfer</th>
+                  <th>QRIS / EDC</th>
+                  <th>Pembiayaan</th>
+                  <th>TNT</th>
+                  <th>DP / PP</th>
+                  <th>Tunai</th>
+                  <th>Piutang</th>
+                </tr>
+              </thead>
+              <tbody id="tblKeuanganHarian">
+                <tr><td colspan="9" style="text-align:center;">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: KEUANGAN SERVICE -->
+      <div id="subTab-service" class="tab-page">
+        <div class="finance-cards">
+          <div class="card main-card" style="grid-column: span 2;">
+            <div class="card-top-row"><span class="card-head">Total Pendapatan Service</span></div>
+            <div class="card-val" id="ksTotalPenjualan">Rp 0</div>
+          </div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Transfer Service</span></div><div class="card-val" id="ksTotalTransfer">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">QRIS / EDC Service</span></div><div class="card-val" id="ksTotalQrisEdc">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Pembiayaan Service</span></div><div class="card-val" id="ksTotalPembiayaan">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">DP / PP Service</span></div><div class="card-val" id="ksTotalDpPp">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Tunai Service</span></div><div class="card-val" id="ksTotalTunai">Rp 0</div></div>
+          <div class="card" style="border-color: #fca5a5; background: #fff5f5;"><div class="card-top-row"><span class="card-head" style="color: #dc2626;">Piutang Service</span></div><div class="card-val" id="ksTotalPiutang" style="color: #dc2626;">Rp 0</div></div>
+        </div>
+
+        <div class="box-panel">
+          <div class="panel-header"><span>Breakdown Keuangan Harian (Sheet SERVICE)</span></div>
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Total Penjualan</th>
+                  <th>Transfer</th>
+                  <th>QRIS / EDC</th>
+                  <th>Pembiayaan</th>
+                  <th>DP / PP</th>
+                  <th>Tunai</th>
+                  <th>Piutang</th>
+                </tr>
+              </thead>
+              <tbody id="tblKeuanganServiceHarian">
+                <tr><td colspan="8" style="text-align:center;">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
+  <!-- SCRIPT UTAMA -->
+  <script src="auth.js"></script>
   <script>
-    // ⚠️ GANTI URL DI BAWAH DENGAN URL WEB APP DEPLOYMENT DARI GOOGLE APPS SCRIPT ANDA
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC_FaMmWcqzY4SZSFPA3UL2xwIaqpjRU-RYGKpWmkLyC559qKL2Dnx4dSqSXuKVevgqw/exec";
-
-    // Jika pengguna sudah pernah login sebelumnya, langsung arahkan ke halaman utama
     window.addEventListener("DOMContentLoaded", () => {
-      const savedUser = localStorage.getItem("currentUser");
-      if (savedUser) {
-        redirectBasedOnAccess(JSON.parse(savedUser));
+      const user = checkAuthAndRenderNav();
+      if (user) {
+        // Cek submenu mana yang berhak diakses pertama kali
+        const a = user.akses || {};
+        if (!a.keuanganMtk && a.keuanganService) {
+          switchKeuanganSubTab('service');
+        }
+        fetchStats();
       }
     });
 
-    function checkEnterKey(e) {
-      if (e.key === "Enter") performLogin();
+    function switchKeuanganSubTab(tabName) {
+      document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(`subTab-${tabName}`).classList.add('active');
+      document.getElementById(`subBtn-${tabName}`).classList.add('active');
     }
 
-    function performLogin() {
-      const u = document.getElementById("userInput").value.trim();
-      const p = document.getElementById("passInput").value.trim();
+    function formatRupiah(val) {
+      if (!val && val !== 0) return "Rp 0";
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
+    }
 
-      if (!u || !p) {
-        alert("Silakan isi Username dan Password!");
-        return;
-      }
-
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Memproses...";
-      btn.disabled = true;
-      document.getElementById("loginError").style.display = "none";
-
-      // Mengirimkan permintaan autentikasi via JSONP ke Apps Script
+    function fetchStats() {
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=onLoginResult&ts=${new Date().getTime()}`;
+      script.src = `${SCRIPT_URL}?callback=renderUI&ts=${new Date().getTime()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
 
-    function onLoginResult(res) {
-      const btn = document.getElementById("btnLoginBtn");
-      btn.innerText = "Masuk System";
-      btn.disabled = false;
+    function renderUI(data) {
+      if (!data) return;
 
-      if (res && res.success) {
-        // Simpan data kredensial & hak akses pengguna ke browser storage
-        localStorage.setItem("currentUser", JSON.stringify(res.user));
-        
-        // Arahkan ke halaman sesuai izin akses dari sheet AKUN
-        redirectBasedOnAccess(res.user);
-      } else {
-        const errDiv = document.getElementById("loginError");
-        errDiv.innerText = (res && res.message) ? res.message : "Username / Password Salah!";
-        errDiv.style.display = "block";
-      }
-    }
+      // 1. KEUANGAN MTK (KASIR)
+      try {
+        if (data.keuangan) {
+          const k = data.keuangan;
+          document.getElementById("kTotalPenjualan").innerText = formatRupiah(k.totalPenjualan);
+          document.getElementById("kTotalTransfer").innerText = formatRupiah(k.totalTransfer);
+          document.getElementById("kTotalQrisEdc").innerText = formatRupiah(k.totalQrisEdc);
+          document.getElementById("kTotalPembiayaan").innerText = formatRupiah(k.totalPembiayaan);
+          document.getElementById("kTotalTnt").innerText = formatRupiah(k.totalTnt || 0);
+          document.getElementById("kTotalDpPp").innerText = formatRupiah(k.totalDpPp);
+          document.getElementById("kTotalTunai").innerText = formatRupiah(k.totalTunai);
+          document.getElementById("kTotalPiutang").innerText = formatRupiah(k.totalPiutang);
 
-    function redirectBasedOnAccess(user) {
-      const a = user.akses || {};
+          if (k.breakdownHarian && k.breakdownHarian.length > 0) {
+            document.getElementById("tblKeuanganHarian").innerHTML = k.breakdownHarian.map(row => `
+              <tr>
+                <td><b>${row.tanggal}</b></td>
+                <td><b>${formatRupiah(row.total)}</b></td>
+                <td>${formatRupiah(row.transfer)}</td>
+                <td>${formatRupiah(row.qris)}</td>
+                <td>${formatRupiah(row.pembiayaan)}</td>
+                <td><b>${formatRupiah(row.tnt || 0)}</b></td>
+                <td>${formatRupiah(row.dppp)}</td>
+                <td>${formatRupiah(row.tunai)}</td>
+                <td style="color:${row.piutang > 0 ? '#dc2626' : 'inherit'}; font-weight:${row.piutang > 0 ? 'bold' : 'normal'};">
+                  ${formatRupiah(row.piutang)}
+                </td>
+              </tr>
+            `).join('');
+          } else {
+            document.getElementById("tblKeuanganHarian").innerHTML = `<tr><td colspan="9" style="text-align:center;">Belum ada data keuangan MTK.</td></tr>`;
+          }
+        }
+      } catch (e) { console.error("Error keuangan MTK render:", e); }
 
-      // Cek prioritas halaman utama yang berhak dibuka pengguna
-      if (a.kebersihan || a.auditKebersihan || a.kpiKebersihan) {
-        window.location.href = "kebersihan.html";
-      } else if (a.penjualan) {
-        window.location.href = "penjualan.html";
-      } else if (a.keuanganMtk || a.keuanganService) {
-        window.location.href = "keuangan.html";
-      } else if (a.siplah) {
-        window.location.href = "siplah.html";
-      } else {
-        alert("Akun Anda terdaftar, tetapi belum memiliki izin akses ke menu manapun. Harap hubungi Admin.");
-        localStorage.removeItem("currentUser");
-      }
+      // 2. KEUANGAN SERVICE
+      try {
+        if (data.keuanganService) {
+          const ks = data.keuanganService;
+          document.getElementById("ksTotalPenjualan").innerText = formatRupiah(ks.totalPenjualan);
+          document.getElementById("ksTotalTransfer").innerText = formatRupiah(ks.totalTransfer);
+          document.getElementById("ksTotalQrisEdc").innerText = formatRupiah(ks.totalQrisEdc);
+          document.getElementById("ksTotalPembiayaan").innerText = formatRupiah(ks.totalPembiayaan);
+          document.getElementById("ksTotalDpPp").innerText = formatRupiah(ks.totalDpPp);
+          document.getElementById("ksTotalTunai").innerText = formatRupiah(ks.totalTunai);
+          document.getElementById("ksTotalPiutang").innerText = formatRupiah(ks.totalPiutang);
+
+          if (ks.breakdownHarian && ks.breakdownHarian.length > 0) {
+            document.getElementById("tblKeuanganServiceHarian").innerHTML = ks.breakdownHarian.map(row => `
+              <tr>
+                <td><b>${row.tanggal}</b></td>
+                <td><b>${formatRupiah(row.total)}</b></td>
+                <td>${formatRupiah(row.transfer)}</td>
+                <td>${formatRupiah(row.qris)}</td>
+                <td>${formatRupiah(row.pembiayaan)}</td>
+                <td>${formatRupiah(row.dppp)}</td>
+                <td>${formatRupiah(row.tunai)}</td>
+                <td style="color:${row.piutang > 0 ? '#dc2626' : 'inherit'}; font-weight:${row.piutang > 0 ? 'bold' : 'normal'};">
+                  ${formatRupiah(row.piutang)}
+                </td>
+              </tr>
+            `).join('');
+          } else {
+            document.getElementById("tblKeuanganServiceHarian").innerHTML = `<tr><td colspan="8" style="text-align:center;">Belum ada data keuangan service.</td></tr>`;
+          }
+        }
+      } catch (e) { console.error("Error keuangan Service render:", e); }
     }
   </script>
 </body>
