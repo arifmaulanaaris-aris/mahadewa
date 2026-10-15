@@ -98,7 +98,7 @@
       <div class="page-title-badge" id="headerPageTitle">Keuangan</div>
     </div>
     <div class="header-user">
-      <span class="user-name" id="userBadge">Guest</span>
+      <span class="user-name" id="userBadge">Memuat...</span>
       <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
       <button class="btn-badge-red" onclick="showProfile()">Profil</button>
       <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
@@ -108,13 +108,12 @@
   <div class="container">
     <!-- SIDEBAR NAVIGATION -->
     <div class="sidebar">
-  <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">🧹 Kebersihan Toko</a>
-  <a id="nav-penjualan" href="penjualan.html" class="menu-item active">📈 Penjualan</a>
-  <a id="nav-keuangan" href="keuangan.html" class="menu-item">💳 Keuangan</a>
-  <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
-  <!-- Tambahkan baris di bawah ini -->
-  <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">👤 Kelola Akun & Akses</a>
-</div>
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">🧹 Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">📈 Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item active">💳 Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
+      <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">👤 Kelola Akun & Akses</a>
+    </div>
 
     <div class="content">
       
@@ -213,11 +212,6 @@
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
       if (user) {
-        // Cek submenu mana yang berhak diakses pertama kali
-        const a = user.akses || {};
-        if (!a.keuanganMtk && a.keuanganService) {
-          switchKeuanganSubTab('service');
-        }
         fetchStats();
       }
     });
@@ -226,8 +220,11 @@
       document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
 
-      document.getElementById(`subTab-${tabName}`).classList.add('active');
-      document.getElementById(`subBtn-${tabName}`).classList.add('active');
+      const targetTab = document.getElementById(`subTab-${tabName}`);
+      const targetBtn = document.getElementById(`subBtn-${tabName}`);
+      
+      if (targetTab) targetTab.classList.add('active');
+      if (targetBtn) targetBtn.classList.add('active');
     }
 
     function formatRupiah(val) {
