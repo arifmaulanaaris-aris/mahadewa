@@ -5,21 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Kebersihan - Executive Dashboard mahadewa.id</title>
   
-  <!-- Google Font: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; 
-      margin: 0; 
-      padding: 0; 
-    }
+    * { box-sizing: border-box; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
     body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* HEADER */
     header {
       background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
@@ -34,7 +27,6 @@
     .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
     .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
 
-    /* LAYOUT & SIDEBAR */
     .container { display: flex; flex: 1; }
     .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
     .menu-item {
@@ -47,7 +39,6 @@
 
     .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
 
-    /* SUB NAV TABS */
     .sub-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
     .tab-btn {
       padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #64748b;
@@ -58,7 +49,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* PANELS & TABLES */
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
     .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
 
@@ -78,7 +68,6 @@
     .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
     .custom-table tr:hover td { background: #f8fafc; }
 
-    /* BADGES */
     .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
     .badge-green { background: #dcfce7; color: #166534; }
     .badge-red { background: #fef2f2; color: #991b1b; }
@@ -97,7 +86,6 @@
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="brand-section">
       <div>
@@ -115,16 +103,15 @@
   </header>
 
   <div class="container">
-    <!-- SIDEBAR NAVIGATION -->
     <div class="sidebar">
       <a id="nav-kebersihan" href="kebersihan.html" class="menu-item active">🧹 Kebersihan Toko</a>
       <a id="nav-penjualan" href="penjualan.html" class="menu-item">📈 Penjualan</a>
       <a id="nav-keuangan" href="keuangan.html" class="menu-item">💳 Keuangan</a>
       <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
+      <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">👤 Kelola Akun & Akses</a>
     </div>
 
     <div class="content">
-      <!-- SUB NAVIGATION TABS -->
       <div class="sub-tabs">
         <button id="nav-tugas-tab" class="tab-btn active" onclick="switchSubTab('tugas-staf', this)">📋 Tugas Kebersihan Staf</button>
         <button id="nav-audit-kebersihan" class="tab-btn" onclick="switchSubTab('audit-toko', this)">🔍 Audit Kebersihan Toko</button>
@@ -144,8 +131,11 @@
             <select id="selectDivisiArea" class="form-control" style="width: auto; padding: 4px 8px;" onchange="updateAreaList()">
               <option value="TEKNISI">🔧 TEKNISI</option>
               <option value="KASIR">💳 KASIR</option>
-              <option value="ADMIN">💻 ADMIN</option>
-              <option value="MARKETING">📢 MARKETING</option>
+              <option value="ADMIN 01">💻 ADMIN 01</option>
+              <option value="ADMIN 02">💻 ADMIN 02</option>
+              <option value="MARKETING 01">📢 MARKETING 01</option>
+              <option value="MARKETING 02">📢 MARKETING 02</option>
+              <option value="MARKETING 03">📢 MARKETING 03</option>
               <option value="GUDANG">📦 GUDANG</option>
               <option value="PROMOTOR HP">📱 PROMOTOR HP</option>
               <option value="PROMOTOR INFINIX">📱 PROMOTOR INFINIX</option>
@@ -154,14 +144,11 @@
           </div>
         </div>
 
-        <!-- FORM UPLOAD FOTO KEBERSIHAN -->
         <div class="box-panel">
           <div class="panel-header"><span>Form Kirim Laporan Kebersihan</span></div>
           <div class="form-group">
             <label class="form-label">Pilih Area Kerja</label>
-            <select id="inputNamaArea" class="form-control">
-              <!-- Opsi diisi otomatis -->
-            </select>
+            <select id="inputNamaArea" class="form-control"></select>
           </div>
           <div class="grid-2">
             <div class="form-group">
@@ -176,7 +163,6 @@
           <button id="btnSubmitLaporan" class="btn-submit" onclick="submitLaporanKebersihan()">Kirim Laporan Foto</button>
         </div>
 
-        <!-- RIWAYAT KEBERSIHAN STAF -->
         <div class="box-panel">
           <div class="panel-header"><span>Riwayat Kebersihan Staf</span></div>
           <div class="table-container" style="max-height: 350px;">
@@ -209,8 +195,11 @@
               <select id="auditDivisiTarget" class="form-control" onchange="updateAuditFormOptions()">
                 <option value="TEKNISI">🔧 TEKNISI</option>
                 <option value="KASIR">💳 KASIR</option>
-                <option value="ADMIN">💻 ADMIN</option>
-                <option value="MARKETING">📢 MARKETING</option>
+                <option value="ADMIN 01">💻 ADMIN 01</option>
+                <option value="ADMIN 02">💻 ADMIN 02</option>
+                <option value="MARKETING 01">📢 MARKETING 01</option>
+                <option value="MARKETING 02">📢 MARKETING 02</option>
+                <option value="MARKETING 03">📢 MARKETING 03</option>
                 <option value="GUDANG">📦 GUDANG</option>
                 <option value="PROMOTOR HP">📱 PROMOTOR HP</option>
                 <option value="PROMOTOR INFINIX">📱 PROMOTOR INFINIX</option>
@@ -219,17 +208,13 @@
             </div>
             <div class="form-group">
               <label class="form-label">Staf Target Audit</label>
-              <select id="auditStafTargetSelect" class="form-control">
-                <!-- Diisi otomatis berdasarkan divisi target -->
-              </select>
+              <select id="auditStafTargetSelect" class="form-control"></select>
             </div>
           </div>
           <div class="grid-2">
             <div class="form-group">
               <label class="form-label">Area Target Audit</label>
-              <select id="auditAreaTargetSelect" class="form-control">
-                <!-- Diisi otomatis berdasarkan divisi target -->
-              </select>
+              <select id="auditAreaTargetSelect" class="form-control"></select>
             </div>
             <div class="form-group">
               <label class="form-label">Hasil Audit</label>
@@ -308,8 +293,11 @@
               <select id="targetDivisiSelect" class="form-control">
                 <option value="TEKNISI">🔧 TEKNISI</option>
                 <option value="KASIR">💳 KASIR</option>
-                <option value="ADMIN">💻 ADMIN</option>
-                <option value="MARKETING">📢 MARKETING</option>
+                <option value="ADMIN 01">💻 ADMIN 01</option>
+                <option value="ADMIN 02">💻 ADMIN 02</option>
+                <option value="MARKETING 01">📢 MARKETING 01</option>
+                <option value="MARKETING 02">📢 MARKETING 02</option>
+                <option value="MARKETING 03">📢 MARKETING 03</option>
                 <option value="GUDANG">📦 GUDANG</option>
                 <option value="PROMOTOR HP">📱 PROMOTOR HP</option>
                 <option value="PROMOTOR INFINIX">📱 PROMOTOR INFINIX</option>
@@ -342,12 +330,11 @@
     </div>
   </div>
 
-  <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
-    let cloudDivisiMap = {}; // Override divisi dari sheet MAP_DIVISI
-    let akunUsersMap = {};  // Divisi bawaan dari sheet AKUN
-    let globalAreaMap = {};  // Area dari sheet AREA_KEBERSIHAN
+    let cloudDivisiMap = {};
+    let akunUsersMap = {};
+    let globalAreaMap = {};
 
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
@@ -357,7 +344,6 @@
       }
     });
 
-    // Helper untuk mengambil divisi user (Utamakan dari MAP_DIVISI, jika tidak ada baru dari AKUN)
     function getUserDivisi(username, defaultDiv) {
       const u = (username || "").trim().toUpperCase();
       if (cloudDivisiMap[u]) return cloudDivisiMap[u];
@@ -397,7 +383,6 @@
 
       const div = divSelect.value.trim().toUpperCase();
 
-      // Gabungkan data user dari sheet AKUN dan MAP_DIVISI
       stafSelect.innerHTML = "";
       let allUsers = Object.keys(Object.assign({}, akunUsersMap, cloudDivisiMap));
       let matchedStaff = [];
@@ -423,7 +408,6 @@
         stafSelect.appendChild(el);
       }
 
-      // Populate Area Target
       areaSelect.innerHTML = "";
       let options = globalAreaMap[div] || [];
 
@@ -524,7 +508,6 @@
       const tbl = document.getElementById("tblDaftarDivisiAkun");
       if (!tbl) return;
 
-      // Gabungkan daftar divisi dari Sheet AKUN dan Sheet MAP_DIVISI
       let mergedMap = Object.assign({}, akunUsersMap, cloudDivisiMap);
       const keys = Object.keys(mergedMap);
 
@@ -594,13 +577,8 @@
     function renderUI(data) {
       if (!data) return;
 
-      if (data.akunUsers) {
-        akunUsersMap = data.akunUsers;
-      }
-
-      if (data.mapDivisi) {
-        cloudDivisiMap = data.mapDivisi;
-      }
+      if (data.akunUsers) akunUsersMap = data.akunUsers;
+      if (data.mapDivisi) cloudDivisiMap = data.mapDivisi;
 
       renderDaftarDivisiWeb();
       if (currentUser) applyRoleRestrictions(currentUser);
@@ -614,7 +592,6 @@
       if (!data.kebersihan) return;
       const keb = data.kebersihan;
 
-      // Render Tabel Riwayat Kebersihan
       const tblK = document.getElementById("tblRiwayatKebersihan");
       if (tblK) {
         if (keb.riwayat && keb.riwayat.length > 0) {
@@ -636,7 +613,6 @@
         }
       }
 
-      // Render Tabel Log Audit
       const tblA = document.getElementById("tblLogAudit");
       if (tblA) {
         if (keb.audit && keb.audit.length > 0) {
@@ -656,7 +632,6 @@
         }
       }
 
-      // Render KPI Summary
       if (data.kpiKebersihan && data.kpiKebersihan.summary) {
         const sum = data.kpiKebersihan.summary;
         const totalLaporanEl = document.getElementById("kpiTotalLaporan");
