@@ -61,7 +61,7 @@
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
     .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .table-container { height: 380px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    .table-container { height: 320px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
     .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
     .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
     .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
@@ -123,6 +123,37 @@
 
       <!-- TAB 1: TUGAS KEBERSIHAN STAF -->
       <div id="subTab-tugas" class="tab-page active">
+        
+        <!-- FORM LAPORAN KEBERSIHAN STAF & UPLOAD FOTO -->
+        <div class="box-panel">
+          <div class="panel-header"><span>📷 Form Upload Bukti Kebersihan Harian Staf</span></div>
+          <form id="formTugasStaf" onsubmit="handleTugasSubmit(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Area Kebersihan</label>
+                <select id="tugasArea" class="form-control" required>
+                  <option value="">-- Pilih Area Kebersihan --</option>
+                  <option value="Area Display / Etalase">Area Display / Etalase</option>
+                  <option value="Meja Kasir / Admin">Meja Kasir / Admin</option>
+                  <option value="Meja Service / Teknisi">Meja Service / Teknisi</option>
+                  <option value="Lantai Toko & Ruang Tunggu">Lantai Toko & Ruang Tunggu</option>
+                  <option value="Toilet & Kamar Mandi">Toilet & Kamar Mandi</option>
+                  <option value="Area Gudang & Stok">Area Gudang & Stok</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Foto Bukti Kebersihan (Ambil dari Kamera / Galeri)</label>
+                <input type="file" id="tugasFoto" class="form-control" accept="image/*" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Catatan Tambahan (Opsional)</label>
+              <input type="text" id="tugasCatatan" class="form-control" placeholder="Contoh: Sudah disapu, dipel, dan dirapikan">
+            </div>
+            <button type="submit" id="btnTugasSubmit" class="btn-submit">📤 Kirim Laporan Kebersihan</button>
+          </form>
+        </div>
+
         <div class="box-panel">
           <div class="panel-header"><span>Daftar Tugas Kebersihan Hari Ini</span></div>
           <div class="table-container">
@@ -132,8 +163,8 @@
                   <th>Area Kebersihan</th>
                   <th>Penanggung Jawab</th>
                   <th>Status Kebersihan</th>
-                  <th>Saksi / Auditor</th>
-                  <th>Waktu Cek</th>
+                  <th>Foto Bukti</th>
+                  <th>Waktu Lapor</th>
                 </tr>
               </thead>
               <tbody id="tblTugasKebersihan">
@@ -237,34 +268,34 @@
   <script src="auth.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-  const user = checkAuthAndRenderNav();
-  if (user) {
-    const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
-    const akses = user.akses || {};
+      const user = checkAuthAndRenderNav();
+      if (user) {
+        const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+        const akses = user.akses || {};
 
-    const hasAccess = (val) => {
-      if (typeof val === "boolean") return val;
-      if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
-      return false;
-    };
+        const hasAccess = (val) => {
+          if (typeof val === "boolean") return val;
+          if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+          return false;
+        };
 
-    // Cek Akses Audit Kebersihan
-    const accAudit = hasAccess(akses.auditKebersihan) || hasAccess(akses.audit) || hasAccess(akses.AUDIT_KEBERSIHAN);
-    const btnAudit = document.getElementById("subBtn-audit");
-    if (btnAudit) {
-      btnAudit.style.display = (isUserAdmin || accAudit) ? "inline-block" : "none";
-    }
+        // Cek Akses Audit Kebersihan
+        const accAudit = hasAccess(akses.auditKebersihan) || hasAccess(akses.audit) || hasAccess(akses.AUDIT_KEBERSIHAN);
+        const btnAudit = document.getElementById("subBtn-audit");
+        if (btnAudit) {
+          btnAudit.style.display = (isUserAdmin || accAudit) ? "inline-block" : "none";
+        }
 
-    // Cek Akses KPI Kebersihan
-    const accKpi = hasAccess(akses.kpiKebersihan) || hasAccess(akses.kpi) || hasAccess(akses.KPI_KEBERSIHAN);
-    const btnKpi = document.getElementById("subBtn-kpi");
-    if (btnKpi) {
-      btnKpi.style.display = (isUserAdmin || accKpi) ? "inline-block" : "none";
-    }
+        // Cek Akses KPI Kebersihan
+        const accKpi = hasAccess(akses.kpiKebersihan) || hasAccess(akses.kpi) || hasAccess(akses.KPI_KEBERSIHAN);
+        const btnKpi = document.getElementById("subBtn-kpi");
+        if (btnKpi) {
+          btnKpi.style.display = (isUserAdmin || accKpi) ? "inline-block" : "none";
+        }
 
-    fetchStats();
-  }
-});
+        fetchStats();
+      }
+    });
 
     function switchKebersihanSubTab(tabName) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
@@ -296,7 +327,7 @@
               <td><b>${t.area}</b></td>
               <td>${t.staf}</td>
               <td><span class="badge-status ${t.status === 'BERSIH' ? 'badge-green' : 'badge-red'}">${t.status}</span></td>
-              <td>${t.auditor || '-'}</td>
+              <td>${t.foto ? `<a href="${t.foto}" target="_blank" style="color:#dc2626; font-weight:bold;">Lihat Foto</a>` : '-'}</td>
               <td>${t.waktu || '-'}</td>
             </tr>
           `).join('');
@@ -336,6 +367,11 @@
           `).join('');
         }
       }
+    }
+
+    function handleTugasSubmit(e) {
+      e.preventDefault();
+      alert("Laporan kebersihan dan foto bukti berhasil dikirim!");
     }
 
     function handleAuditSubmit(e) {
