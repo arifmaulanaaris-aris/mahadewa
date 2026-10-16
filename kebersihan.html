@@ -412,6 +412,17 @@
       });
     }
 
+    // Helper Format Tanggal Lokal (YYYY-MM-DD)
+    function parseToLocalDateStr(dateVal) {
+      if (!dateVal) return "";
+      let d = new Date(dateVal);
+      if (isNaN(d.getTime())) return "";
+      let year = d.getFullYear();
+      let month = String(d.getMonth() + 1).padStart(2, '0');
+      let day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
     // Render Kartu Tugas Harian Staf Per Area (Dua Tombol Sebelum & Sesudah)
     function renderTaskCards() {
       const container = document.getElementById("tasksContainer");
@@ -421,19 +432,22 @@
       const areaList = globalAreaMap[userDev] || ["Area Kerja 1", "Area Kerja 2", "Area Kerja 3", "Area Kerja 4"];
       const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
 
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = parseToLocalDateStr(new Date());
+
       const myTodayLogs = globalRiwayatData.filter(r => {
         const isMe = String(r.nama || "").trim().toUpperCase() === userAkunName;
-        const rTgl = r.tgl ? new Date(r.tgl).toISOString().split('T')[0] : "";
+        const rTgl = parseToLocalDateStr(r.tgl);
         return isMe && rTgl === todayStr;
       });
 
       let html = "";
       areaList.forEach((areaName, index) => {
-        const record = myTodayLogs.find(r => String(r.area || "").trim().toUpperCase() === areaName.trim().toUpperCase());
+        const record = myTodayLogs.find(r => 
+          String(r.area || "").trim().toLowerCase() === areaName.trim().toLowerCase()
+        );
 
-        const hasBefore = record && record.urlBefore;
-        const hasAfter = record && record.urlAfter;
+        const hasBefore = record && record.urlBefore && record.urlBefore.trim() !== "";
+        const hasAfter = record && record.urlAfter && record.urlAfter.trim() !== "";
         const isFullyCompleted = hasBefore && hasAfter;
 
         if (isFullyCompleted) {
@@ -444,7 +458,7 @@
                 <span class="badge-status badge-green">Selesai</span>
               </div>
               <div style="font-size: 11px; color: #16a34a; margin-bottom: 8px;">
-                Waktu Lapor: <b>${record.tgl ? new Date(record.tgl).toLocaleTimeString('id-ID') : '-'}</b>
+                Waktu Lapor: <b>${record.tgl ? new Date(record.tgl).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) : '-'}</b>
               </div>
               <div style="display: flex; gap: 12px; font-size: 11px; font-weight: bold;">
                 <a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto Before</a>
@@ -468,7 +482,7 @@
                   <label class="form-label">FOTO BEFORE (SEBELUM)</label>
                   ${hasBefore ? `
                     <div style="font-size: 11px; color: #16a34a; font-weight: bold; margin-top: 4px;">
-                      Foto Before Terkirim (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626;">Lihat Foto</a>)
+                      Foto Before Terkirim (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto</a>)
                     </div>
                   ` : `
                     <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment">
@@ -483,7 +497,7 @@
                   <label class="form-label">FOTO AFTER (SESUDAH)</label>
                   ${hasAfter ? `
                     <div style="font-size: 11px; color: #16a34a; font-weight: bold; margin-top: 4px;">
-                      Foto After Terkirim (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a;">Lihat Foto</a>)
+                      Foto After Terkirim (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto</a>)
                     </div>
                   ` : `
                     <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment">
@@ -540,9 +554,11 @@
 
         alert(`Foto ${type} berhasil dikirim!`);
         
+        fileInput.value = "";
+
         setTimeout(() => {
           fetchStats();
-        }, 1500);
+        }, 1200);
 
       } catch (err) {
         alert("Terjadi kesalahan koneksi saat mengunggah foto.");
