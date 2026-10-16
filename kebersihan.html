@@ -84,7 +84,7 @@
     .form-group { margin-bottom: 6px; }
     .form-label { display: block; font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
     .form-control { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; outline: none; background: #ffffff; }
-    .btn-submit { background: #dc2626; color: white; border: none; padding: 7px 10px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 8px 10px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
     .btn-submit:hover { opacity: 0.9; }
 
     .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
@@ -379,6 +379,39 @@
       renderKpiTable();
     }
 
+    // KOMPRESI GAMBAR AUTOMATIS (Mencegah Ukuran File Terlalu Besar)
+    function compressImage(file, maxWidth = 1000, quality = 0.7) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            resolve(compressedBase64);
+          };
+          img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+      });
+    }
+
     // Render Kartu Tugas Harian Staf Per Area (Dua Tombol Sebelum & Sesudah)
     function renderTaskCards() {
       const container = document.getElementById("tasksContainer");
@@ -482,38 +515,39 @@
 
       const btn = document.getElementById(btnId);
       const origText = btn.innerText;
-      btn.innerText = "Mengunggah...";
+      btn.innerText = "Mengompres & Mengunggah...";
       btn.disabled = true;
 
       try {
-        const base64Data = await toBase64(fileInput.files[0]);
+        const compressedBase64 = await compressImage(fileInput.files[0]);
 
         const payload = {
           action: "simpanKebersihanAreaParsial",
           namaStaf: currentUser.nama || currentUser.username,
           namaArea: areaName,
           type: type,
-          base64Image: base64Data
+          base64Image: compressedBase64
         };
 
-        const res = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
           body: JSON.stringify(payload)
         });
-        const result = await res.json();
 
-        if (result.success) {
-          alert(`Foto ${type} berhasil dikirim!`);
+        alert(`Foto ${type} berhasil dikirim!`);
+        
+        setTimeout(() => {
           fetchStats();
-        } else {
-          alert("Gagal mengunggah: " + (result.message || "Error server"));
-          btn.innerText = origText;
-          btn.disabled = false;
-        }
+        }, 1500);
+
       } catch (err) {
+        alert("Terjadi kesalahan koneksi saat mengunggah foto.");
         btn.innerText = origText;
         btn.disabled = false;
-        alert("Terjadi kesalahan koneksi saat mengunggah foto.");
       }
     }
 
@@ -698,7 +732,7 @@
 
       let base64Foto = "";
       if (fileFotoInput && fileFotoInput.files[0]) {
-        base64Foto = await toBase64(fileFotoInput.files[0]);
+        base64Foto = await compressImage(fileFotoInput.files[0]);
       }
 
       if (!stafTarget || !areaTarget) {
@@ -722,23 +756,23 @@
           base64Foto: base64Foto || ""
         };
 
-        const res = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
           body: JSON.stringify(payload)
         });
-        const result = await res.json();
 
         btn.innerText = "Kirim Hasil Audit";
         btn.disabled = false;
 
-        if (result.success) {
-          alert("Hasil audit berhasil disimpan!");
-          document.getElementById("auditCatatan").value = "";
-          document.getElementById("auditFoto").value = "";
-          fetchStats();
-        } else {
-          alert("Gagal menyimpan audit.");
-        }
+        alert("Hasil audit berhasil disimpan!");
+        document.getElementById("auditCatatan").value = "";
+        document.getElementById("auditFoto").value = "";
+        fetchStats();
+
       } catch (err) {
         btn.innerText = "Kirim Hasil Audit";
         btn.disabled = false;
