@@ -48,8 +48,8 @@
     .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
     .tab-page { display: block; }
 
-    /* KPI CARDS */
-    .top-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    /* KPI CARDS (Disesuaikan Menjadi 2 Kolom) */
+    .top-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
     .card { background: #ffffff; border-radius: 8px; padding: 14px 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
     .card.main-card { background: #dc2626; color: white; border: none; }
     .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
@@ -120,10 +120,6 @@
             <div class="card-val" id="sipTotalNilai">Rp 0</div>
           </div>
           <div class="card">
-            <div class="card-top-row"><span class="card-head">Total Harga JL MSK</span></div>
-            <div class="card-val" id="sipTotalMsk">Rp 0</div>
-          </div>
-          <div class="card">
             <div class="card-top-row"><span class="card-head">Total Transaksi / Sekolah</span></div>
             <div class="card-val" id="sipTotalTrx">0</div>
           </div>
@@ -140,11 +136,10 @@
                     <th>Marketing</th>
                     <th>Jml Sekolah</th>
                     <th>Total Keseluruhan</th>
-                    <th>Harga JL MSK</th>
                   </tr>
                 </thead>
                 <tbody id="tblSiplahMkt">
-                  <tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>
+                  <tr><td colspan="3" style="text-align:center;">Memuat data...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -188,9 +183,16 @@
       }
     });
 
+    function parseNumber(val) {
+      if (!val && val !== 0) return 0;
+      if (typeof val === 'number') return val;
+      let cleaned = val.toString().replace(/[^0-9-]/g, '');
+      return parseInt(cleaned, 10) || 0;
+    }
+
     function formatRupiah(val) {
-      if (!val && val !== 0) return "Rp 0";
-      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
+      let num = parseNumber(val);
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
     }
 
     function fetchStats() {
@@ -203,42 +205,42 @@
     function renderUI(data) {
       if (!data || !data.siplah) return;
       const sip = data.siplah;
+      const list = sip.listDetail || [];
 
       // 1. TOP CARDS
-      document.getElementById("sipTotalNilai").innerText = formatRupiah(sip.totalKeseluruhan || 0);
-      document.getElementById("sipTotalMsk").innerText = formatRupiah(sip.totalHargaMsk || 0);
-      document.getElementById("sipTotalTrx").innerText = (sip.totalTransaksi || 0) + " Transaksi";
+      document.getElementById("sipTotalNilai").innerText = formatRupiah(sip.totalSiplahTertunda || 0);
+      document.getElementById("sipTotalTrx").innerText = (sip.totalTransaksi || list.length) + " Transaksi";
 
-      // 2. REKAP PER MARKETING
+      // 2. REKAP PER MARKETING (Kolom I)
       const tblMkt = document.getElementById("tblSiplahMkt");
       if (tblMkt) {
-        if (sip.byMarketing && sip.byMarketing.length > 0) {
-          tblMkt.innerHTML = sip.byMarketing.map(m => `
+        let mktList = sip.byMarketing || [];
+        if (mktList.length > 0) {
+          tblMkt.innerHTML = mktList.map(m => `
             <tr>
               <td><b>${m.marketing}</b></td>
               <td>${m.jmlSekolah} Sekolah</td>
-              <td><b>${formatRupiah(m.totalNilai)}</b></td>
-              <td>${formatRupiah(m.totalMsk)}</td>
+              <td><b>${formatRupiah(m.totalKeseluruhan)}</b></td>
             </tr>
           `).join('');
         } else {
-          tblMkt.innerHTML = `<tr><td colspan="4" style="text-align:center;">Belum ada rekap per marketing.</td></tr>`;
+          tblMkt.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada rekap per marketing.</td></tr>`;
         }
       }
 
       // 3. DETAIL TRANSAKSI
       const tblDetail = document.getElementById("tblSiplahDetail");
       if (tblDetail) {
-        if (sip.listDetail && sip.listDetail.length > 0) {
-          tblDetail.innerHTML = sip.listDetail.map(d => `
+        if (list.length > 0) {
+          tblDetail.innerHTML = list.map(d => `
             <tr>
-              <td><b>${d.noDok}</b></td>
-              <td>${d.soMsk}</td>
-              <td>${formatRupiah(d.hargaMsk)}</td>
-              <td><b>${d.user}</b></td>
-              <td>${d.catatan}</td>
-              <td><span class="badge-status badge-yellow">${d.posUang}</span></td>
-              <td>${d.marketing}</td>
+              <td><b>${d.noDok || '-'}</b></td>
+              <td>${d.soMsk || '-'}</td>
+              <td>${formatRupiah(d.hargaJlMsk)}</td>
+              <td><b>${d.namaSekolah || '-'}</b></td>
+              <td>${d.catatan || '-'}</td>
+              <td><span class="badge-status badge-yellow">${d.posisiUang || '-'}</span></td>
+              <td>${d.marketing || '-'}</td>
             </tr>
           `).join('');
         } else {
