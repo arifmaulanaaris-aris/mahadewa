@@ -83,12 +83,13 @@
     .form-control { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; outline: none; background: #ffffff; }
     .btn-submit { background: #dc2626; color: white; border: none; padding: 8px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
     .btn-submit:hover { background: #b91c1c; }
-    .btn-submit.btn-done { background: #16a34a; cursor: default; }
 
     .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
     .badge-green { background: #dcfce7; color: #15803d; }
     .badge-red { background: #fee2e2; color: #b91c1c; }
     .badge-orange { background: #ffedd5; color: #c2410c; }
+
+    .draft-preview { margin-top: 4px; font-size: 10px; color: #2563eb; font-weight: bold; display: flex; align-items: center; gap: 4px; }
 
     @media (max-width: 768px) {
       .container { flex-direction: column; }
@@ -251,8 +252,6 @@
 
       <!-- TAB 3: PROGRES & KPI STAF -->
       <div id="subTab-kpi" class="tab-page">
-        
-        <!-- CARDS RINGKASAN PROGRES -->
         <div class="kpi-cards">
           <div class="card-kpi">
             <div class="lbl">Total Progres</div>
@@ -322,21 +321,18 @@
           return false;
         };
 
-        // Kontrol Visibilitas Sub-Tab Audit Kebersihan
         const accAudit = hasAccess(akses.auditKebersihan) || hasAccess(akses.audit) || hasAccess(akses.AUDIT_KEBERSIHAN);
         const btnAudit = document.getElementById("subBtn-audit");
         if (btnAudit) {
           btnAudit.style.display = (isUserAdmin || accAudit) ? "inline-block" : "none";
         }
 
-        // Kontrol Visibilitas Sub-Tab KPI Kebersihan
         const accKpi = hasAccess(akses.kpiKebersihan) || hasAccess(akses.kpi) || hasAccess(akses.KPI_KEBERSIHAN);
         const btnKpi = document.getElementById("subBtn-kpi");
         if (btnKpi) {
           btnKpi.style.display = (isUserAdmin || accKpi) ? "inline-block" : "none";
         }
 
-        // Label Scope
         const lblScope = document.getElementById("labelScopeView");
         if (lblScope) {
           lblScope.innerText = isUserAdmin ? "(Akses Admin: Menampilkan Seluruh Staf)" : `(Akses Staf: Khusus Akun ${user.nama || user.username})`;
@@ -382,6 +378,43 @@
       renderKpiTable();
     }
 
+    // SIMPAN DRAF FOTO KE LOCALSTORAGE HP (Anti-Hilang saat logout/refresh)
+    function saveDraftPhoto(areaIndex, type, inputElement) {
+      const file = inputElement.files[0];
+      if (!file || !currentUser) return;
+
+      const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Data = e.target.result;
+        const draftKey = `draft_photo_${userKey}_task${areaIndex}_${type}`;
+        localStorage.setItem(draftKey, base64Data);
+
+        // Tampilkan indikator draf
+        const previewEl = document.getElementById(`preview_${type}_${areaIndex}`);
+        if (previewEl) {
+          previewEl.innerHTML = `✅ Draf Foto Tersimpan di HP`;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // AMBIL DRAF FOTO
+    function getDraftPhoto(areaIndex, type) {
+      if (!currentUser) return null;
+      const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+      const draftKey = `draft_photo_${userKey}_task${areaIndex}_${type}`;
+      return localStorage.getItem(draftKey);
+    }
+
+    // HAPUS DRAF FOTO DARI MEMORI HP SETELAH BERHASIL DIPUBLISH
+    function clearDraftPhoto(areaIndex) {
+      if (!currentUser) return;
+      const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+      localStorage.removeItem(`draft_photo_${userKey}_task${areaIndex}_before`);
+      localStorage.removeItem(`draft_photo_${userKey}_task${areaIndex}_after`);
+    }
+
     // Render Kartu Tugas Harian Staf Per Area
     function renderTaskCards() {
       const container = document.getElementById("tasksContainer");
@@ -391,7 +424,6 @@
       const areaList = globalAreaMap[userDev] || ["Area Kerja 1", "Area Kerja 2", "Area Kerja 3", "Area Kerja 4"];
       const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
 
-      // Filter laporan hari ini khusus user ini
       const todayStr = new Date().toISOString().split('T')[0];
       const myTodayLogs = globalRiwayatData.filter(r => {
         const isMe = String(r.nama || "").trim().toUpperCase() === userAkunName;
@@ -401,11 +433,12 @@
 
       let html = "";
       areaList.forEach((areaName, index) => {
-        // Cek apakah area ini sudah diselesaikan hari ini
         const doneRecord = myTodayLogs.find(r => String(r.area || "").trim().toUpperCase() === areaName.trim().toUpperCase());
 
         if (doneRecord) {
-          // Tampilan Jika Tugas Selesai (Bisa terbaca setelah refresh/logout)
+          // Bersihkan draf jika sudah selesai di server
+          clearDraftPhoto(index);
+
           html += `
             <div class="card-task-item completed">
               <div class="card-task-title">
@@ -422,7 +455,10 @@
             </div>
           `;
         } else {
-          // Tampilan Form Jika Tugas Belum Selesai
+          // Cek Draf Foto yang tersimpan di HP
+          const draftBefore = getDraftPhoto(index, 'before');
+          const draftAfter = getDraftPhoto(index, 'after');
+
           html += `
             <div class="card-task-item">
               <div class="card-task-title">
@@ -432,11 +468,13 @@
               <form onsubmit="submitSingleTask(event, '${areaName.replace(/'/g, "\\'")}', ${index})">
                 <div class="form-group">
                   <label class="form-label">Foto Before (Sebelum)</label>
-                  <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment" required>
+                  <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveDraftPhoto(${index}, 'before', this)" ${draftBefore ? '' : 'required'}>
+                  <div class="draft-preview" id="preview_before_${index}">${draftBefore ? '✅ Draf Foto Before Tersimpan di HP' : ''}</div>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Foto After (Sesudah)</label>
-                  <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment" required>
+                  <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveDraftPhoto(${index}, 'after', this)" ${draftAfter ? '' : 'required'}>
+                  <div class="draft-preview" id="preview_after_${index}">${draftAfter ? '✅ Draf Foto After Tersimpan di HP' : ''}</div>
                 </div>
                 <button type="submit" id="btn_task_${index}" class="btn-submit">✅ Selesaikan Tugas Ini</button>
               </form>
@@ -448,16 +486,26 @@
       container.innerHTML = html;
     }
 
-    // Submit Tugas per Satu Area
+    // Submit Tugas per Satu Area (Mendukung File Kamera / Draf tersimpan)
     async function submitSingleTask(e, areaName, index) {
       e.preventDefault();
       if (!currentUser) return alert("Sesi login tidak valid.");
 
-      const fileB = document.getElementById(`before_${index}`).files[0];
-      const fileA = document.getElementById(`after_${index}`).files[0];
+      const fileBInput = document.getElementById(`before_${index}`);
+      const fileAInput = document.getElementById(`after_${index}`);
 
-      if (!fileB || !fileA) {
-        alert("Harap unggah Foto Before & After untuk area ini!");
+      let base64Before = getDraftPhoto(index, 'before');
+      let base64After = getDraftPhoto(index, 'after');
+
+      if (!base64Before && fileBInput && fileBInput.files[0]) {
+        base64Before = await toBase64(fileBInput.files[0]);
+      }
+      if (!base64After && fileAInput && fileAInput.files[0]) {
+        base64After = await toBase64(fileAInput.files[0]);
+      }
+
+      if (!base64Before || !base64After) {
+        alert("Harap unggah atau ambil Foto Before & After untuk area ini!");
         return;
       }
 
@@ -466,9 +514,6 @@
       btn.disabled = true;
 
       try {
-        const base64Before = await toBase64(fileB);
-        const base64After = await toBase64(fileA);
-
         const payload = {
           action: "simpanKebersihanArea",
           namaStaf: currentUser.nama || currentUser.username,
@@ -484,8 +529,9 @@
         const result = await res.json();
 
         if (result.success) {
+          clearDraftPhoto(index); // Hapus draf setelah tersimpan di Google Sheets
           alert(`Tugas ${areaName} berhasil diselesaikan & disimpan ke KEBERSIHAN_LOG!`);
-          fetchStats(); // Auto Refresh Data
+          fetchStats();
         } else {
           alert("Gagal mengunggah: " + (result.message || "Error server"));
           btn.innerText = "✅ Selesaikan Tugas Ini";
@@ -498,7 +544,6 @@
       }
     }
 
-    // Populate Dropdown Staf Target pada Form Audit
     function populateAuditStafDropdown() {
       const auditStafSelect = document.getElementById("auditStaf");
       if (!auditStafSelect) return;
@@ -529,7 +574,6 @@
         areaList.map(a => `<option value="${a}">${a}</option>`).join('');
     }
 
-    // Render Tabel Log Tugas Kebersihan
     function renderTugasTable() {
       const container = document.getElementById("tblTugasKebersihan");
       if (!container) return;
@@ -561,7 +605,6 @@
       }
     }
 
-    // Render Log Audit Kebersihan
     function renderAuditTable() {
       const container = document.getElementById("tblLogAudit");
       if (!container) return;
@@ -591,7 +634,6 @@
       }
     }
 
-    // Render Ringkasan KPI & Peringkat Kebersihan Staf
     function renderKpiTable() {
       const container = document.getElementById("tblKpiKebersihan");
       if (!container) return;
@@ -601,13 +643,11 @@
       let totalTemuanKotorAudit = 0;
       let totalDendaKeseluruhan = 0;
 
-      // Inisialisasi Seluruh Akun Staf
       Object.keys(globalUsersMap).forEach(stafName => {
         let name = stafName.trim().toUpperCase();
         stats[name] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
       });
 
-      // Akumulasi Laporan Tugas Selesai
       globalRiwayatData.forEach(r => {
         let staf = (r.nama || "UNKNOWN").trim().toUpperCase();
         if (!stats[staf]) stats[staf] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
@@ -619,7 +659,6 @@
         totalLaporanDoneHariIni++;
       });
 
-      // Akumulasi Audit Kotor
       globalAuditData.forEach(a => {
         let staf = (a.stafTarget || "UNKNOWN").trim().toUpperCase();
         if (!stats[staf]) stats[staf] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
@@ -636,7 +675,7 @@
         container.innerHTML = keys.map(k => {
           let item = stats[k];
           let dev = globalUsersMap[k] || "STAFF";
-          let expectedTasks = 4; // Standard 4 tugas harian
+          let expectedTasks = 4;
           let missCount = Math.max(0, expectedTasks - item.done);
           let itemTotalDenda = item.denda + (missCount * 15000);
           let skor = Math.max(0, 100 - (item.kotorAudit * 15) - (missCount * 20));
@@ -657,7 +696,6 @@
         container.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada akumulasi KPI kebersihan.</td></tr>`;
       }
 
-      // Update Card KPI Ringkasan
       document.getElementById("kpiTotalProgres").innerText = totalLaporanDoneHariIni > 0 ? "100%" : "0%";
       document.getElementById("kpiAvgScore").innerText = "90%";
       document.getElementById("kpiTotalTemuan").innerText = totalTemuanKotorAudit;
