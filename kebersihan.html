@@ -237,32 +237,34 @@
   <script src="auth.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      const user = checkAuthAndRenderNav();
-      if (user) {
-        const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
-        const akses = user.akses || {};
+  const user = checkAuthAndRenderNav();
+  if (user) {
+    const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+    const akses = user.akses || {};
 
-        const hasAccess = (val) => {
-          if (typeof val === "boolean") return val;
-          if (typeof val === "string") return val.trim().toUpperCase() === "YA";
-          return false;
-        };
+    const hasAccess = (val) => {
+      if (typeof val === "boolean") return val;
+      if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+      return false;
+    };
 
-        // Kontrol Visibilitas Sub-Tab Audit Kebersihan
-        const btnAudit = document.getElementById("subBtn-audit");
-        if (btnAudit) {
-          btnAudit.style.display = (isUserAdmin || hasAccess(akses.auditKebersihan)) ? "inline-block" : "none";
-        }
+    // Cek Akses Audit Kebersihan
+    const accAudit = hasAccess(akses.auditKebersihan) || hasAccess(akses.audit) || hasAccess(akses.AUDIT_KEBERSIHAN);
+    const btnAudit = document.getElementById("subBtn-audit");
+    if (btnAudit) {
+      btnAudit.style.display = (isUserAdmin || accAudit) ? "inline-block" : "none";
+    }
 
-        // Kontrol Visibilitas Sub-Tab Progres & KPI Staf
-        const btnKpi = document.getElementById("subBtn-kpi");
-        if (btnKpi) {
-          btnKpi.style.display = (isUserAdmin || hasAccess(akses.kpiKebersihan)) ? "inline-block" : "none";
-        }
+    // Cek Akses KPI Kebersihan
+    const accKpi = hasAccess(akses.kpiKebersihan) || hasAccess(akses.kpi) || hasAccess(akses.KPI_KEBERSIHAN);
+    const btnKpi = document.getElementById("subBtn-kpi");
+    if (btnKpi) {
+      btnKpi.style.display = (isUserAdmin || accKpi) ? "inline-block" : "none";
+    }
 
-        fetchStats();
-      }
-    });
+    fetchStats();
+  }
+});
 
     function switchKebersihanSubTab(tabName) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
