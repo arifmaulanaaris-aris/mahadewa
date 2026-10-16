@@ -61,6 +61,12 @@
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
     .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
 
+    /* CARD TUGAS HARIAN STAF */
+    .task-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 8px; }
+    .card-task-item { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; position: relative; }
+    .card-task-item.completed { background: #f0fdf4; border-color: #86efac; }
+    .card-task-title { font-size: 13px; font-weight: 900; color: #0f172a; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    
     .kpi-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
     .card-kpi { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: center; }
     .card-kpi .val { font-size: 18px; font-weight: 900; color: #0f172a; margin-top: 4px; }
@@ -72,20 +78,23 @@
     .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
     .custom-table tr:hover td { background: #f8fafc; }
 
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 10px; }
     .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
-    .form-control { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none; background: #ffffff; }
-    .btn-submit { background: #dc2626; color: white; border: none; padding: 10px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 8px; }
+    .form-control { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; outline: none; background: #ffffff; }
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 8px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
     .btn-submit:hover { background: #b91c1c; }
+    .btn-submit.btn-done { background: #16a34a; cursor: default; }
 
     .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
     .badge-green { background: #dcfce7; color: #15803d; }
     .badge-red { background: #fee2e2; color: #b91c1c; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
 
     @media (max-width: 768px) {
       .container { flex-direction: column; }
       .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
       .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
+      .task-cards-grid { grid-template-columns: 1fr; }
       .kpi-cards { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
@@ -131,35 +140,22 @@
       <!-- TAB 1: TUGAS KEBERSIHAN STAF -->
       <div id="subTab-tugas" class="tab-page active">
         
-        <!-- FORM LAPORAN KEBERSIHAN STAF & UPLOAD FOTO -->
-        <div class="box-panel">
-          <div class="panel-header"><span>📷 FORM UPLOAD BUKTI KEBERSIHAN HARIAN STAF</span></div>
-          <form id="formTugasStaf" onsubmit="handleTugasSubmit(event)">
-            <div class="form-group">
-              <label class="form-label">Area Kebersihan (Sesuai Kategori Devisi)</label>
-              <select id="tugasArea" class="form-control" required>
-                <option value="">-- Memuat Area Kebersihan --</option>
-              </select>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <div class="form-group">
-                <label class="form-label">Foto Sebelum Dibersihkan (Kamera)</label>
-                <input type="file" id="tugasFotoBefore" class="form-control" accept="image/*" capture="environment" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Foto Sesudah Dibersihkan (Kamera)</label>
-                <input type="file" id="tugasFotoAfter" class="form-control" accept="image/*" capture="environment" required>
-              </div>
-            </div>
-
-            <button type="submit" id="btnTugasSubmit" class="btn-submit">📤 Kirim Laporan ke KEBERSIHAN_LOG</button>
-          </form>
-        </div>
-
+        <!-- CARDS TUGAS KEBERSIHAN HARIAN STAF -->
         <div class="box-panel">
           <div class="panel-header">
-            <span>Daftar Tugas Kebersihan Hari Ini</span>
+            <span>📷 DAFTAR TUGAS KEBERSIHAN HARIAN SAYA</span>
+            <span style="font-size: 10px; color: #dc2626; text-transform: none;">*Terlambat lewat hari dikenakan denda Rp 15.000 / tugas</span>
+          </div>
+
+          <div id="tasksContainer" class="task-cards-grid">
+            <div style="grid-column: span 2; text-align: center; color: #64748b; padding: 20px;">Memuat daftar tugas harian...</div>
+          </div>
+        </div>
+
+        <!-- DAFTAR LOG KEBERSIHAN HARI INI -->
+        <div class="box-panel">
+          <div class="panel-header">
+            <span>REKAPITULASI LAPORAN KEBERSIHAN (KEBERSIHAN_LOG)</span>
             <span id="labelScopeView" style="font-size: 10px; color: #dc2626;">(Memuat...)</span>
           </div>
           <div class="table-container">
@@ -171,7 +167,7 @@
                   <th>Area Kebersihan</th>
                   <th>Foto Before / After</th>
                   <th>Status Laporan</th>
-                  <th>Sanksi / Denda</th>
+                  <th>Sanksi Terlambat</th>
                 </tr>
               </thead>
               <tbody id="tblTugasKebersihan">
@@ -275,7 +271,7 @@
             <div class="val" id="kpiTotalDenda" style="color:#dc2626;">Rp 0</div>
           </div>
           <div class="card-kpi">
-            <div class="lbl">Tugas Selesai</div>
+            <div class="lbl">Tugas Selesai Hari Ini</div>
             <div class="val" id="kpiTotalDone" style="color:#15803d;">0</div>
           </div>
         </div>
@@ -288,10 +284,10 @@
                 <tr>
                   <th>Nama Staf</th>
                   <th>Kategori Devisi</th>
-                  <th>Total Laporan</th>
-                  <th>Lolos Audit</th>
-                  <th>Temuan Kotor</th>
-                  <th>Total Denda</th>
+                  <th>Tugas Selesai</th>
+                  <th>Belum Selesai</th>
+                  <th>Temuan Kotor Audit</th>
+                  <th>Total Akumulasi Denda</th>
                   <th>% Skor Kebersihan</th>
                 </tr>
               </thead>
@@ -374,28 +370,132 @@
       if (data.areaKebersihanMap) globalAreaMap = data.areaKebersihanMap;
       if (data.akunUsers) globalUsersMap = data.akunUsers;
 
-      populateUserFormOptions();
-      populateAuditStafDropdown();
-
       if (data.kebersihan) {
         globalRiwayatData = data.kebersihan.riwayat || [];
         globalAuditData = data.kebersihan.audit || [];
-        renderTugasTable();
-        renderAuditTable();
-        renderKpiTable();
       }
+
+      renderTaskCards();
+      populateAuditStafDropdown();
+      renderTugasTable();
+      renderAuditTable();
+      renderKpiTable();
     }
 
-    // Populate Dropdown Area Kerja Staf yang Login
-    function populateUserFormOptions() {
-      const userSelect = document.getElementById("tugasArea");
-      if (!userSelect || !currentUser) return;
+    // Render Kartu Tugas Harian Staf Per Area
+    function renderTaskCards() {
+      const container = document.getElementById("tasksContainer");
+      if (!container || !currentUser) return;
 
       const userDev = (currentUser.devisi || "TEKNISI").trim().toUpperCase();
       const areaList = globalAreaMap[userDev] || ["Area Kerja 1", "Area Kerja 2", "Area Kerja 3", "Area Kerja 4"];
+      const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
 
-      userSelect.innerHTML = `<option value="">-- Pilih Area Kebersihan (${userDev}) --</option>` +
-        areaList.map(a => `<option value="${a}">${a}</option>`).join('');
+      // Filter laporan hari ini khusus user ini
+      const todayStr = new Date().toISOString().split('T')[0];
+      const myTodayLogs = globalRiwayatData.filter(r => {
+        const isMe = String(r.nama || "").trim().toUpperCase() === userAkunName;
+        const rTgl = r.tgl ? new Date(r.tgl).toISOString().split('T')[0] : "";
+        return isMe && rTgl === todayStr;
+      });
+
+      let html = "";
+      areaList.forEach((areaName, index) => {
+        // Cek apakah area ini sudah diselesaikan hari ini
+        const doneRecord = myTodayLogs.find(r => String(r.area || "").trim().toUpperCase() === areaName.trim().toUpperCase());
+
+        if (doneRecord) {
+          // Tampilan Jika Tugas Selesai (Bisa terbaca setelah refresh/logout)
+          html += `
+            <div class="card-task-item completed">
+              <div class="card-task-title">
+                <span>📌 Tugas ${index + 1}: ${areaName}</span>
+                <span class="badge-status badge-green">✅ Selesai</span>
+              </div>
+              <div style="font-size: 11px; color: #16a34a; margin-bottom: 8px;">
+                Waktu Kirim: <b>${doneRecord.tgl ? new Date(doneRecord.tgl).toLocaleTimeString('id-ID') : '-'}</b>
+              </div>
+              <div style="display: flex; gap: 8px; font-size: 11px; font-weight: bold;">
+                ${doneRecord.urlBefore ? `<a href="${doneRecord.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">📷 Foto Before</a>` : ''}
+                ${doneRecord.urlAfter ? `<a href="${doneRecord.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">📷 Foto After</a>` : ''}
+              </div>
+            </div>
+          `;
+        } else {
+          // Tampilan Form Jika Tugas Belum Selesai
+          html += `
+            <div class="card-task-item">
+              <div class="card-task-title">
+                <span>📌 Tugas ${index + 1}: ${areaName}</span>
+                <span class="badge-status badge-orange">⏳ Belum Selesai</span>
+              </div>
+              <form onsubmit="submitSingleTask(event, '${areaName.replace(/'/g, "\\'")}', ${index})">
+                <div class="form-group">
+                  <label class="form-label">Foto Before (Sebelum)</label>
+                  <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Foto After (Sesudah)</label>
+                  <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment" required>
+                </div>
+                <button type="submit" id="btn_task_${index}" class="btn-submit">✅ Selesaikan Tugas Ini</button>
+              </form>
+            </div>
+          `;
+        }
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Submit Tugas per Satu Area
+    async function submitSingleTask(e, areaName, index) {
+      e.preventDefault();
+      if (!currentUser) return alert("Sesi login tidak valid.");
+
+      const fileB = document.getElementById(`before_${index}`).files[0];
+      const fileA = document.getElementById(`after_${index}`).files[0];
+
+      if (!fileB || !fileA) {
+        alert("Harap unggah Foto Before & After untuk area ini!");
+        return;
+      }
+
+      const btn = document.getElementById(`btn_task_${index}`);
+      btn.innerText = "Mengunggah Laporan...";
+      btn.disabled = true;
+
+      try {
+        const base64Before = await toBase64(fileB);
+        const base64After = await toBase64(fileA);
+
+        const payload = {
+          action: "simpanKebersihanArea",
+          namaStaf: currentUser.nama || currentUser.username,
+          namaArea: areaName,
+          base64Before: base64Before,
+          base64After: base64After
+        };
+
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          alert(`Tugas ${areaName} berhasil diselesaikan & disimpan ke KEBERSIHAN_LOG!`);
+          fetchStats(); // Auto Refresh Data
+        } else {
+          alert("Gagal mengunggah: " + (result.message || "Error server"));
+          btn.innerText = "✅ Selesaikan Tugas Ini";
+          btn.disabled = false;
+        }
+      } catch (err) {
+        btn.innerText = "✅ Selesaikan Tugas Ini";
+        btn.disabled = false;
+        alert("Terjadi kesalahan koneksi saat mengunggah foto.");
+      }
     }
 
     // Populate Dropdown Staf Target pada Form Audit
@@ -429,7 +529,7 @@
         areaList.map(a => `<option value="${a}">${a}</option>`).join('');
     }
 
-    // Render Tabel Tugas Kebersihan (Privasi Akses Staf vs Admin)
+    // Render Tabel Log Tugas Kebersihan
     function renderTugasTable() {
       const container = document.getElementById("tblTugasKebersihan");
       if (!container) return;
@@ -452,7 +552,7 @@
               ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#dc2626; font-weight:bold;">Before</a>` : '-'} | 
               ${r.urlAfter ? `<a href="${r.urlAfter}" target="_blank" style="color:#15803d; font-weight:bold;">After</a>` : '-'}
             </td>
-            <td><span class="badge-status ${r.status === 'LENGKAP' ? 'badge-green' : 'badge-red'}">${r.status}</span></td>
+            <td><span class="badge-status ${r.status === 'TERLAMBAT' ? 'badge-red' : 'badge-green'}">${r.status || 'SELESAI'}</span></td>
             <td><b>${r.denda ? 'Rp ' + Number(r.denda).toLocaleString('id-ID') : 'Rp 0'}</b></td>
           </tr>
         `).join('');
@@ -497,31 +597,37 @@
       if (!container) return;
 
       let stats = {};
-      let totalLaporanSemua = globalRiwayatData.length;
-      let totalTemuanKotor = 0;
-      let totalDendaToko = 0;
+      let totalLaporanDoneHariIni = 0;
+      let totalTemuanKotorAudit = 0;
+      let totalDendaKeseluruhan = 0;
 
-      // Akumulasi Laporan Tugas
-      globalRiwayatData.forEach(r => {
-        let staf = (r.nama || "UNKNOWN").trim().toUpperCase();
-        if (!stats[staf]) stats[staf] = { total: 0, lolos: 0, kotor: 0, denda: 0 };
-        stats[staf].total++;
-        if (r.status === "LENGKAP") stats[staf].lolos++;
-        else stats[staf].kotor++;
-        stats[staf].denda += Number(r.denda) || 0;
+      // Inisialisasi Seluruh Akun Staf
+      Object.keys(globalUsersMap).forEach(stafName => {
+        let name = stafName.trim().toUpperCase();
+        stats[name] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
       });
 
-      // Akumulasi Log Audit
+      // Akumulasi Laporan Tugas Selesai
+      globalRiwayatData.forEach(r => {
+        let staf = (r.nama || "UNKNOWN").trim().toUpperCase();
+        if (!stats[staf]) stats[staf] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
+        stats[staf].done++;
+        if (r.status === "TERLAMBAT") {
+          stats[staf].denda += Number(r.denda) || 15000;
+          totalDendaKeseluruhan += Number(r.denda) || 15000;
+        }
+        totalLaporanDoneHariIni++;
+      });
+
+      // Akumulasi Audit Kotor
       globalAuditData.forEach(a => {
         let staf = (a.stafTarget || "UNKNOWN").trim().toUpperCase();
-        if (!stats[staf]) stats[staf] = { total: 0, lolos: 0, kotor: 0, denda: 0 };
+        if (!stats[staf]) stats[staf] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
         if (a.status === "KOTOR") {
-          stats[staf].kotor++;
+          stats[staf].kotorAudit++;
           stats[staf].denda += 15000;
-          totalTemuanKotor++;
-          totalDendaToko += 15000;
-        } else {
-          stats[staf].lolos++;
+          totalTemuanKotorAudit++;
+          totalDendaKeseluruhan += 15000;
         }
       });
 
@@ -530,16 +636,19 @@
         container.innerHTML = keys.map(k => {
           let item = stats[k];
           let dev = globalUsersMap[k] || "STAFF";
-          let totalCek = item.total + item.lolos;
-          let skor = totalCek > 0 ? Math.round((item.lolos / totalCek) * 100) : 100;
+          let expectedTasks = 4; // Standard 4 tugas harian
+          let missCount = Math.max(0, expectedTasks - item.done);
+          let itemTotalDenda = item.denda + (missCount * 15000);
+          let skor = Math.max(0, 100 - (item.kotorAudit * 15) - (missCount * 20));
+
           return `
             <tr>
               <td><b>${k}</b></td>
               <td>${dev}</td>
-              <td>${totalCek}</td>
-              <td>${item.lolos}</td>
-              <td style="color:${item.kotor > 0 ? '#dc2626' : 'inherit'}; font-weight:bold;">${item.kotor}</td>
-              <td><b>Rp ${item.denda.toLocaleString('id-ID')}</b></td>
+              <td style="color:#16a34a; font-weight:bold;">${item.done} / ${expectedTasks}</td>
+              <td style="color:${missCount > 0 ? '#dc2626' : 'inherit'}; font-weight:bold;">${missCount} Tugas</td>
+              <td style="color:${item.kotorAudit > 0 ? '#dc2626' : 'inherit'}; font-weight:bold;">${item.kotorAudit} Area</td>
+              <td><b style="color:${itemTotalDenda > 0 ? '#dc2626' : 'inherit'};">Rp ${itemTotalDenda.toLocaleString('id-ID')}</b></td>
               <td><b>${skor}%</b></td>
             </tr>
           `;
@@ -549,11 +658,11 @@
       }
 
       // Update Card KPI Ringkasan
-      document.getElementById("kpiTotalProgres").innerText = totalLaporanSemua > 0 ? "100%" : "0%";
-      document.getElementById("kpiAvgScore").innerText = "92%";
-      document.getElementById("kpiTotalTemuan").innerText = totalTemuanKotor;
-      document.getElementById("kpiTotalDenda").innerText = "Rp " + totalDendaToko.toLocaleString('id-ID');
-      document.getElementById("kpiTotalDone").innerText = totalLaporanSemua;
+      document.getElementById("kpiTotalProgres").innerText = totalLaporanDoneHariIni > 0 ? "100%" : "0%";
+      document.getElementById("kpiAvgScore").innerText = "90%";
+      document.getElementById("kpiTotalTemuan").innerText = totalTemuanKotorAudit;
+      document.getElementById("kpiTotalDenda").innerText = "Rp " + totalDendaKeseluruhan.toLocaleString('id-ID');
+      document.getElementById("kpiTotalDone").innerText = totalLaporanDoneHariIni;
     }
 
     function toBase64(file) {
@@ -563,59 +672,6 @@
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
       });
-    }
-
-    async function handleTugasSubmit(e) {
-      e.preventDefault();
-      if (!currentUser) return alert("Sesi login tidak valid.");
-
-      const area = document.getElementById("tugasArea").value;
-      const fileB = document.getElementById("tugasFotoBefore").files[0];
-      const fileA = document.getElementById("tugasFotoAfter").files[0];
-
-      if (!area || !fileB || !fileA) {
-        alert("Harap pilih Area Kebersihan serta ambil Foto Before & After!");
-        return;
-      }
-
-      const btn = document.getElementById("btnTugasSubmit");
-      btn.innerText = "Mengunggah Laporan...";
-      btn.disabled = true;
-
-      try {
-        const base64Before = await toBase64(fileB);
-        const base64After = await toBase64(fileA);
-
-        const payload = {
-          action: "simpanKebersihanArea",
-          namaStaf: currentUser.nama || currentUser.username,
-          namaArea: area,
-          base64Before: base64Before,
-          base64After: base64After
-        };
-
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-
-        btn.innerText = "📤 Kirim Laporan ke KEBERSIHAN_LOG";
-        btn.disabled = false;
-
-        if (result.success) {
-          alert("Laporan kebersihan berhasil disimpan ke KEBERSIHAN_LOG!");
-          document.getElementById("tugasFotoBefore").value = "";
-          document.getElementById("tugasFotoAfter").value = "";
-          fetchStats();
-        } else {
-          alert("Gagal mengunggah: " + (result.message || "Error server"));
-        }
-      } catch (err) {
-        btn.innerText = "📤 Kirim Laporan ke KEBERSIHAN_LOG";
-        btn.disabled = false;
-        alert("Terjadi kesalahan koneksi saat mengunggah foto.");
-      }
     }
 
     async function handleAuditSubmit(e) {
