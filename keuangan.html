@@ -69,7 +69,7 @@
 
     /* PANELS & TABLES */
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
+    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; flex-wrap: wrap; gap: 8px; }
 
     .table-container { height: 380px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
     .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
@@ -140,7 +140,15 @@
         </div>
 
         <div class="box-panel">
-          <div class="panel-header"><span>Breakdown Keuangan Harian MTK (Sheet KASIR)</span></div>
+          <div class="panel-header">
+            <span>Breakdown Keuangan Harian MTK (Sheet KASIR)</span>
+            <!-- INPUT FILTER BULAN MTK -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label style="font-size: 11px; color: #64748b; font-weight: bold;">Filter Bulan:</label>
+              <input type="month" id="filterBulanMtk" onchange="applyFilterMtk()" style="padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">
+              <button onclick="resetFilterMtk()" style="padding: 4px 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold;">Reset</button>
+            </div>
+          </div>
           <div class="table-container">
             <table class="custom-table">
               <thead>
@@ -180,7 +188,15 @@
         </div>
 
         <div class="box-panel">
-          <div class="panel-header"><span>Breakdown Keuangan Harian (Sheet SERVICE)</span></div>
+          <div class="panel-header">
+            <span>Breakdown Keuangan Harian (Sheet SERVICE)</span>
+            <!-- INPUT FILTER BULAN SERVICE -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label style="font-size: 11px; color: #64748b; font-weight: bold;">Filter Bulan:</label>
+              <input type="month" id="filterBulanService" onchange="applyFilterService()" style="padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">
+              <button onclick="resetFilterService()" style="padding: 4px 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold;">Reset</button>
+            </div>
+          </div>
           <div class="table-container">
             <table class="custom-table">
               <thead>
@@ -209,6 +225,8 @@
   <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
+    let rawKeuanganData = null; // Penampung data global
+
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
       if (user) {
@@ -233,82 +251,180 @@
     }
 
     function fetchStats() {
+      document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="9" style="text-align:center;">Memuat data terbaru...</td></tr>';
+      document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="8" style="text-align:center;">Memuat data terbaru...</td></tr>';
+
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?callback=renderUI&ts=${new Date().getTime()}`;
+
+      script.onerror = () => {
+        document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="9" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
+        document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="8" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
+      };
+
+      script.onload = () => {
+        if (script.parentNode) script.parentNode.removeChild(script);
+      };
+
       document.body.appendChild(script);
-      document.body.removeChild(script);
     }
 
     function renderUI(data) {
       if (!data) return;
+      rawKeuanganData = data;
 
-      // 1. KEUANGAN MTK (KASIR)
-      try {
-        if (data.keuangan) {
-          const k = data.keuangan;
-          document.getElementById("kTotalPenjualan").innerText = formatRupiah(k.totalPenjualan);
-          document.getElementById("kTotalTransfer").innerText = formatRupiah(k.totalTransfer);
-          document.getElementById("kTotalQrisEdc").innerText = formatRupiah(k.totalQrisEdc);
-          document.getElementById("kTotalPembiayaan").innerText = formatRupiah(k.totalPembiayaan);
-          document.getElementById("kTotalTnt").innerText = formatRupiah(k.totalTnt || 0);
-          document.getElementById("kTotalDpPp").innerText = formatRupiah(k.totalDpPp);
-          document.getElementById("kTotalTunai").innerText = formatRupiah(k.totalTunai);
-          document.getElementById("kTotalPiutang").innerText = formatRupiah(k.totalPiutang);
+      renderKeuanganMtk();
+      renderKeuanganService();
+    }
 
-          if (k.breakdownHarian && k.breakdownHarian.length > 0) {
-            document.getElementById("tblKeuanganHarian").innerHTML = k.breakdownHarian.map(row => `
-              <tr>
-                <td><b>${row.tanggal}</b></td>
-                <td><b>${formatRupiah(row.total)}</b></td>
-                <td>${formatRupiah(row.transfer)}</td>
-                <td>${formatRupiah(row.qris)}</td>
-                <td>${formatRupiah(row.pembiayaan)}</td>
-                <td><b>${formatRupiah(row.tnt || 0)}</b></td>
-                <td>${formatRupiah(row.dppp)}</td>
-                <td>${formatRupiah(row.tunai)}</td>
-                <td style="color:${row.piutang > 0 ? '#dc2626' : 'inherit'}; font-weight:${row.piutang > 0 ? 'bold' : 'normal'};">
-                  ${formatRupiah(row.piutang)}
-                </td>
-              </tr>
-            `).join('');
-          } else {
-            document.getElementById("tblKeuanganHarian").innerHTML = `<tr><td colspan="9" style="text-align:center;">Belum ada data keuangan MTK.</td></tr>`;
+    // ----------------------------------------------------
+    // KEUANGAN MTK (KASIR)
+    // ----------------------------------------------------
+    function renderKeuanganMtk() {
+      if (!rawKeuanganData || !rawKeuanganData.keuangan) return;
+      const k = rawKeuanganData.keuangan;
+
+      document.getElementById("kTotalPenjualan").innerText = formatRupiah(k.totalPenjualan || 0);
+      document.getElementById("kTotalTransfer").innerText = formatRupiah(k.totalTransfer || 0);
+      document.getElementById("kTotalQrisEdc").innerText = formatRupiah(k.totalQrisEdc || 0);
+      document.getElementById("kTotalPembiayaan").innerText = formatRupiah(k.totalPembiayaan || 0);
+      document.getElementById("kTotalTnt").innerText = formatRupiah(k.totalTnt || 0);
+      document.getElementById("kTotalDpPp").innerText = formatRupiah(k.totalDpPp || 0);
+      document.getElementById("kTotalTunai").innerText = formatRupiah(k.totalTunai || 0);
+      document.getElementById("kTotalPiutang").innerText = formatRupiah(k.totalPiutang || 0);
+
+      applyFilterMtk();
+    }
+
+    function applyFilterMtk() {
+      if (!rawKeuanganData || !rawKeuanganData.keuangan || !rawKeuanganData.keuangan.breakdownHarian) return;
+      
+      const filterVal = document.getElementById("filterBulanMtk").value;
+      let list = rawKeuanganData.keuangan.breakdownHarian;
+
+      if (filterVal) {
+        const [year, month] = filterVal.split("-");
+        list = list.filter(row => {
+          if (!row.tanggal) return false;
+          let parts = row.tanggal.split(/[\/\-]/);
+          if (parts.length === 3) {
+            let rowMonth, rowYear;
+            if (parts[0].length === 4) {
+              rowYear = parts[0];
+              rowMonth = parts[1].padStart(2, '0');
+            } else {
+              rowMonth = parts[1].padStart(2, '0');
+              rowYear = parts[2];
+            }
+            return rowMonth === month && rowYear === year;
           }
-        }
-      } catch (e) { console.error("Error keuangan MTK render:", e); }
+          return true;
+        });
+      }
 
-      // 2. KEUANGAN SERVICE
-      try {
-        if (data.keuanganService) {
-          const ks = data.keuanganService;
-          document.getElementById("ksTotalPenjualan").innerText = formatRupiah(ks.totalPenjualan);
-          document.getElementById("ksTotalTransfer").innerText = formatRupiah(ks.totalTransfer);
-          document.getElementById("ksTotalQrisEdc").innerText = formatRupiah(ks.totalQrisEdc);
-          document.getElementById("ksTotalPembiayaan").innerText = formatRupiah(ks.totalPembiayaan);
-          document.getElementById("ksTotalDpPp").innerText = formatRupiah(ks.totalDpPp);
-          document.getElementById("ksTotalTunai").innerText = formatRupiah(ks.totalTunai);
-          document.getElementById("ksTotalPiutang").innerText = formatRupiah(ks.totalPiutang);
+      renderTableMtk(list);
+    }
 
-          if (ks.breakdownHarian && ks.breakdownHarian.length > 0) {
-            document.getElementById("tblKeuanganServiceHarian").innerHTML = ks.breakdownHarian.map(row => `
-              <tr>
-                <td><b>${row.tanggal}</b></td>
-                <td><b>${formatRupiah(row.total)}</b></td>
-                <td>${formatRupiah(row.transfer)}</td>
-                <td>${formatRupiah(row.qris)}</td>
-                <td>${formatRupiah(row.pembiayaan)}</td>
-                <td>${formatRupiah(row.dppp)}</td>
-                <td>${formatRupiah(row.tunai)}</td>
-                <td style="color:${row.piutang > 0 ? '#dc2626' : 'inherit'}; font-weight:${row.piutang > 0 ? 'bold' : 'normal'};">
-                  ${formatRupiah(row.piutang)}
-                </td>
-              </tr>
-            `).join('');
-          } else {
-            document.getElementById("tblKeuanganServiceHarian").innerHTML = `<tr><td colspan="8" style="text-align:center;">Belum ada data keuangan service.</td></tr>`;
+    function resetFilterMtk() {
+      document.getElementById("filterBulanMtk").value = "";
+      applyFilterMtk();
+    }
+
+    function renderTableMtk(list) {
+      const tbody = document.getElementById("tblKeuanganHarian");
+      if (list && list.length > 0) {
+        tbody.innerHTML = list.map(row => `
+          <tr>
+            <td><b>${row.tanggal || '-'}</b></td>
+            <td><b>${formatRupiah(row.total || 0)}</b></td>
+            <td>${formatRupiah(row.transfer || 0)}</td>
+            <td>${formatRupiah(row.qris || 0)}</td>
+            <td>${formatRupiah(row.pembiayaan || 0)}</td>
+            <td><b>${formatRupiah(row.tnt || 0)}</b></td>
+            <td>${formatRupiah(row.dppp || 0)}</td>
+            <td>${formatRupiah(row.tunai || 0)}</td>
+            <td style="color:${(row.piutang || 0) > 0 ? '#dc2626' : 'inherit'}; font-weight:${(row.piutang || 0) > 0 ? 'bold' : 'normal'};">
+              ${formatRupiah(row.piutang || 0)}
+            </td>
+          </tr>
+        `).join('');
+      } else {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Tidak ada data keuangan pada bulan ini.</td></tr>`;
+      }
+    }
+
+    // ----------------------------------------------------
+    // KEUANGAN SERVICE
+    // ----------------------------------------------------
+    function renderKeuanganService() {
+      if (!rawKeuanganData || !rawKeuanganData.keuanganService) return;
+      const ks = rawKeuanganData.keuanganService;
+
+      document.getElementById("ksTotalPenjualan").innerText = formatRupiah(ks.totalPenjualan || 0);
+      document.getElementById("ksTotalTransfer").innerText = formatRupiah(ks.totalTransfer || 0);
+      document.getElementById("ksTotalQrisEdc").innerText = formatRupiah(ks.totalQrisEdc || 0);
+      document.getElementById("ksTotalPembiayaan").innerText = formatRupiah(ks.totalPembiayaan || 0);
+      document.getElementById("ksTotalDpPp").innerText = formatRupiah(ks.totalDpPp || 0);
+      document.getElementById("ksTotalTunai").innerText = formatRupiah(ks.totalTunai || 0);
+      document.getElementById("ksTotalPiutang").innerText = formatRupiah(ks.totalPiutang || 0);
+
+      applyFilterService();
+    }
+
+    function applyFilterService() {
+      if (!rawKeuanganData || !rawKeuanganData.keuanganService || !rawKeuanganData.keuanganService.breakdownHarian) return;
+      
+      const filterVal = document.getElementById("filterBulanService").value;
+      let list = rawKeuanganData.keuanganService.breakdownHarian;
+
+      if (filterVal) {
+        const [year, month] = filterVal.split("-");
+        list = list.filter(row => {
+          if (!row.tanggal) return false;
+          let parts = row.tanggal.split(/[\/\-]/);
+          if (parts.length === 3) {
+            let rowMonth, rowYear;
+            if (parts[0].length === 4) {
+              rowYear = parts[0];
+              rowMonth = parts[1].padStart(2, '0');
+            } else {
+              rowMonth = parts[1].padStart(2, '0');
+              rowYear = parts[2];
+            }
+            return rowMonth === month && rowYear === year;
           }
-        }
-      } catch (e) { console.error("Error keuangan Service render:", e); }
+          return true;
+        });
+      }
+
+      renderTableService(list);
+    }
+
+    function resetFilterService() {
+      document.getElementById("filterBulanService").value = "";
+      applyFilterService();
+    }
+
+    function renderTableService(list) {
+      const tbody = document.getElementById("tblKeuanganServiceHarian");
+      if (list && list.length > 0) {
+        tbody.innerHTML = list.map(row => `
+          <tr>
+            <td><b>${row.tanggal || '-'}</b></td>
+            <td><b>${formatRupiah(row.total || 0)}</b></td>
+            <td>${formatRupiah(row.transfer || 0)}</td>
+            <td>${formatRupiah(row.qris || 0)}</td>
+            <td>${formatRupiah(row.pembiayaan || 0)}</td>
+            <td>${formatRupiah(row.dppp || 0)}</td>
+            <td>${formatRupiah(row.tunai || 0)}</td>
+            <td style="color:${(row.piutang || 0) > 0 ? '#dc2626' : 'inherit'}; font-weight:${(row.piutang || 0) > 0 ? 'bold' : 'normal'};">
+              ${formatRupiah(row.piutang || 0)}
+            </td>
+          </tr>
+        `).join('');
+      } else {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Tidak ada data keuangan service pada bulan ini.</td></tr>`;
+      }
     }
   </script>
 </body>
