@@ -129,7 +129,7 @@
     <div class="content">
       <div id="penjualan" class="tab-page">
         
-        <!-- TOP KPI CARDS -->
+        <!-- 1. PENCAPAAN TOKO / TOTAL INVOICE / MARKETING / ADMIN / TEKNISI -->
         <div class="top-cards">
           <div class="card main-card">
             <div class="card-top-row"><span class="card-head">Pencapaian Toko</span></div>
@@ -158,21 +158,49 @@
           </div>
         </div>
 
-        <!-- SALES GRID -->
-        <div class="sales-grid">
-          <!-- OMZET HARIAN -->
-          <div class="box-panel full-width">
-            <div class="panel-header"><span>Daily Results (Omzet Harian)</span></div>
-            <div class="chart-scroll-wrapper"><div class="chart-wrapper"><canvas id="barDailyChart"></canvas></div></div>
+        <!-- 2. TABEL KINERJA PERSONAL MARKETING -->
+        <div class="box-panel full-width">
+          <div class="panel-header"><span>Tabel Kinerja Personal Marketing</span></div>
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Personal</th>
+                  <th>Pencapaian (ACH)</th>
+                  <th>Target / Bln</th>
+                  <th>Target Sisa / Hari</th>
+                  <th>% ACH</th>
+                  <th>Avg / Hari</th>
+                  <th>Proyeksi Run Rate</th>
+                  <th>% Proyeksi</th>
+                </tr>
+              </thead>
+              <tbody id="tblMktPerf"><tr><td colspan="8" style="text-align:center;">Memuat data...</td></tr></tbody>
+            </table>
           </div>
+        </div>
 
-          <!-- MINGGUAN -->
+        <!-- 3. PERBANDINGAN REVENUE & PROYEKSI MARKETING -->
+        <div class="box-panel full-width">
+          <div class="panel-header"><span>Perbandingan Revenue & Proyeksi Marketing</span></div>
+          <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="height: 260px;"><canvas id="barMktPerfChart"></canvas></div></div>
+        </div>
+
+        <!-- 4. DAILY RESULTS (OMZET HARIAN) -->
+        <div class="box-panel full-width">
+          <div class="panel-header"><span>Daily Results (Omzet Harian)</span></div>
+          <div class="chart-scroll-wrapper"><div class="chart-wrapper"><canvas id="barDailyChart"></canvas></div></div>
+        </div>
+
+        <!-- GRID KELOMPOK 5 & 6 -->
+        <div class="sales-grid">
+          <!-- 5. PERFORMA PENJUALAN MINGGUAN -->
           <div class="box-panel">
             <div class="panel-header"><span>Performa Penjualan Mingguan</span></div>
             <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="min-width:100%;"><canvas id="barWeeklyChart"></canvas></div></div>
           </div>
 
-          <!-- BULANAN -->
+          <!-- 6. PERFORMA PENJUALAN BULANAN -->
           <div class="box-panel">
             <div class="panel-header"><span>Performa Penjualan Bulanan</span></div>
             <div class="table-container" style="height: 220px;">
@@ -183,48 +211,32 @@
             </div>
           </div>
 
-          <!-- BY BRAND -->
+          <!-- 7. PENCAPAAN BY BRAND -->
           <div class="box-panel">
             <div class="panel-header"><span>Pencapaian By Brand</span></div>
             <div class="chart-wrapper" style="min-width:100%;"><canvas id="pieBrandChart"></canvas></div>
           </div>
 
-          <!-- BY DEPARTMENT -->
+          <!-- 8. PENCAPAAN BY DEPARTMENT -->
           <div class="box-panel">
             <div class="panel-header"><span>Pencapaian By Department</span></div>
             <div class="chart-wrapper" style="min-width:100%;"><canvas id="barDeptChart"></canvas></div>
           </div>
+        </div>
 
-          <!-- BEST SELLER -->
-          <div class="box-panel full-width">
-            <div class="panel-header">
-              <span>Top Best Seller Product</span>
-              <select id="bestSellerFilter" onchange="changeBestSellerSort(this.value)" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 11px;">
-                <option value="omzet">By Omzet (Rp)</option>
-                <option value="qty">By Qty (Pcs)</option>
-              </select>
-            </div>
-            <div class="table-container">
-              <table class="custom-table">
-                <thead><tr><th>Rank</th><th>Nama Produk</th><th>Qty</th><th>Total Omzet</th></tr></thead>
-                <tbody id="tblBestSeller"><tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr></tbody>
-              </table>
-            </div>
+        <!-- 9. TOP BEST SELLER PRODUCT -->
+        <div class="box-panel full-width">
+          <div class="panel-header">
+            <span>Top Best Seller Product</span>
+            <select id="bestSellerFilter" onchange="changeBestSellerSort(this.value)" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 11px;">
+              <option value="omzet">By Omzet (Rp)</option>
+              <option value="qty">By Qty (Pcs)</option>
+            </select>
           </div>
-        </div>
-
-        <!-- MARKETING PERFORMANCE -->
-        <div class="box-panel full-width">
-          <div class="panel-header"><span>Perbandingan Revenue & Proyeksi Marketing</span></div>
-          <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="height: 260px;"><canvas id="barMktPerfChart"></canvas></div></div>
-        </div>
-
-        <div class="box-panel full-width">
-          <div class="panel-header"><span>Tabel Kinerja Personal Marketing</span></div>
-          <div class="table-container">
+          <div class="table-container" style="height: 350px;">
             <table class="custom-table">
-              <thead><tr><th>Personal</th><th>Pencapaian (ACH)</th><th>Target / Bln</th><th>Target Sisa / Hari</th><th>% ACH</th><th>Avg / Hari</th><th>Proyeksi Run Rate</th><th>% Proyeksi</th></tr></thead>
-              <tbody id="tblMktPerf"><tr><td colspan="8" style="text-align:center;">Memuat data...</td></tr></tbody>
+              <thead><tr><th>Rank</th><th>Nama Produk</th><th>Qty</th><th>Total Omzet</th></tr></thead>
+              <tbody id="tblBestSeller"><tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -279,7 +291,12 @@
         document.getElementById("pTekValAvg").innerText = `Avg: ${formatRupiah(s.kpi.pencapaianTeknisiAvg || 0)} / hari`;
       }
 
-      // 2. DAILY RESULTS
+      // 2 & 3. MARKETING PERFORMANCE (TABEL & GRAFIK)
+      if (s.mktPerformance && s.mktPerformance.length > 0) {
+        renderMktPerformance(s.mktPerformance);
+      }
+
+      // 4. DAILY RESULTS
       if (s.dailyResults && barDailyInst) {
         let full31Days = Array.from({ length: 31 }, (_, i) => String(i + 1));
         let dataMap = {};
@@ -296,78 +313,67 @@
         barDailyInst.update();
       }
 
-      // 3. MINGGUAN
+      // 5. MINGGUAN
       if (s.weeklyResults && barWeeklyInst) {
         barWeeklyInst.data.labels = s.weeklyResults.map(w => w.minggu || '-');
         barWeeklyInst.data.datasets[0].data = s.weeklyResults.map(w => w.omzet);
         barWeeklyInst.update();
       }
 
-      // 4. BULANAN
+      // 6. BULANAN
       if (s.monthlyPerformance && s.monthlyPerformance.length > 0) {
         document.getElementById("tblMonthlyPerf").innerHTML = s.monthlyPerformance.map(m => `
           <tr><td><b>${m.bulan}</b></td><td><b>${formatRupiah(m.omzet)}</b></td></tr>
         `).join('');
       }
 
-      // 5. BRAND
+      // 7. BRAND
       if (s.byBrand && pieBrandInst) {
         pieBrandInst.data.labels = s.byBrand.map(b => b.brand);
         pieBrandInst.data.datasets[0].data = s.byBrand.map(b => b.unit);
         pieBrandInst.update();
       }
 
-      // 6. DEPARTMENT
+      // 8. DEPARTMENT
       if (s.byDept && barDeptInst) {
         barDeptInst.data.labels = s.byDept.map(d => d.dept);
         barDeptInst.data.datasets[0].data = s.byDept.map(d => d.nilai);
         barDeptInst.update();
       }
 
-      // 7. BEST SELLER
+      // 9. BEST SELLER
       if (s.bestSeller && s.bestSeller.length > 0) {
         rawBestSellerData = s.bestSeller;
         renderBestSellerTable('omzet');
       }
-
-      // 8. MARKETING PERFORMANCE
-      if (s.mktPerformance && s.mktPerformance.length > 0) {
-        renderMktPerformance(s.mktPerformance);
-      }
     }
-
-    function renderBestSellerTable(sortBy) {
-      if (!rawBestSellerData) return;
-      let sortedList = [...rawBestSellerData];
-      if (sortBy === 'qty') sortedList.sort((a, b) => b.qty - a.qty);
-      else sortedList.sort((a, b) => b.total - a.total);
-
-      const container = document.getElementById("tblBestSeller");
-      if (container) {
-        container.innerHTML = sortedList.slice(0, 10).map((b, i) => `
-          <tr><td><b>#${i + 1}</b></td><td><b>${b.item}</b></td><td>${b.qty} Pcs</td><td><b>${formatRupiah(b.total)}</b></td></tr>
-        `).join('');
-      }
-    }
-
-    function changeBestSellerSort(val) { renderBestSellerTable(val); }
 
     function renderMktPerformance(list) {
       let html = "";
       let names = [], achData = [], targetData = [], runRateData = [];
 
       list.forEach(item => {
-        names.push(item.nama); achData.push(item.ach); targetData.push(item.targetBln); runRateData.push(item.runRate);
+        names.push(item.nama); 
+        achData.push(item.ach); 
+        targetData.push(item.targetBln); 
+        runRateData.push(item.runRate);
+
         let rawPct = parseFloat(item.pctRunRate || 0);
-        let pctVal = rawPct <= 10 ? rawPct * 100 : rawPct;
+        let pctVal = rawPct <= 1 ? rawPct * 100 : rawPct;
+        let pctAchVal = item.pctAch <= 1 ? item.pctAch * 100 : item.pctAch;
+
         let badgeClass = pctVal < 90 ? "badge-red" : (pctVal < 100 ? "badge-yellow" : "badge-green");
 
         html += `
           <tr>
-            <td><b>${item.nama}</b></td><td>${formatRupiah(item.ach)}</td><td>${formatRupiah(item.targetBln)}</td>
-            <td style="color:${item.targetHari < 0 ? '#dc2626' : '#16a34a'}; font-weight:bold;">${formatRupiah(item.targetHari)}</td>
-            <td><b>${(item.pctAch * 100).toFixed(1)}%</b></td><td>${formatRupiah(item.avgHari)}</td><td><b>${formatRupiah(item.runRate)}</b></td>
-            <td><span class="badge-status ${badgeClass}">${(pctVal).toFixed(1)}%</span></td>
+            <td><b>${item.nama}</b></td>
+            <td>${formatRupiah(item.ach)}</td>
+            <td>${formatRupiah(item.targetBln)}</td>
+            <td style="color:${item.targetHari < 0 ? '#16a34a' : '#dc2626'}; font-weight:bold;">${formatRupiah(item.targetHari)}</td>
+            <td><b>${pctAchVal.toFixed(1)}%</b></td>
+            <td>${formatRupiah(item.avgHari)}</td>
+            <td><b>${formatRupiah(item.runRate)}</b></td>
+            <td><span class="badge-status ${badgeClass}">${pctVal.toFixed(1)}%</span></td>
           </tr>
         `;
       });
@@ -383,6 +389,22 @@
         barMktPerfInst.update();
       }
     }
+
+    function renderBestSellerTable(sortBy) {
+      if (!rawBestSellerData) return;
+      let sortedList = [...rawBestSellerData];
+      if (sortBy === 'qty') sortedList.sort((a, b) => b.qty - a.qty);
+      else sortedList.sort((a, b) => b.total - a.total);
+
+      const container = document.getElementById("tblBestSeller");
+      if (container) {
+        container.innerHTML = sortedList.map((b, i) => `
+          <tr><td><b>#${i + 1}</b></td><td><b>${b.item}</b></td><td>${b.qty} Pcs</td><td><b>${formatRupiah(b.total)}</b></td></tr>
+        `).join('');
+      }
+    }
+
+    function changeBestSellerSort(val) { renderBestSellerTable(val); }
 
     function initCharts() {
       Chart.defaults.font.family = 'Roboto';
