@@ -63,10 +63,13 @@
 
     /* CARD TUGAS HARIAN STAF */
     .task-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 8px; }
-    .card-task-item { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; position: relative; }
+    .card-task-item { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; position: relative; }
     .card-task-item.completed { background: #f0fdf4; border-color: #86efac; }
-    .card-task-title { font-size: 13px; font-weight: 900; color: #0f172a; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .card-task-item.partially-completed { border-color: #fcd34d; background: #fffbeb; }
+    .card-task-title { font-size: 13px; font-weight: 900; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
     
+    .sub-task-box { background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; }
+
     .kpi-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
     .card-kpi { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: center; }
     .card-kpi .val { font-size: 18px; font-weight: 900; color: #0f172a; margin-top: 4px; }
@@ -78,16 +81,16 @@
     .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
     .custom-table tr:hover td { background: #f8fafc; }
 
-    .form-group { margin-bottom: 10px; }
-    .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
-    .form-control { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; outline: none; background: #ffffff; }
-    .btn-submit { background: #dc2626; color: white; border: none; padding: 8px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
-    .btn-submit:hover { background: #b91c1c; }
+    .form-group { margin-bottom: 6px; }
+    .form-label { display: block; font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; outline: none; background: #ffffff; }
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 7px 10px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
+    .btn-submit:hover { opacity: 0.9; }
 
     .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
     .badge-green { background: #dcfce7; color: #15803d; }
     .badge-red { background: #fee2e2; color: #b91c1c; }
-    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-orange { background: #fef3c7; color: #b45309; }
 
     @media (max-width: 768px) {
       .container { flex-direction: column; }
@@ -111,7 +114,7 @@
     </div>
     <div class="header-user">
       <span class="user-name" id="userBadge">Memuat...</span>
-      <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
+      <button class="btn-badge-gray" onclick="fetchStats()">Refresh</button>
       <button class="btn-badge-red" onclick="showProfile()">Profil</button>
       <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
     </div>
@@ -120,20 +123,20 @@
   <div class="container">
     <!-- SIDEBAR NAVIGATION -->
     <div class="sidebar">
-      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item active">🧹 Kebersihan Toko</a>
-      <a id="nav-penjualan" href="penjualan.html" class="menu-item">📈 Penjualan</a>
-      <a id="nav-keuangan" href="keuangan.html" class="menu-item">💳 Keuangan</a>
-      <a id="nav-siplah" href="siplah.html" class="menu-item">📑 SIPLah Tertunda</a>
-      <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">👤 Kelola Akun & Akses</a>
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item active">Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
+      <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">Kelola Akun & Akses</a>
     </div>
 
     <div class="content">
       
       <!-- SUB TAB NAVIGASI KEBERSIHAN -->
       <div class="sub-tab-nav">
-        <button id="subBtn-tugas" class="sub-tab-btn active" onclick="switchKebersihanSubTab('tugas')">📋 Tugas Kebersihan Staf</button>
-        <button id="subBtn-audit" class="sub-tab-btn" onclick="switchKebersihanSubTab('audit')" style="display:none;">🔍 Audit Kebersihan Toko</button>
-        <button id="subBtn-kpi" class="sub-tab-btn" onclick="switchKebersihanSubTab('kpi')" style="display:none;">📊 Progres & KPI Staf</button>
+        <button id="subBtn-tugas" class="sub-tab-btn active" onclick="switchKebersihanSubTab('tugas')">Tugas Kebersihan Staf</button>
+        <button id="subBtn-audit" class="sub-tab-btn" onclick="switchKebersihanSubTab('audit')" style="display:none;">Audit Kebersihan Toko</button>
+        <button id="subBtn-kpi" class="sub-tab-btn" onclick="switchKebersihanSubTab('kpi')" style="display:none;">Progres & KPI Staf</button>
       </div>
 
       <!-- TAB 1: TUGAS KEBERSIHAN STAF -->
@@ -142,7 +145,7 @@
         <!-- CARDS TUGAS KEBERSIHAN HARIAN STAF -->
         <div class="box-panel">
           <div class="panel-header">
-            <span>📷 DAFTAR TUGAS KEBERSIHAN HARIAN SAYA</span>
+            <span>DAFTAR TUGAS KEBERSIHAN HARIAN SAYA</span>
             <span style="font-size: 10px; color: #dc2626; text-transform: none;">*Terlambat lewat hari dikenakan denda Rp 15.000 / tugas</span>
           </div>
 
@@ -154,7 +157,7 @@
         <!-- DAFTAR LOG KEBERSIHAN HARI INI -->
         <div class="box-panel">
           <div class="panel-header">
-            <span>REKAPITULASI LAPORAN KEBERSIHAN (KEBERSIHAN_LOG)</span>
+            <span>REKAPITULASI LAPORAN KEBERSIHAN</span>
             <span id="labelScopeView" style="font-size: 10px; color: #dc2626;">(Memuat...)</span>
           </div>
           <div class="table-container">
@@ -180,11 +183,11 @@
       <!-- TAB 2: AUDIT KEBERSIHAN TOKO (SUPERVISOR/ADMIN) -->
       <div id="subTab-audit" class="tab-page">
         <div class="box-panel">
-          <div class="panel-header"><span>FORM AUDIT KEBERSIHAN (SUPERVISOR / AUDITOR)</span></div>
+          <div class="panel-header"><span>FORM AUDIT KEBERSIHAN</span></div>
           <form id="formAudit" onsubmit="handleAuditSubmit(event)">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
-                <label class="form-label">Staf Target Audit (Pop-Up Akun)</label>
+                <label class="form-label">Staf Target Audit</label>
                 <select id="auditStaf" class="form-control" onchange="onAuditStafChanged()" required>
                   <option value="">-- Pilih Akun Staf --</option>
                 </select>
@@ -197,7 +200,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
-                <label class="form-label">Area Target Audit (Pop-Up Area Staf)</label>
+                <label class="form-label">Area Target Audit</label>
                 <select id="auditArea" class="form-control" required>
                   <option value="">-- Pilih Staf Terlebih Dahulu --</option>
                 </select>
@@ -205,8 +208,8 @@
               <div class="form-group">
                 <label class="form-label">Hasil Audit</label>
                 <select id="auditHasil" class="form-control" required>
-                  <option value="BERSIH">✅ BERSIH (Lolos Audit)</option>
-                  <option value="KOTOR">❌ KOTOR (Denda Rp 15.000)</option>
+                  <option value="BERSIH">BERSIH (Lolos Audit)</option>
+                  <option value="KOTOR">KOTOR (Denda Rp 15.000)</option>
                 </select>
               </div>
             </div>
@@ -217,11 +220,11 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">Foto Bukti Audit (Ambil dari Kamera)</label>
-              <input type="file" id="auditFoto" class="form-control" accept="image/*" capture="environment" onchange="saveGenericDraft('audit', 'foto', this)">
+              <label class="form-label">Foto Bukti Audit</label>
+              <input type="file" id="auditFoto" class="form-control" accept="image/*" capture="environment">
             </div>
 
-            <button type="submit" id="btnAuditSubmit" class="btn-submit">Kirim Hasil Audit ke AUDIT_KEBERSIHAN_LOG</button>
+            <button type="submit" id="btnAuditSubmit" class="btn-submit">Kirim Hasil Audit</button>
           </form>
         </div>
 
@@ -376,39 +379,7 @@
       renderKpiTable();
     }
 
-    // SIMPAN DRAF FOTO SECARA TERSILAT PADA BROWSER/HP (TANPA TEXT KETERANGAN)
-    function saveGenericDraft(contextId, fieldType, inputElement) {
-      const file = inputElement.files[0];
-      if (!file || !currentUser) return;
-
-      const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Data = e.target.result;
-        const draftKey = `draft_img_${userKey}_${contextId}_${fieldType}`;
-        localStorage.setItem(draftKey, base64Data);
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // AMBIL DRAF FOTO DARI LOCALSTORAGE
-    function getGenericDraft(contextId, fieldType) {
-      if (!currentUser) return null;
-      const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
-      const draftKey = `draft_img_${userKey}_${contextId}_${fieldType}`;
-      return localStorage.getItem(draftKey);
-    }
-
-    // HAPUS DRAF FOTO DARI MEMORI LOCAL SETELAH BERHASIL DI-SUBMIT
-    function clearGenericDraft(contextId) {
-      if (!currentUser) return;
-      const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
-      localStorage.removeItem(`draft_img_${userKey}_${contextId}_before`);
-      localStorage.removeItem(`draft_img_${userKey}_${contextId}_after`);
-      localStorage.removeItem(`draft_img_${userKey}_${contextId}_foto`);
-    }
-
-    // Render Kartu Tugas Harian Staf Per Area
+    // Render Kartu Tugas Harian Staf Per Area (Dua Tombol Sebelum & Sesudah)
     function renderTaskCards() {
       const container = document.getElementById("tasksContainer");
       if (!container || !currentUser) return;
@@ -426,47 +397,69 @@
 
       let html = "";
       areaList.forEach((areaName, index) => {
-        const doneRecord = myTodayLogs.find(r => String(r.area || "").trim().toUpperCase() === areaName.trim().toUpperCase());
+        const record = myTodayLogs.find(r => String(r.area || "").trim().toUpperCase() === areaName.trim().toUpperCase());
 
-        if (doneRecord) {
-          clearGenericDraft(`task_${index}`);
+        const hasBefore = record && record.urlBefore;
+        const hasAfter = record && record.urlAfter;
+        const isFullyCompleted = hasBefore && hasAfter;
 
+        if (isFullyCompleted) {
           html += `
             <div class="card-task-item completed">
               <div class="card-task-title">
-                <span>📌 Tugas ${index + 1}: ${areaName}</span>
-                <span class="badge-status badge-green">✅ Selesai</span>
+                <span>Tugas ${index + 1}: ${areaName}</span>
+                <span class="badge-status badge-green">Selesai</span>
               </div>
               <div style="font-size: 11px; color: #16a34a; margin-bottom: 8px;">
-                Waktu Kirim: <b>${doneRecord.tgl ? new Date(doneRecord.tgl).toLocaleTimeString('id-ID') : '-'}</b>
+                Waktu Lapor: <b>${record.tgl ? new Date(record.tgl).toLocaleTimeString('id-ID') : '-'}</b>
               </div>
-              <div style="display: flex; gap: 8px; font-size: 11px; font-weight: bold;">
-                ${doneRecord.urlBefore ? `<a href="${doneRecord.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">📷 Foto Before</a>` : ''}
-                ${doneRecord.urlAfter ? `<a href="${doneRecord.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">📷 Foto After</a>` : ''}
+              <div style="display: flex; gap: 12px; font-size: 11px; font-weight: bold;">
+                <a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto Before</a>
+                <a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto After</a>
               </div>
             </div>
           `;
         } else {
-          const draftBefore = getGenericDraft(`task_${index}`, 'before');
-          const draftAfter = getGenericDraft(`task_${index}`, 'after');
-
           html += `
-            <div class="card-task-item">
+            <div class="card-task-item ${hasBefore ? 'partially-completed' : ''}">
               <div class="card-task-title">
-                <span>📌 Tugas ${index + 1}: ${areaName}</span>
-                <span class="badge-status badge-orange">⏳ Belum Selesai</span>
+                <span>Tugas ${index + 1}: ${areaName}</span>
+                <span class="badge-status ${hasBefore ? 'badge-orange' : 'badge-red'}">
+                  ${hasBefore ? 'Menunggu Foto After' : 'Belum Selesai'}
+                </span>
               </div>
-              <form onsubmit="submitSingleTask(event, '${areaName.replace(/'/g, "\\'")}', ${index})">
-                <div class="form-group">
-                  <label class="form-label">Foto Before (Sebelum)</label>
-                  <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveGenericDraft('task_${index}', 'before', this)" ${draftBefore ? '' : 'required'}>
+              
+              <div style="display: grid; gap: 10px; margin-top: 10px;">
+                <!-- FOTO BEFORE -->
+                <div class="sub-task-box">
+                  <label class="form-label">FOTO BEFORE (SEBELUM)</label>
+                  ${hasBefore ? `
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; margin-top: 4px;">
+                      Foto Before Terkirim (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626;">Lihat Foto</a>)
+                    </div>
+                  ` : `
+                    <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment">
+                    <button type="button" id="btn_before_${index}" class="btn-submit" style="background: #2563eb;" onclick="submitSubTask('${areaName.replace(/'/g, "\\'")}', ${index}, 'BEFORE')">
+                      Kirim Foto Before
+                    </button>
+                  `}
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Foto After (Sesudah)</label>
-                  <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveGenericDraft('task_${index}', 'after', this)" ${draftAfter ? '' : 'required'}>
+
+                <!-- FOTO AFTER -->
+                <div class="sub-task-box">
+                  <label class="form-label">FOTO AFTER (SESUDAH)</label>
+                  ${hasAfter ? `
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; margin-top: 4px;">
+                      Foto After Terkirim (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a;">Lihat Foto</a>)
+                    </div>
+                  ` : `
+                    <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment">
+                    <button type="button" id="btn_after_${index}" class="btn-submit" style="background: #16a34a;" onclick="submitSubTask('${areaName.replace(/'/g, "\\'")}', ${index}, 'AFTER')">
+                      Selesaikan Tugas Ini
+                    </button>
+                  `}
                 </div>
-                <button type="submit" id="btn_task_${index}" class="btn-submit">✅ Selesaikan Tugas Ini</button>
-              </form>
+              </div>
             </div>
           `;
         }
@@ -475,40 +468,32 @@
       container.innerHTML = html;
     }
 
-    // Submit Tugas per Satu Area
-    async function submitSingleTask(e, areaName, index) {
-      e.preventDefault();
+    // Submit Laporan Parsial (BEFORE / AFTER)
+    async function submitSubTask(areaName, index, type) {
       if (!currentUser) return alert("Sesi login tidak valid.");
 
-      const fileBInput = document.getElementById(`before_${index}`);
-      const fileAInput = document.getElementById(`after_${index}`);
+      const inputId = type === 'BEFORE' ? `before_${index}` : `after_${index}`;
+      const btnId = type === 'BEFORE' ? `btn_before_${index}` : `btn_after_${index}`;
+      const fileInput = document.getElementById(inputId);
 
-      let base64Before = getGenericDraft(`task_${index}`, 'before');
-      let base64After = getGenericDraft(`task_${index}`, 'after');
-
-      if (!base64Before && fileBInput && fileBInput.files[0]) {
-        base64Before = await toBase64(fileBInput.files[0]);
-      }
-      if (!base64After && fileAInput && fileAInput.files[0]) {
-        base64After = await toBase64(fileAInput.files[0]);
+      if (!fileInput || !fileInput.files[0]) {
+        return alert(`Harap pilih atau ambil Foto ${type} terlebih dahulu!`);
       }
 
-      if (!base64Before || !base64After) {
-        alert("Harap unggah atau ambil Foto Before & After untuk area ini!");
-        return;
-      }
-
-      const btn = document.getElementById(`btn_task_${index}`);
-      btn.innerText = "Mengunggah Laporan...";
+      const btn = document.getElementById(btnId);
+      const origText = btn.innerText;
+      btn.innerText = "Mengunggah...";
       btn.disabled = true;
 
       try {
+        const base64Data = await toBase64(fileInput.files[0]);
+
         const payload = {
-          action: "simpanKebersihanArea",
+          action: "simpanKebersihanAreaParsial",
           namaStaf: currentUser.nama || currentUser.username,
           namaArea: areaName,
-          base64Before: base64Before,
-          base64After: base64After
+          type: type,
+          base64Image: base64Data
         };
 
         const res = await fetch(SCRIPT_URL, {
@@ -518,16 +503,15 @@
         const result = await res.json();
 
         if (result.success) {
-          clearGenericDraft(`task_${index}`);
-          alert(`Tugas ${areaName} berhasil diselesaikan & disimpan ke KEBERSIHAN_LOG!`);
+          alert(`Foto ${type} berhasil dikirim!`);
           fetchStats();
         } else {
           alert("Gagal mengunggah: " + (result.message || "Error server"));
-          btn.innerText = "✅ Selesaikan Tugas Ini";
+          btn.innerText = origText;
           btn.disabled = false;
         }
       } catch (err) {
-        btn.innerText = "✅ Selesaikan Tugas Ini";
+        btn.innerText = origText;
         btn.disabled = false;
         alert("Terjadi kesalahan koneksi saat mengunggah foto.");
       }
@@ -585,7 +569,7 @@
               ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#dc2626; font-weight:bold;">Before</a>` : '-'} | 
               ${r.urlAfter ? `<a href="${r.urlAfter}" target="_blank" style="color:#15803d; font-weight:bold;">After</a>` : '-'}
             </td>
-            <td><span class="badge-status ${r.status === 'TERLAMBAT' ? 'badge-red' : 'badge-green'}">${r.status || 'SELESAI'}</span></td>
+            <td><span class="badge-status ${r.status === 'TERLAMBAT' ? 'badge-red' : (r.status === 'SELESAI' ? 'badge-green' : 'badge-orange')}">${r.status || 'PENDING'}</span></td>
             <td><b>${r.denda ? 'Rp ' + Number(r.denda).toLocaleString('id-ID') : 'Rp 0'}</b></td>
           </tr>
         `).join('');
@@ -640,7 +624,7 @@
       globalRiwayatData.forEach(r => {
         let staf = (r.nama || "UNKNOWN").trim().toUpperCase();
         if (!stats[staf]) stats[staf] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
-        stats[staf].done++;
+        if (r.urlBefore && r.urlAfter) stats[staf].done++;
         if (r.status === "TERLAMBAT") {
           stats[staf].denda += Number(r.denda) || 15000;
           totalDendaKeseluruhan += Number(r.denda) || 15000;
@@ -712,8 +696,8 @@
       const catatan = document.getElementById("auditCatatan").value;
       const fileFotoInput = document.getElementById("auditFoto");
 
-      let base64Foto = getGenericDraft('audit', 'foto');
-      if (!base64Foto && fileFotoInput && fileFotoInput.files[0]) {
+      let base64Foto = "";
+      if (fileFotoInput && fileFotoInput.files[0]) {
         base64Foto = await toBase64(fileFotoInput.files[0]);
       }
 
@@ -744,12 +728,11 @@
         });
         const result = await res.json();
 
-        btn.innerText = "Kirim Hasil Audit ke AUDIT_KEBERSIHAN_LOG";
+        btn.innerText = "Kirim Hasil Audit";
         btn.disabled = false;
 
         if (result.success) {
-          clearGenericDraft('audit');
-          alert("Hasil audit berhasil disimpan ke AUDIT_KEBERSIHAN_LOG!");
+          alert("Hasil audit berhasil disimpan!");
           document.getElementById("auditCatatan").value = "";
           document.getElementById("auditFoto").value = "";
           fetchStats();
@@ -757,7 +740,7 @@
           alert("Gagal menyimpan audit.");
         }
       } catch (err) {
-        btn.innerText = "Kirim Hasil Audit ke AUDIT_KEBERSIHAN_LOG";
+        btn.innerText = "Kirim Hasil Audit";
         btn.disabled = false;
         alert("Terjadi kesalahan koneksi saat mengirim audit.");
       }
