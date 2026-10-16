@@ -1,12 +1,15 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8RW9so1GSE3QVNzO4CTrgl366pHXAd_5umSI-IYOPsTgdgIkvw/exec"; // Sesuaikan URL Apps Script Anda
+// URL Apps Script Terbaru
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8RW9so1GSE3QVNzO4CTrgl366pHXAd_5umSI-IYOPsTgdgIkvw/exec";
 
 let currentUser = null;
 
 function checkAuthAndRenderNav() {
   const session = localStorage.getItem("mahadewa_user");
+  const currentPath = window.location.pathname;
+
+  // Jika tidak ada sesi dan bukan di index.html, arahkan ke index.html
   if (!session) {
-    // Mencegah infinite loop jika sudah di halaman index.html
-    if (!window.location.pathname.endsWith("index.html") && window.location.pathname !== "/") {
+    if (!currentPath.endsWith("index.html") && currentPath !== "/") {
       window.location.href = "index.html";
     }
     return null;
@@ -15,19 +18,21 @@ function checkAuthAndRenderNav() {
   try {
     currentUser = JSON.parse(session);
   } catch (e) {
-    console.error("Data sesi corrupt, menghapus sesi...");
+    console.error("Sesi corrupt, menghapus data...");
     localStorage.removeItem("mahadewa_user");
-    window.location.href = "index.html";
+    if (!currentPath.endsWith("index.html") && currentPath !== "/") {
+      window.location.href = "index.html";
+    }
     return null;
   }
 
-  // Set User Badge di Header jika elemen ditemukan
+  // Set User Badge di Header
   const badge = document.getElementById("userBadge");
   if (badge) {
     badge.innerText = `${(currentUser.nama || currentUser.username || '').toUpperCase()} (${(currentUser.role || 'STAFF').toUpperCase()})`;
   }
 
-  // Helper untuk mengecek akses dengan aman (mendukung boolean true / string "YA")
+  // Helper cek akses aman
   const hasAccess = (val) => {
     if (typeof val === "boolean") return val;
     if (typeof val === "string") return val.trim().toUpperCase() === "YA";
@@ -37,7 +42,7 @@ function checkAuthAndRenderNav() {
   const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
   const akses = currentUser.akses || {};
 
-  // Tampilkan / Sembunyikan Navigasi Menu berdasarkan Hak Akses
+  // Tampilkan / Sembunyikan Navigasi Menu berdasarkan Akses
   const navPenjualan = document.getElementById("nav-penjualan");
   const navKeuangan = document.getElementById("nav-keuangan");
   const navSiplah = document.getElementById("nav-siplah");
