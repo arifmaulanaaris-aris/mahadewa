@@ -423,7 +423,7 @@
       return `${year}-${month}-${day}`;
     }
 
-    // Render Kartu Tugas Harian Staf Per Area (Dua Tombol Sebelum & Sesudah)
+    // Render Kartu Tugas Harian Staf Per Area (Terkunci jika sudah diisi pada hari ini)
     function renderTaskCards() {
       const container = document.getElementById("tasksContainer");
       if (!container || !currentUser) return;
@@ -434,6 +434,7 @@
 
       const todayStr = parseToLocalDateStr(new Date());
 
+      // Filter riwayat khusus untuk staf aktif pada HARI INI
       const myTodayLogs = globalRiwayatData.filter(r => {
         const isMe = String(r.nama || "").trim().toUpperCase() === userAkunName;
         const rTgl = parseToLocalDateStr(r.tgl);
@@ -451,11 +452,12 @@
         const isFullyCompleted = hasBefore && hasAfter;
 
         if (isFullyCompleted) {
+          // JIKA DUA-DUANYA SUDAH TERISI: KARTU TERKUNCI PENUH
           html += `
             <div class="card-task-item completed">
               <div class="card-task-title">
                 <span>Tugas ${index + 1}: ${areaName}</span>
-                <span class="badge-status badge-green">Selesai</span>
+                <span class="badge-status badge-green">Selesai (Terkunci)</span>
               </div>
               <div style="font-size: 11px; color: #16a34a; margin-bottom: 8px;">
                 Waktu Lapor: <b>${record.tgl ? new Date(record.tgl).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) : '-'}</b>
@@ -481,8 +483,8 @@
                 <div class="sub-task-box">
                   <label class="form-label">FOTO BEFORE (SEBELUM)</label>
                   ${hasBefore ? `
-                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; margin-top: 4px;">
-                      Foto Before Terkirim (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto</a>)
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 6px 0;">
+                      ✅ Sudah Diisi & Terkunci Hari Ini (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto</a>)
                     </div>
                   ` : `
                     <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment">
@@ -496,8 +498,8 @@
                 <div class="sub-task-box">
                   <label class="form-label">FOTO AFTER (SESUDAH)</label>
                   ${hasAfter ? `
-                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; margin-top: 4px;">
-                      Foto After Terkirim (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto</a>)
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 6px 0;">
+                      ✅ Sudah Diisi & Terkunci Hari Ini (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto</a>)
                     </div>
                   ` : `
                     <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment">
