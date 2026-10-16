@@ -89,8 +89,6 @@
     .badge-red { background: #fee2e2; color: #b91c1c; }
     .badge-orange { background: #ffedd5; color: #c2410c; }
 
-    .draft-preview { margin-top: 4px; font-size: 10px; color: #2563eb; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-
     @media (max-width: 768px) {
       .container { flex-direction: column; }
       .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
@@ -220,7 +218,7 @@
 
             <div class="form-group">
               <label class="form-label">Foto Bukti Audit (Ambil dari Kamera)</label>
-              <input type="file" id="auditFoto" class="form-control" accept="image/*" capture="environment">
+              <input type="file" id="auditFoto" class="form-control" accept="image/*" capture="environment" onchange="saveGenericDraft('audit', 'foto', this)">
             </div>
 
             <button type="submit" id="btnAuditSubmit" class="btn-submit">Kirim Hasil Audit ke AUDIT_KEBERSIHAN_LOG</button>
@@ -378,8 +376,8 @@
       renderKpiTable();
     }
 
-    // SIMPAN DRAF FOTO KE LOCALSTORAGE HP (Anti-Hilang saat logout/refresh)
-    function saveDraftPhoto(areaIndex, type, inputElement) {
+    // SIMPAN DRAF FOTO SECARA TERSILAT PADA BROWSER/HP (TANPA TEXT KETERANGAN)
+    function saveGenericDraft(contextId, fieldType, inputElement) {
       const file = inputElement.files[0];
       if (!file || !currentUser) return;
 
@@ -387,32 +385,27 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         const base64Data = e.target.result;
-        const draftKey = `draft_photo_${userKey}_task${areaIndex}_${type}`;
+        const draftKey = `draft_img_${userKey}_${contextId}_${fieldType}`;
         localStorage.setItem(draftKey, base64Data);
-
-        // Tampilkan indikator draf
-        const previewEl = document.getElementById(`preview_${type}_${areaIndex}`);
-        if (previewEl) {
-          previewEl.innerHTML = `✅ Draf Foto Tersimpan di HP`;
-        }
       };
       reader.readAsDataURL(file);
     }
 
-    // AMBIL DRAF FOTO
-    function getDraftPhoto(areaIndex, type) {
+    // AMBIL DRAF FOTO DARI LOCALSTORAGE
+    function getGenericDraft(contextId, fieldType) {
       if (!currentUser) return null;
       const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
-      const draftKey = `draft_photo_${userKey}_task${areaIndex}_${type}`;
+      const draftKey = `draft_img_${userKey}_${contextId}_${fieldType}`;
       return localStorage.getItem(draftKey);
     }
 
-    // HAPUS DRAF FOTO DARI MEMORI HP SETELAH BERHASIL DIPUBLISH
-    function clearDraftPhoto(areaIndex) {
+    // HAPUS DRAF FOTO DARI MEMORI LOCAL SETELAH BERHASIL DI-SUBMIT
+    function clearGenericDraft(contextId) {
       if (!currentUser) return;
       const userKey = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
-      localStorage.removeItem(`draft_photo_${userKey}_task${areaIndex}_before`);
-      localStorage.removeItem(`draft_photo_${userKey}_task${areaIndex}_after`);
+      localStorage.removeItem(`draft_img_${userKey}_${contextId}_before`);
+      localStorage.removeItem(`draft_img_${userKey}_${contextId}_after`);
+      localStorage.removeItem(`draft_img_${userKey}_${contextId}_foto`);
     }
 
     // Render Kartu Tugas Harian Staf Per Area
@@ -436,8 +429,7 @@
         const doneRecord = myTodayLogs.find(r => String(r.area || "").trim().toUpperCase() === areaName.trim().toUpperCase());
 
         if (doneRecord) {
-          // Bersihkan draf jika sudah selesai di server
-          clearDraftPhoto(index);
+          clearGenericDraft(`task_${index}`);
 
           html += `
             <div class="card-task-item completed">
@@ -455,9 +447,8 @@
             </div>
           `;
         } else {
-          // Cek Draf Foto yang tersimpan di HP
-          const draftBefore = getDraftPhoto(index, 'before');
-          const draftAfter = getDraftPhoto(index, 'after');
+          const draftBefore = getGenericDraft(`task_${index}`, 'before');
+          const draftAfter = getGenericDraft(`task_${index}`, 'after');
 
           html += `
             <div class="card-task-item">
@@ -468,13 +459,11 @@
               <form onsubmit="submitSingleTask(event, '${areaName.replace(/'/g, "\\'")}', ${index})">
                 <div class="form-group">
                   <label class="form-label">Foto Before (Sebelum)</label>
-                  <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveDraftPhoto(${index}, 'before', this)" ${draftBefore ? '' : 'required'}>
-                  <div class="draft-preview" id="preview_before_${index}">${draftBefore ? '✅ Draf Foto Before Tersimpan di HP' : ''}</div>
+                  <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveGenericDraft('task_${index}', 'before', this)" ${draftBefore ? '' : 'required'}>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Foto After (Sesudah)</label>
-                  <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveDraftPhoto(${index}, 'after', this)" ${draftAfter ? '' : 'required'}>
-                  <div class="draft-preview" id="preview_after_${index}">${draftAfter ? '✅ Draf Foto After Tersimpan di HP' : ''}</div>
+                  <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment" onchange="saveGenericDraft('task_${index}', 'after', this)" ${draftAfter ? '' : 'required'}>
                 </div>
                 <button type="submit" id="btn_task_${index}" class="btn-submit">✅ Selesaikan Tugas Ini</button>
               </form>
@@ -486,7 +475,7 @@
       container.innerHTML = html;
     }
 
-    // Submit Tugas per Satu Area (Mendukung File Kamera / Draf tersimpan)
+    // Submit Tugas per Satu Area
     async function submitSingleTask(e, areaName, index) {
       e.preventDefault();
       if (!currentUser) return alert("Sesi login tidak valid.");
@@ -494,8 +483,8 @@
       const fileBInput = document.getElementById(`before_${index}`);
       const fileAInput = document.getElementById(`after_${index}`);
 
-      let base64Before = getDraftPhoto(index, 'before');
-      let base64After = getDraftPhoto(index, 'after');
+      let base64Before = getGenericDraft(`task_${index}`, 'before');
+      let base64After = getGenericDraft(`task_${index}`, 'after');
 
       if (!base64Before && fileBInput && fileBInput.files[0]) {
         base64Before = await toBase64(fileBInput.files[0]);
@@ -529,7 +518,7 @@
         const result = await res.json();
 
         if (result.success) {
-          clearDraftPhoto(index); // Hapus draf setelah tersimpan di Google Sheets
+          clearGenericDraft(`task_${index}`);
           alert(`Tugas ${areaName} berhasil diselesaikan & disimpan ke KEBERSIHAN_LOG!`);
           fetchStats();
         } else {
@@ -721,7 +710,12 @@
       const areaTarget = document.getElementById("auditArea").value;
       const hasil = document.getElementById("auditHasil").value;
       const catatan = document.getElementById("auditCatatan").value;
-      const fileFoto = document.getElementById("auditFoto").files[0];
+      const fileFotoInput = document.getElementById("auditFoto");
+
+      let base64Foto = getGenericDraft('audit', 'foto');
+      if (!base64Foto && fileFotoInput && fileFotoInput.files[0]) {
+        base64Foto = await toBase64(fileFotoInput.files[0]);
+      }
 
       if (!stafTarget || !areaTarget) {
         alert("Harap tentukan Staf Target dan Area Target Audit!");
@@ -733,8 +727,6 @@
       btn.disabled = true;
 
       try {
-        const base64Foto = fileFoto ? await toBase64(fileFoto) : "";
-
         const payload = {
           action: "simpanAuditKebersihan",
           auditor: currentUser.nama || currentUser.username,
@@ -743,7 +735,7 @@
           areaTarget: areaTarget,
           statusAudit: hasil,
           catatan: catatan,
-          base64Foto: base64Foto
+          base64Foto: base64Foto || ""
         };
 
         const res = await fetch(SCRIPT_URL, {
@@ -756,6 +748,7 @@
         btn.disabled = false;
 
         if (result.success) {
+          clearGenericDraft('audit');
           alert("Hasil audit berhasil disimpan ke AUDIT_KEBERSIHAN_LOG!");
           document.getElementById("auditCatatan").value = "";
           document.getElementById("auditFoto").value = "";
