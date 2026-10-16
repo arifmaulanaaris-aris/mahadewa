@@ -353,16 +353,19 @@
       let names = [], achData = [], targetData = [], runRateData = [];
 
       list.forEach(item => {
+        // Filter tambahan untuk memastikan nama "PERSONAL" / "TOTAL" tidak ikut masuk
+        if (!item.nama || item.nama.toUpperCase() === "PERSONAL" || item.nama.toUpperCase() === "TOTAL") return;
+
         names.push(item.nama); 
         achData.push(item.ach); 
         targetData.push(item.targetBln); 
         runRateData.push(item.runRate);
 
-        let rawPct = parseFloat(item.pctRunRate || 0);
-        let pctVal = rawPct <= 1 ? rawPct * 100 : rawPct;
-        let pctAchVal = item.pctAch <= 1 ? item.pctAch * 100 : item.pctAch;
+        // Perhitungan persentase presisi dari desimal ke %
+        let pctAchVal = Number(item.pctAch) * 100;
+        let pctRunRateVal = Number(item.pctRunRate) * 100;
 
-        let badgeClass = pctVal < 90 ? "badge-red" : (pctVal < 100 ? "badge-yellow" : "badge-green");
+        let badgeClass = pctRunRateVal < 90 ? "badge-red" : (pctRunRateVal < 100 ? "badge-yellow" : "badge-green");
 
         html += `
           <tr>
@@ -373,7 +376,7 @@
             <td><b>${pctAchVal.toFixed(1)}%</b></td>
             <td>${formatRupiah(item.avgHari)}</td>
             <td><b>${formatRupiah(item.runRate)}</b></td>
-            <td><span class="badge-status ${badgeClass}">${pctVal.toFixed(1)}%</span></td>
+            <td><span class="badge-status ${badgeClass}">${pctRunRateVal.toFixed(1)}%</span></td>
           </tr>
         `;
       });
