@@ -1,4 +1,3 @@
-// URL Apps Script Terbaru
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8RW9so1GSE3QVNzO4CTrgl366pHXAd_5umSI-IYOPsTgdgIkvw/exec";
 
 let currentUser = null;
@@ -7,7 +6,6 @@ function checkAuthAndRenderNav() {
   const session = localStorage.getItem("mahadewa_user");
   const currentPath = window.location.pathname;
 
-  // Jika tidak ada sesi dan bukan di index.html, arahkan ke index.html
   if (!session) {
     if (!currentPath.endsWith("index.html") && currentPath !== "/") {
       window.location.href = "index.html";
@@ -32,27 +30,32 @@ function checkAuthAndRenderNav() {
     badge.innerText = `${(currentUser.nama || currentUser.username || '').toUpperCase()} (${(currentUser.role || 'STAFF').toUpperCase()})`;
   }
 
-  // Helper cek akses aman
+  // Helper cek akses fleksibel
   const hasAccess = (val) => {
     if (typeof val === "boolean") return val;
-    if (typeof val === "string") return val.trim().toUpperCase() === "YA";
+    if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
     return false;
   };
 
   const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
   const akses = currentUser.akses || {};
 
-  // Tampilkan / Sembunyikan Navigasi Menu berdasarkan Akses
+  // Tampilkan / Sembunyikan Navigasi Menu Utama di Sidebar
   const navPenjualan = document.getElementById("nav-penjualan");
   const navKeuangan = document.getElementById("nav-keuangan");
   const navSiplah = document.getElementById("nav-siplah");
   const navKebersihan = document.getElementById("nav-kebersihan");
   const navAdminUsers = document.getElementById("nav-admin-users");
 
-  if (navPenjualan) navPenjualan.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "flex" : "none";
-  if (navKeuangan) navKeuangan.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "flex" : "none";
-  if (navSiplah) navSiplah.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "flex" : "none";
-  if (navKebersihan) navKebersihan.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "flex" : "none";
+  const accPenjualan = hasAccess(akses.penjualan) || hasAccess(akses.PENJUALAN);
+  const accKeuangan = hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService) || hasAccess(akses.KEUANGAN_MTK) || hasAccess(akses.KEUANGAN_SERVICE);
+  const accSiplah = hasAccess(akses.siplah) || hasAccess(akses.SIPLAH);
+  const accKebersihan = hasAccess(akses.kebersihan) || hasAccess(akses.KEBERSIHAN);
+
+  if (navPenjualan) navPenjualan.style.display = (isUserAdmin || accPenjualan) ? "flex" : "none";
+  if (navKeuangan) navKeuangan.style.display = (isUserAdmin || accKeuangan) ? "flex" : "none";
+  if (navSiplah) navSiplah.style.display = (isUserAdmin || accSiplah) ? "flex" : "none";
+  if (navKebersihan) navKebersihan.style.display = (isUserAdmin || accKebersihan) ? "flex" : "none";
   if (navAdminUsers) navAdminUsers.style.display = isUserAdmin ? "flex" : "none";
 
   return currentUser;
