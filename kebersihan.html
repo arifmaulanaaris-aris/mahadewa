@@ -61,6 +61,23 @@
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
     .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
 
+    /* SUMMARY DENDA BANNER ATAS */
+    .denda-summary-banner {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .denda-summary-title { font-size: 12px; font-weight: 900; color: #991b1b; text-transform: uppercase; }
+    .denda-summary-amount { font-size: 20px; font-weight: 900; color: #dc2626; }
+    .denda-admin-breakdown { font-size: 11px; color: #7f1d1d; width: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #fca5a5; display: flex; flex-wrap: wrap; gap: 12px; }
+
     /* CARD TUGAS HARIAN STAF */
     .task-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 8px; }
     .card-task-item { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; position: relative; }
@@ -142,6 +159,16 @@
       <!-- TAB 1: TUGAS KEBERSIHAN STAF -->
       <div id="subTab-tugas" class="tab-page active">
         
+        <!-- BANNER TOTAL DENDA DI BAGIAN ATAS DAFTAR TUGAS -->
+        <div id="dendaSummaryBanner" class="denda-summary-banner">
+          <div>
+            <div id="dendaSummaryTitle" class="denda-summary-title">AKUMULASI DENDA SAYA HARI INI</div>
+            <div style="font-size: 10px; color: #7f1d1d;">Terlambat lapor / Temuan kotor hasil audit</div>
+          </div>
+          <div id="dendaSummaryAmount" class="denda-summary-amount">Rp 0</div>
+          <div id="dendaAdminBreakdown" class="denda-admin-breakdown" style="display: none;"></div>
+        </div>
+
         <!-- CARDS TUGAS KEBERSIHAN HARIAN STAF -->
         <div class="box-panel">
           <div class="panel-header">
@@ -356,7 +383,8 @@
 
     function fetchStats() {
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?callback=renderUI&ts=${new Date().getTime()}`;
+      // Pemuatan super cepat khusus modul kebersihan
+      script.src = `${SCRIPT_URL}?action=getKebersihanOnly&callback=renderUI&ts=${new Date().getTime()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
@@ -373,13 +401,14 @@
       }
 
       renderTaskCards();
+      renderDendaSummaryBanner();
       populateAuditStafDropdown();
       renderTugasTable();
       renderAuditTable();
       renderKpiTable();
     }
 
-    // KOMPRESI GAMBAR AUTOMATIS (Mencegah Ukuran File Terlalu Besar)
+    // KOMPRESI GAMBAR AUTOMATIS
     function compressImage(file, maxWidth = 1000, quality = 0.7) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -423,6 +452,71 @@
       return `${year}-${month}-${day}`;
     }
 
+    // HITUNG DAN TAMPILKAN RINGKASAN DENDA PRIBADI / KESELURUHAN PADA BANNER ATAS
+    function renderDendaSummaryBanner() {
+      if (!currentUser) return;
+
+      const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
+      const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+
+      let dendaByStaff = {};
+      let totalDendaKeseluruhan = 0;
+
+      // Inisialisasi daftar staf dari akun registered
+      Object.keys(globalUsersMap).forEach(stafName => {
+        let name = stafName.trim().toUpperCase();
+        dendaByStaff[name] = 0;
+      });
+
+      // 1. Akumulasi Denda Laporan Terlambat dari Log Kebersihan
+      globalRiwayatData.forEach(r => {
+        let staf = (r.nama || "").trim().toUpperCase();
+        if (staf && (r.status === "TERLAMBAT" || Number(r.denda) > 0)) {
+          let nominal = Number(r.denda) || 15000;
+          dendaByStaff[staf] = (dendaByStaff[staf] || 0) + nominal;
+          totalDendaKeseluruhan += nominal;
+        }
+      });
+
+      // 2. Akumulasi Denda Hasil Audit Kotor
+      globalAuditData.forEach(a => {
+        let staf = (a.stafTarget || "").trim().toUpperCase();
+        if (staf && a.status === "KOTOR") {
+          let nominal = 15000;
+          dendaByStaff[staf] = (dendaByStaff[staf] || 0) + nominal;
+          totalDendaKeseluruhan += nominal;
+        }
+      });
+
+      const titleEl = document.getElementById("dendaSummaryTitle");
+      const amountEl = document.getElementById("dendaSummaryAmount");
+      const breakdownEl = document.getElementById("dendaAdminBreakdown");
+
+      if (isUserAdmin) {
+        titleEl.innerText = "TOTAL AKUMULASI DENDA TOKO (SELURUH STAF)";
+        amountEl.innerText = "Rp " + totalDendaKeseluruhan.toLocaleString('id-ID');
+
+        let breakdownHtml = "";
+        let keys = Object.keys(dendaByStaff);
+        if (keys.length > 0) {
+          breakdownHtml = keys.map(k => {
+            let nominal = dendaByStaff[k];
+            return `<span><b>${k}:</b> Rp ${nominal.toLocaleString('id-ID')}</span>`;
+          }).join(' | ');
+          breakdownEl.innerHTML = "<b>Rincian Per Staf:</b> " + breakdownHtml;
+          breakdownEl.style.display = "flex";
+        } else {
+          breakdownEl.style.display = "none";
+        }
+      } else {
+        // Tampilkan KHUSUS Denda milik akun staf aktif
+        let myDenda = dendaByStaff[userAkunName] || 0;
+        titleEl.innerText = `AKUMULASI DENDA SAYA (${userAkunName})`;
+        amountEl.innerText = "Rp " + myDenda.toLocaleString('id-ID');
+        breakdownEl.style.display = "none";
+      }
+    }
+
     // Render Kartu Tugas Harian Staf Per Area (Terkunci jika sudah diisi pada hari ini)
     function renderTaskCards() {
       const container = document.getElementById("tasksContainer");
@@ -434,7 +528,6 @@
 
       const todayStr = parseToLocalDateStr(new Date());
 
-      // Filter riwayat khusus untuk staf aktif pada HARI INI
       const myTodayLogs = globalRiwayatData.filter(r => {
         const isMe = String(r.nama || "").trim().toUpperCase() === userAkunName;
         const rTgl = parseToLocalDateStr(r.tgl);
@@ -452,7 +545,6 @@
         const isFullyCompleted = hasBefore && hasAfter;
 
         if (isFullyCompleted) {
-          // JIKA DUA-DUANYA SUDAH TERISI: KARTU TERKUNCI PENUH
           html += `
             <div class="card-task-item completed">
               <div class="card-task-title">
@@ -483,8 +575,8 @@
                 <div class="sub-task-box">
                   <label class="form-label">FOTO BEFORE (SEBELUM)</label>
                   ${hasBefore ? `
-                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 6px 0;">
-                      ✅ Sudah Diisi & Terkunci Hari Ini (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto</a>)
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 4px 0;">
+                      ✅ Sudah Diisi Hari Ini (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto</a>)
                     </div>
                   ` : `
                     <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment">
@@ -498,8 +590,8 @@
                 <div class="sub-task-box">
                   <label class="form-label">FOTO AFTER (SESUDAH)</label>
                   ${hasAfter ? `
-                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 6px 0;">
-                      ✅ Sudah Diisi & Terkunci Hari Ini (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto</a>)
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 4px 0;">
+                      ✅ Sudah Diisi Hari Ini (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto</a>)
                     </div>
                   ` : `
                     <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment">
