@@ -389,9 +389,12 @@
       document.body.removeChild(script);
     }
 
+    let globalStartDate = "2026-11-01"; // Fallback default
+
     function renderUI(data) {
       if (!data) return;
 
+      if (data.systemStartDate) globalStartDate = data.systemStartDate;
       if (data.areaKebersihanMap) globalAreaMap = data.areaKebersihanMap;
       if (data.akunUsers) globalUsersMap = data.akunUsers;
 
