@@ -348,7 +348,17 @@
       }
     }
 
-    function renderMktPerformance(list) {
+    function getBadgeClass(val) {
+  if (val > 100) {
+    return "badge-green";
+  } else if (val < 90) {
+    return "badge-red";
+  } else {
+    return "badge-yellow"; // 90% sampai 100%
+  }
+}
+
+function renderMktPerformance(list) {
   let html = "";
   let names = [], achData = [], targetData = [], runRateData = [];
 
@@ -357,31 +367,24 @@
     if (!item.nama || item.nama.toUpperCase() === "PERSONAL" || item.nama.toUpperCase() === "TOTAL") return;
 
     names.push(item.nama); 
-    achData.push(item.ach); 
-    targetData.push(item.targetBln); 
-    runRateData.push(item.runRate);
+    achData.push(item.ach || 0); 
+    targetData.push(item.targetBln || 0); 
+    runRateData.push(item.runRate || 0);
 
     // Perhitungan persentase dari desimal ke %
-    let pctAchVal = Number(item.pctAch) * 100;
-    let pctRunRateVal = Number(item.pctRunRate) * 100;
+    let pctAchVal = Number(item.pctAch || 0) * 100;
+    let pctRunRateVal = Number(item.pctRunRate || 0) * 100;
 
-    // Fungsi pembantu untuk menentukan class badge warna berdasarkan kriteria:
-    // > 100% (Hijau), < 90% (Merah), 90% - 99.9999999% (Kuning)
-    function getBadgeClass(val) {
-      if (val > 100) {
-        return "badge-green";
-      } else if (val < 90) {
-        return "badge-red";
-      } else {
-        return "badge-yellow";
-      }
-    }
+    let badgeAchClass = getBadgeClass(pctAchVal);
+    let badgeProyeksiClass = getBadgeClass(pctRunRateVal);
 
-    let badgeClassAch = getBadgeClass(pctAchVal);
-    let badgeClassRunRate = getBadgeClass(pctRunRateVal);
+    // Konversi nilai targetHari ke angka murni untuk pengecekan minus/plus yang aman
+    let rawTargetHari = typeof item.targetHari === "number" 
+      ? item.targetHari 
+      : parseFloat(String(item.targetHari || 0).replace(/[^0-9.-]/g, ""));
 
-    // Warna Target Sisa / Hari: Minus (< 0) Merah, Plus/Nol (>= 0) Hijau
-    let colorTargetHari = item.targetHari < 0 ? '#dc2626' : '#16a34a';
+    // Jika minus/negatif = MERAH (#dc2626), jika positif/nol = HIJAU (#16a34a)
+    let colorTargetHari = rawTargetHari < 0 ? '#dc2626' : '#16a34a';
 
     html += `
       <tr>
@@ -389,10 +392,10 @@
         <td>${formatRupiah(item.ach)}</td>
         <td>${formatRupiah(item.targetBln)}</td>
         <td style="color:${colorTargetHari}; font-weight:bold;">${formatRupiah(item.targetHari)}</td>
-        <td><span class="badge-status ${badgeClassAch}">${pctAchVal.toFixed(1)}%</span></td>
+        <td><span class="badge-status ${badgeAchClass}">${pctAchVal.toFixed(1)}%</span></td>
         <td>${formatRupiah(item.avgHari)}</td>
         <td><b>${formatRupiah(item.runRate)}</b></td>
-        <td><span class="badge-status ${badgeClassRunRate}">${pctRunRateVal.toFixed(1)}%</span></td>
+        <td><span class="badge-status ${badgeProyeksiClass}">${pctRunRateVal.toFixed(1)}%</span></td>
       </tr>
     `;
   });
