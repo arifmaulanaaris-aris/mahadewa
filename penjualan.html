@@ -348,12 +348,12 @@
       }
     }
 
-    function renderMktPerformance(list) {
+    ffunction renderMktPerformance(list) {
   let html = "";
   let names = [], achData = [], targetData = [], runRateData = [];
 
   list.forEach(item => {
-    // Filter tambahan untuk memastikan nama "PERSONAL" / "TOTAL" tidak ikut masuk
+    // Filter untuk memastikan nama "PERSONAL" / "TOTAL" tidak ikut masuk
     if (!item.nama || item.nama.toUpperCase() === "PERSONAL" || item.nama.toUpperCase() === "TOTAL") return;
 
     names.push(item.nama); 
@@ -361,13 +361,26 @@
     targetData.push(item.targetBln); 
     runRateData.push(item.runRate);
 
-    // Perhitungan persentase presisi dari desimal ke %
+    // Perhitungan persentase dari desimal ke %
     let pctAchVal = Number(item.pctAch) * 100;
     let pctRunRateVal = Number(item.pctRunRate) * 100;
 
-    let badgeClass = pctRunRateVal < 90 ? "badge-red" : (pctRunRateVal < 100 ? "badge-yellow" : "badge-green");
+    // Fungsi pembantu untuk menentukan class badge warna berdasarkan kriteria:
+    // > 100% (Hijau), < 90% (Merah), 90% - 99.9999999% (Kuning)
+    function getBadgeClass(val) {
+      if (val > 100) {
+        return "badge-green";
+      } else if (val < 90) {
+        return "badge-red";
+      } else {
+        return "badge-yellow";
+      }
+    }
 
-    // REVISI WARNA: Nilai minus (< 0) tetap MERAH (#dc2626), nilai positif/nol (>= 0) HIJAU (#16a34a)
+    let badgeClassAch = getBadgeClass(pctAchVal);
+    let badgeClassRunRate = getBadgeClass(pctRunRateVal);
+
+    // Warna Target Sisa / Hari: Minus (< 0) Merah, Plus/Nol (>= 0) Hijau
     let colorTargetHari = item.targetHari < 0 ? '#dc2626' : '#16a34a';
 
     html += `
@@ -376,10 +389,10 @@
         <td>${formatRupiah(item.ach)}</td>
         <td>${formatRupiah(item.targetBln)}</td>
         <td style="color:${colorTargetHari}; font-weight:bold;">${formatRupiah(item.targetHari)}</td>
-        <td><b>${pctAchVal.toFixed(1)}%</b></td>
+        <td><span class="badge-status ${badgeClassAch}">${pctAchVal.toFixed(1)}%</span></td>
         <td>${formatRupiah(item.avgHari)}</td>
         <td><b>${formatRupiah(item.runRate)}</b></td>
-        <td><span class="badge-status ${badgeClass}">${pctRunRateVal.toFixed(1)}%</span></td>
+        <td><span class="badge-status ${badgeClassRunRate}">${pctRunRateVal.toFixed(1)}%</span></td>
       </tr>
     `;
   });
