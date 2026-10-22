@@ -349,50 +349,52 @@
     }
 
     function renderMktPerformance(list) {
-      let html = "";
-      let names = [], achData = [], targetData = [], runRateData = [];
+  let html = "";
+  let names = [], achData = [], targetData = [], runRateData = [];
 
-      list.forEach(item => {
-        // Filter tambahan untuk memastikan nama "PERSONAL" / "TOTAL" tidak ikut masuk
-        if (!item.nama || item.nama.toUpperCase() === "PERSONAL" || item.nama.toUpperCase() === "TOTAL") return;
+  list.forEach(item => {
+    // Filter tambahan untuk memastikan nama "PERSONAL" / "TOTAL" tidak ikut masuk
+    if (!item.nama || item.nama.toUpperCase() === "PERSONAL" || item.nama.toUpperCase() === "TOTAL") return;
 
-        names.push(item.nama); 
-        achData.push(item.ach); 
-        targetData.push(item.targetBln); 
-        runRateData.push(item.runRate);
+    names.push(item.nama); 
+    achData.push(item.ach); 
+    targetData.push(item.targetBln); 
+    runRateData.push(item.runRate);
 
-        // Perhitungan persentase presisi dari desimal ke %
-        let pctAchVal = Number(item.pctAch) * 100;
-        let pctRunRateVal = Number(item.pctRunRate) * 100;
+    // Perhitungan persentase presisi dari desimal ke %
+    let pctAchVal = Number(item.pctAch) * 100;
+    let pctRunRateVal = Number(item.pctRunRate) * 100;
 
-        let badgeClass = pctRunRateVal < 90 ? "badge-red" : (pctRunRateVal < 100 ? "badge-yellow" : "badge-green");
+    let badgeClass = pctRunRateVal < 90 ? "badge-red" : (pctRunRateVal < 100 ? "badge-yellow" : "badge-green");
 
-        html += `
-          <tr>
-            <td><b>${item.nama}</b></td>
-            <td>${formatRupiah(item.ach)}</td>
-            <td>${formatRupiah(item.targetBln)}</td>
-            <td style="color:${item.targetHari < 0 ? '#16a34a' : '#dc2626'}; font-weight:bold;">${formatRupiah(item.targetHari)}</td>
-            <td><b>${pctAchVal.toFixed(1)}%</b></td>
-            <td>${formatRupiah(item.avgHari)}</td>
-            <td><b>${formatRupiah(item.runRate)}</b></td>
-            <td><span class="badge-status ${badgeClass}">${pctRunRateVal.toFixed(1)}%</span></td>
-          </tr>
-        `;
-      });
+    // REVISI WARNA: Nilai minus (< 0) tetap MERAH (#dc2626), nilai positif/nol (>= 0) HIJAU (#16a34a)
+    let colorTargetHari = item.targetHari < 0 ? '#dc2626' : '#16a34a';
 
-      const container = document.getElementById("tblMktPerf");
-      if (container) container.innerHTML = html;
+    html += `
+      <tr>
+        <td><b>${item.nama}</b></td>
+        <td>${formatRupiah(item.ach)}</td>
+        <td>${formatRupiah(item.targetBln)}</td>
+        <td style="color:${colorTargetHari}; font-weight:bold;">${formatRupiah(item.targetHari)}</td>
+        <td><b>${pctAchVal.toFixed(1)}%</b></td>
+        <td>${formatRupiah(item.avgHari)}</td>
+        <td><b>${formatRupiah(item.runRate)}</b></td>
+        <td><span class="badge-status ${badgeClass}">${pctRunRateVal.toFixed(1)}%</span></td>
+      </tr>
+    `;
+  });
 
-      if (barMktPerfInst) {
-        barMktPerfInst.data.labels = names;
-        barMktPerfInst.data.datasets[0].data = achData;
-        barMktPerfInst.data.datasets[1].data = targetData;
-        barMktPerfInst.data.datasets[2].data = runRateData;
-        barMktPerfInst.update();
-      }
-    }
+  const container = document.getElementById("tblMktPerf");
+  if (container) container.innerHTML = html;
 
+  if (barMktPerfInst) {
+    barMktPerfInst.data.labels = names;
+    barMktPerfInst.data.datasets[0].data = achData;
+    barMktPerfInst.data.datasets[1].data = targetData;
+    barMktPerfInst.data.datasets[2].data = runRateData;
+    barMktPerfInst.update();
+  }
+}
     function renderBestSellerTable(sortBy) {
       if (!rawBestSellerData) return;
       let sortedList = [...rawBestSellerData];
