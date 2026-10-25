@@ -13,50 +13,96 @@
     * { box-sizing: border-box; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
     body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
+    /* Header Utama */
     header {
       background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
     }
+    .brand-container { display: flex; align-items: baseline; gap: 8px; }
     .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; }
-    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; }
+    .brand-sub { font-size: 11px; color: #64748b; font-weight: 700; }
     
-    .container { display: flex; flex: 1; }
-    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; }
+    .header-user-action { display: flex; align-items: center; gap: 8px; }
+    .user-badge { font-size: 12px; font-weight: 700; color: #334155; }
+    .btn-header { padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 11px; font-weight: 700; color: #334155; text-decoration: none; }
+    .btn-header:hover { background: #f1f5f9; }
+
+    /* Layout Utama */
+    .container { display: flex; flex: 1; flex-direction: column; }
+    
+    /* Navigasi Sidebar (Desktop) & Topbar (Mobile) */
+    .sidebar { 
+      background: #ffffff; 
+      border-bottom: 1px solid #e2e8f0; 
+      display: flex; 
+      overflow-x: auto; 
+      padding: 8px 12px;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
     .menu-item {
-      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
-      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px;
+      display: inline-flex; align-items: center; padding: 10px 14px; border-radius: 6px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none;
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
     .menu-item.active { background: #dc2626; color: white; }
 
-    .content { flex: 1; padding: 20px 24px; }
-    .box-panel { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
-    .panel-header { font-size: 14px; font-weight: 900; color: #334155; margin-bottom: 16px; text-transform: uppercase; }
+    /* Area Konten */
+    .content { flex: 1; padding: 16px 12px; max-width: 1200px; width: 100%; margin: 0 auto; }
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+    .panel-header { font-size: 14px; font-weight: 900; color: #334155; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    /* Layout Grid Dynamic */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
-    .form-group { margin-bottom: 12px; }
-    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
-    .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; }
-    .form-control:focus { border-color: #dc2626; }
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background-color: #fff; }
+    .form-control:focus { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1); }
 
-    .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; cursor: pointer; }
+    .checkbox-group input { cursor: pointer; }
 
-    .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 12px; }
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 16px; transition: background 0.2s; }
     .btn-submit:hover { background: #b91c1c; }
+
+    /* Media Query khusus Desktop / Mac (Screen width > 768px) */
+    @media (min-width: 769px) {
+      .container { flex-direction: row; }
+      .sidebar { 
+        width: 220px; 
+        min-width: 220px;
+        flex-direction: column; 
+        border-right: 1px solid #e2e8f0; 
+        border-bottom: none; 
+        padding: 16px 12px;
+        overflow-x: visible;
+      }
+      .menu-item { width: 100%; margin-bottom: 4px; }
+      .content { padding: 24px; }
+    }
+
+    /* Responsive adjustment Mobile (Screen width <= 768px) */
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 10px; }
+      header { padding: 10px 16px; }
+      .brand-container { flex-direction: column; gap: 0; }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <div>
+    <div class="brand-container">
       <span class="brand-name">mahadewa.id</span>
       <span class="brand-sub">Cab. Palopo</span>
     </div>
-    <div>
-      <span id="userBadge" style="font-size: 12px; font-weight: 700; margin-right: 12px;">Memuat...</span>
-      <button onclick="handleLogout()" style="padding: 5px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 11px; font-weight: 700;">Keluar</button>
+    <div class="header-user-action">
+      <span id="userBadge" class="user-badge">Memuat...</span>
+      <button class="btn-header" onclick="location.reload()">Refresh</button>
+      <button class="btn-header" onclick="handleLogout()">Keluar</button>
     </div>
   </header>
 
@@ -114,7 +160,7 @@
           </div>
         </div>
 
-        <div class="panel-header" style="margin-top: 16px; font-size: 12px;">Hak Akses Menu:</div>
+        <div class="panel-header" style="margin-top: 20px; font-size: 12px;">Hak Akses Menu:</div>
         <div class="grid-3">
           <label class="checkbox-group"><input type="checkbox" id="chkPenjualan" checked>Penjualan</label>
           <label class="checkbox-group"><input type="checkbox" id="chkKeuanganMtk">Keuangan MTK</label>
