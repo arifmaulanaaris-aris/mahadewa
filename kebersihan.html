@@ -460,7 +460,9 @@
       if (!currentUser) return;
 
       const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
-      const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+      const rawUserNama = (currentUser.nama || "").trim().toUpperCase();
+      const rawUserUsername = (currentUser.username || "").trim().toUpperCase();
+      const todayStr = parseToLocalDateStr(new Date());
 
       let dendaByStaff = {};
       let totalDendaKeseluruhan = 0;
@@ -512,9 +514,26 @@
           breakdownEl.style.display = "none";
         }
       } else {
-        // Tampilkan KHUSUS Denda milik akun staf aktif
-        let myDenda = dendaByStaff[userAkunName] || 0;
-        titleEl.innerText = `AKUMULASI DENDA SAYA (${userAkunName})`;
+        // PERBAIKAN: Pencocokan nama fleksibel (Match Nama Lengkap / Username / Panggilan Alias)
+        let myDenda = 0;
+        
+        Object.keys(dendaByStaff).forEach(stafKey => {
+          const keyUpper = stafKey.toUpperCase();
+          const isMatch = (
+            keyUpper === rawUserNama || 
+            keyUpper === rawUserUsername || 
+            rawUserNama.includes(keyUpper) || 
+            keyUpper.includes(rawUserNama) ||
+            rawUserUsername.includes(keyUpper) ||
+            keyUpper.includes(rawUserUsername)
+          );
+
+          if (isMatch) {
+            myDenda += dendaByStaff[stafKey];
+          }
+        });
+
+        titleEl.innerText = `AKUMULASI DENDA SAYA (${rawUserNama || rawUserUsername})`;
         amountEl.innerText = "Rp " + myDenda.toLocaleString('id-ID');
         breakdownEl.style.display = "none";
       }
