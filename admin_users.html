@@ -15,98 +15,120 @@
 
     /* Header Utama */
     header {
-      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      background: #ffffff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
     }
-    .brand-container { display: flex; align-items: baseline; gap: 8px; }
+    .brand-container { display: flex; align-items: center; gap: 8px; }
     .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; }
     .brand-sub { font-size: 11px; color: #64748b; font-weight: 700; }
     
-    .header-user-action { display: flex; align-items: center; gap: 8px; }
-    .user-badge { font-size: 12px; font-weight: 700; color: #334155; }
-    .btn-header { padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 11px; font-weight: 700; color: #334155; text-decoration: none; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .user-badge { font-size: 12px; font-weight: 700; color: #334155; margin-right: 4px; }
+    .btn-header { padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 11px; font-weight: 700; color: #475569; }
     .btn-header:hover { background: #f1f5f9; }
 
-    /* Layout Utama */
-    .container { display: flex; flex: 1; flex-direction: column; }
-    
-    /* Navigasi Sidebar (Desktop) & Topbar (Mobile) */
-    .sidebar { 
-      background: #ffffff; 
-      border-bottom: 1px solid #e2e8f0; 
-      display: flex; 
-      overflow-x: auto; 
-      padding: 8px 12px;
-      gap: 6px;
-      white-space: nowrap;
+    /* Sub-Header Bar */
+    .sub-header-bar {
+      background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 10px 20px;
+      display: flex; align-items: center; justify-content: space-between;
     }
+    .page-title { font-size: 14px; font-weight: 900; color: #1e293b; }
 
+    /* Menu Navigasi Horizontal Mobile */
+    .mobile-nav {
+      display: none; background: #ffffff; padding: 8px 12px; border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto; white-space: nowrap; gap: 8px;
+    }
+    .mobile-nav-item {
+      display: inline-block; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700;
+      color: #64748b; text-decoration: none; background: #f1f5f9;
+    }
+    .mobile-nav-item.active { background: #dc2626; color: white; }
+
+    /* Container & Layout Utama */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
     .menu-item {
-      display: inline-flex; align-items: center; padding: 10px 14px; border-radius: 6px;
-      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none;
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px;
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
     .menu-item.active { background: #dc2626; color: white; }
 
-    /* Area Konten */
-    .content { flex: 1; padding: 16px 12px; max-width: 1200px; width: 100%; margin: 0 auto; }
-    .box-panel { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-    .panel-header { font-size: 14px; font-weight: 900; color: #334155; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* Content Area */
+    .content { flex: 1; padding: 20px 24px; }
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+    .panel-header { font-size: 14px; font-weight: 900; color: #334155; margin-bottom: 16px; text-transform: uppercase; }
 
-    /* Layout Grid Dynamic */
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    /* Layout Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
-    .form-group { margin-bottom: 14px; }
-    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase; }
-    .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background-color: #fff; }
-    .form-control:focus { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1); }
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
+    .form-control:focus { border-color: #dc2626; }
 
-    .checkbox-group { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; cursor: pointer; }
-    .checkbox-group input { cursor: pointer; }
+    .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; }
 
-    .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 16px; transition: background 0.2s; }
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 12px; }
     .btn-submit:hover { background: #b91c1c; }
 
-    /* Media Query khusus Desktop / Mac (Screen width > 768px) */
-    @media (min-width: 769px) {
-      .container { flex-direction: row; }
-      .sidebar { 
-        width: 220px; 
-        min-width: 220px;
-        flex-direction: column; 
-        border-right: 1px solid #e2e8f0; 
-        border-bottom: none; 
-        padding: 16px 12px;
-        overflow-x: visible;
-      }
-      .menu-item { width: 100%; margin-bottom: 4px; }
-      .content { padding: 24px; }
-    }
+    /* CSS Tabel Daftar Akun */
+    .table-container { overflow-x: auto; width: 100%; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
+    th { background: #f8fafc; color: #475569; font-weight: 700; padding: 10px 12px; border-bottom: 2px solid #e2e8f0; text-transform: uppercase; font-size: 11px; }
+    td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+    tr:hover { background-color: #f8fafc; }
+    
+    .badge-role { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+    .badge-admin { background: #fee2e2; color: #dc2626; }
+    .badge-staff { background: #e0f2fe; color: #0284c7; }
+    
+    .btn-delete { background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-delete:hover { background: #b91c1c; }
 
-    /* Responsive adjustment Mobile (Screen width <= 768px) */
+    /* Responsive HP */
     @media (max-width: 768px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 10px; }
-      header { padding: 10px 16px; }
-      .brand-container { flex-direction: column; gap: 0; }
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .sub-header-bar { display: none; }
+      .content { padding: 16px 12px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 8px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Header Utama -->
   <header>
     <div class="brand-container">
       <span class="brand-name">mahadewa.id</span>
       <span class="brand-sub">Cab. Palopo</span>
     </div>
-    <div class="header-user-action">
+    <div class="header-right">
       <span id="userBadge" class="user-badge">Memuat...</span>
       <button class="btn-header" onclick="location.reload()">Refresh</button>
       <button class="btn-header" onclick="handleLogout()">Keluar</button>
     </div>
   </header>
 
+  <!-- Sub-Header Bar -->
+  <div class="sub-header-bar">
+    <div class="page-title">Kelola Akun & Akses</div>
+  </div>
+
+  <!-- Menu Navigasi Horizontal Mobile -->
+  <div class="mobile-nav">
+    <a href="kebersihan.html" class="mobile-nav-item">Kebersihan Toko</a>
+    <a href="penjualan.html" class="mobile-nav-item">Penjualan</a>
+    <a href="keuangan.html" class="mobile-nav-item">Keuangan</a>
+    <a href="siplah.html" class="mobile-nav-item">SIPLah Tertunda</a>
+    <a href="admin_users.html" class="mobile-nav-item active">Kelola Akun & Akses</a>
+  </div>
+
   <div class="container">
+    <!-- Sidebar Desktop -->
     <div class="sidebar">
       <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">Kebersihan Toko</a>
       <a id="nav-penjualan" href="penjualan.html" class="menu-item">Penjualan</a>
@@ -115,7 +137,10 @@
       <a id="nav-admin-users" href="admin_users.html" class="menu-item active">Kelola Akun & Akses</a>
     </div>
 
+    <!-- Area Konten Utama -->
     <div class="content">
+      
+      <!-- Panel Form Tambah Akun -->
       <div class="box-panel">
         <div class="panel-header">Pengguna Baru</div>
         
@@ -160,7 +185,7 @@
           </div>
         </div>
 
-        <div class="panel-header" style="margin-top: 20px; font-size: 12px;">Hak Akses Menu:</div>
+        <div class="panel-header" style="margin-top: 16px; font-size: 12px;">Hak Akses Menu:</div>
         <div class="grid-3">
           <label class="checkbox-group"><input type="checkbox" id="chkPenjualan" checked>Penjualan</label>
           <label class="checkbox-group"><input type="checkbox" id="chkKeuanganMtk">Keuangan MTK</label>
@@ -174,6 +199,31 @@
         <button id="btnSimpanAkun" class="btn-submit" onclick="submitAkunBaru()">Simpan Akun Baru ke Spreadsheet</button>
       </div>
 
+      <!-- Panel Tabel Daftar Akun yang Telah Dibuat -->
+      <div class="box-panel">
+        <div class="panel-header">Daftar Akun Terdaftar</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Username</th>
+                <th>Nama Lengkap</th>
+                <th>Devisi</th>
+                <th>Role</th>
+                <th>Hak Akses Active</th>
+                <th style="text-align: center;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="akunTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">Memuat data akun...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -184,9 +234,46 @@
       if (user && (user.role || "").toUpperCase() !== "ADMIN") {
         alert("Akses Ditolak! Halaman ini khusus untuk ADMIN.");
         window.location.href = "kebersihan.html";
+        return;
       }
+
+      // Ambil list akun saat halaman pertama kali di-load
+      fetchAkunList();
     });
 
+    // Fungsi Fetch List Akun dari Spreadsheet
+    async function fetchAkunList() {
+      const tbody = document.getElementById("akunTableBody");
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getAkunList`);
+        const result = await res.json();
+
+        if (result.success && result.data && result.data.length > 0) {
+          tbody.innerHTML = result.data.map((item, index) => {
+            const roleClass = (item.role || "").toUpperCase() === "ADMIN" ? "badge-admin" : "badge-staff";
+            return `
+              <tr>
+                <td>${index + 1}</td>
+                <td><strong>${item.username}</strong></td>
+                <td>${item.nama}</td>
+                <td>${item.devisi}</td>
+                <td><span class="badge-role ${roleClass}">${item.role}</span></td>
+                <td style="font-size: 11px; color: #64748b;">${item.aksesSummary || '-'}</td>
+                <td style="text-align: center;">
+                  <button class="btn-delete" onclick="hapusAkun('${item.username}')">Hapus</button>
+                </td>
+              </tr>
+            `;
+          }).join("");
+        } else {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">Belum ada data akun terdaftar.</td></tr>`;
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444; padding: 20px;">Gagal memuat list akun dari server.</td></tr>`;
+      }
+    }
+
+    // Fungsi Simpan Akun Baru
     async function submitAkunBaru() {
       const username = document.getElementById("newUsername").value.trim();
       const password = document.getElementById("newPassword").value.trim();
@@ -232,10 +319,13 @@
         btn.disabled = false;
 
         if (result.success) {
-          alert("Selamat! Akun baru berhasil ditambahkan ke sheet AKUN.");
+          alert("Selamat! Akun baru berhasil ditambahkan.");
           document.getElementById("newUsername").value = "";
           document.getElementById("newPassword").value = "";
           document.getElementById("newNama").value = "";
+          
+          // Refresh tabel list akun secara otomatis setelah menyimpan
+          fetchAkunList();
         } else {
           alert("Gagal: " + result.message);
         }
@@ -243,6 +333,28 @@
         btn.innerText = "Simpan Akun Baru ke Spreadsheet";
         btn.disabled = false;
         alert("Terjadi kesalahan koneksi saat menyimpan akun.");
+      }
+    }
+
+    // Fungsi Hapus Akun (Opsional)
+    async function hapusAkun(username) {
+      if (!confirm(`Apakah Anda yakin ingin menghapus akun '${username}'?`)) return;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "hapusAkun", username: username })
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          alert(`Akun '${username}' berhasil dihapus.`);
+          fetchAkunList();
+        } else {
+          alert("Gagal menghapus: " + result.message);
+        }
+      } catch (e) {
+        alert("Terjadi kesalahan koneksi saat menghapus akun.");
       }
     }
   </script>
