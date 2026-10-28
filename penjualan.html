@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- Lucide Icons CDN -->
+  <!-- Lucide Icons CDN (Ultra Minimalist Line Icons) -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Chart.js & Datalabels Plugin CDN -->
@@ -34,31 +34,34 @@
     .brand-section { display: flex; align-items: center; gap: 8px; }
     .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
     .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
-    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    .page-title-badge { display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
     
     .header-user { display: flex; align-items: center; gap: 6px; }
     .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
-    .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .btn-badge-red { background: #dc2626; color: #ffffff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .btn-badge-red:hover { background: #b91c1c; }
+    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 11px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-badge-gray:hover { background: #e2e8f0; }
 
-    /* LAYOUT & SIDEBAR */
+    /* LAYOUT & SIDEBAR MINIMALIS */
     .container { display: flex; flex: 1; }
-    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
     .menu-item {
-      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
-      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 4px; text-decoration: none;
-      transition: all 0.2s; text-align: left;
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border-radius: 6px;
+      border: none; background: transparent; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; margin-bottom: 2px; text-decoration: none;
+      transition: all 0.15s ease-in-out; text-align: left;
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
-    .menu-item.active { background: #dc2626; color: white; }
-    .menu-item i { width: 18px; height: 18px; flex-shrink: 0; }
+    .menu-item.active { background: #dc2626; color: #ffffff; font-weight: 700; }
+    .menu-item i { width: 16px; height: 16px; stroke-width: 1.75; flex-shrink: 0; color: #64748b; }
+    .menu-item.active i { color: #ffffff; }
 
     .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
     .tab-page { display: block; }
 
-    /* KPI CARDS */
+    /* KPI CARDS ELEGANT */
     .top-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
-    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
+    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
     .card.main-card { background: #dc2626; color: white; border: none; }
     .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
     .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -67,13 +70,20 @@
     .card.main-card .card-val { color: #ffffff; }
     .card-avg { font-size: 10px; font-weight: 500; color: #64748b; margin-top: 6px; padding-top: 4px; border-top: 1px dashed #f1f5f9; }
     .card.main-card .card-avg { color: #fee2e2; border-top-color: rgba(255,255,255,0.2); }
+    
+    /* Icon Soft Circle Badge di Card */
+    .card-icon-badge {
+      width: 24px; height: 24px; border-radius: 50%; background: #f8fafc; display: flex; align-items: center; justify-content: center;
+    }
+    .card-icon-badge i { width: 13px; height: 13px; stroke-width: 2; color: #64748b; }
+    .card.main-card .card-icon-badge { background: rgba(255,255,255,0.15); }
+    .card.main-card .card-icon-badge i { color: #ffffff; }
 
     /* DASHBOARD PANELS & GRID */
     .sales-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 16px; }
     .box-panel.full-width { grid-column: span 2; }
     .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
-    .panel-header-title { display: flex; align-items: center; gap: 8px; }
 
     .chart-scroll-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .chart-wrapper { position: relative; width: 100%; height: 260px; min-width: 650px; }
@@ -85,7 +95,7 @@
     .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
     .custom-table tr:hover td { background: #f8fafc; }
 
-    /* BADGES */
+    /* BADGES MINIMALIS */
     .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
     .badge-green { background: #dcfce7; color: #15803d; }
     .badge-yellow { background: #fef9c3; color: #a16207; }
@@ -111,35 +121,33 @@
         <span class="brand-name">mahadewa.id</span>
         <span class="brand-sub">Cab. Palopo</span>
       </div>
-      <div class="page-title-badge" id="headerPageTitle">
-        <i data-lucide="line-chart" style="width: 16px; height: 16px;"></i> Penjualan
-      </div>
+      <div class="page-title-badge" id="headerPageTitle">Penjualan</div>
     </div>
     <div class="header-user">
       <span class="user-name" id="userBadge">Memuat...</span>
-      <button class="btn-badge-gray" onclick="fetchStats()"><i data-lucide="refresh-cw" style="width: 13px; height: 13px;"></i> Refresh</button>
-      <button class="btn-badge-red" onclick="showProfile()"><i data-lucide="user" style="width: 13px; height: 13px;"></i> Profil</button>
-      <button class="btn-badge-gray" onclick="handleLogout()"><i data-lucide="log-out" style="width: 13px; height: 13px;"></i> Keluar</button>
+      <button class="btn-badge-gray" onclick="fetchStats()">Refresh</button>
+      <button class="btn-badge-red" onclick="showProfile()">Profil</button>
+      <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
     </div>
   </header>
 
   <div class="container">
-    <!-- SIDEBAR NAVIGATION -->
+    <!-- SIDEBAR NAVIGATION MINIMALIS -->
     <div class="sidebar">
       <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">
-        <i data-lucide="sparkles"></i> Kebersihan Toko
+        <i data-lucide="check-square"></i> Kebersihan Toko
       </a>
       <a id="nav-penjualan" href="penjualan.html" class="menu-item active">
-        <i data-lucide="trending-up"></i> Penjualan
+        <i data-lucide="bar-chart-2"></i> Penjualan
       </a>
       <a id="nav-keuangan" href="keuangan.html" class="menu-item">
-        <i data-lucide="wallet"></i> Keuangan
+        <i data-lucide="credit-card"></i> Keuangan
       </a>
       <a id="nav-siplah" href="siplah.html" class="menu-item">
         <i data-lucide="file-text"></i> SIPLah Tertunda
       </a>
       <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">
-        <i data-lucide="users"></i> Kelola Akun & Akses
+        <i data-lucide="user"></i> Kelola Akun & Akses
       </a>
     </div>
 
@@ -151,7 +159,7 @@
           <div class="card main-card">
             <div class="card-top-row">
               <span class="card-head">Total Omset</span>
-              <i data-lucide="dollar-sign" style="width: 16px; height: 16px;"></i>
+              <div class="card-icon-badge"><i data-lucide="trending-up"></i></div>
             </div>
             <div class="card-val" id="pPencapaianToko">Rp 0</div>
             <div class="card-avg" id="pPencapaianTokoAvg">Avg: Rp 0 / hari</div>
@@ -159,7 +167,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Invoice</span>
-              <i data-lucide="receipt" style="width: 16px; height: 16px; color: #64748b;"></i>
+              <div class="card-icon-badge"><i data-lucide="receipt"></i></div>
             </div>
             <div class="card-val" id="pTotalInv">0</div>
             <div class="card-avg" id="pTotalInvAvg">Avg: 0 inv / hari</div>
@@ -167,7 +175,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Marketing</span>
-              <i data-lucide="megaphone" style="width: 16px; height: 16px; color: #64748b;"></i>
+              <div class="card-icon-badge"><i data-lucide="user"></i></div>
             </div>
             <div class="card-val" id="pMktVal">Rp 0</div>
             <div class="card-avg" id="pMktValAvg">Avg: Rp 0 / hari</div>
@@ -175,7 +183,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Admin</span>
-              <i data-lucide="user-check" style="width: 16px; height: 16px; color: #64748b;"></i>
+              <div class="card-icon-badge"><i data-lucide="shield-check"></i></div>
             </div>
             <div class="card-val" id="pAdmVal">Rp 0</div>
             <div class="card-avg" id="pAdmValAvg">Avg: Rp 0 / hari</div>
@@ -183,7 +191,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Teknisi</span>
-              <i data-lucide="wrench" style="width: 16px; height: 16px; color: #64748b;"></i>
+              <div class="card-icon-badge"><i data-lucide="wrench"></i></div>
             </div>
             <div class="card-val" id="pTekVal">Rp 0</div>
             <div class="card-avg" id="pTekValAvg">Avg: Rp 0 / hari</div>
@@ -192,9 +200,7 @@
 
         <!-- 2. TABEL KINERJA PERSONAL MARKETING -->
         <div class="box-panel full-width">
-          <div class="panel-header">
-            <span class="panel-header-title"><i data-lucide="user-cog" style="width: 16px; height: 16px;"></i> Kinerja Personal</span>
-          </div>
+          <div class="panel-header"><span>Kinerja Personal</span></div>
           <div class="table-container">
             <table class="custom-table">
               <thead>
@@ -216,17 +222,13 @@
 
         <!-- 3. PERBANDINGAN REVENUE & PROYEKSI MARKETING -->
         <div class="box-panel full-width">
-          <div class="panel-header">
-            <span class="panel-header-title"><i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i> Perbandingan Revenue & Proyeksi Staff</span>
-          </div>
+          <div class="panel-header"><span>Perbandingan Revenue & Proyeksi Staff</span></div>
           <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="height: 260px;"><canvas id="barMktPerfChart"></canvas></div></div>
         </div>
 
         <!-- 4. DAILY RESULTS (OMZET HARIAN) -->
         <div class="box-panel full-width">
-          <div class="panel-header">
-            <span class="panel-header-title"><i data-lucide="calendar" style="width: 16px; height: 16px;"></i> Daily Results</span>
-          </div>
+          <div class="panel-header"><span>Daily Results</span></div>
           <div class="chart-scroll-wrapper"><div class="chart-wrapper"><canvas id="barDailyChart"></canvas></div></div>
         </div>
 
@@ -234,17 +236,13 @@
         <div class="sales-grid">
           <!-- 5. PERFORMA PENJUALAN MINGGUAN -->
           <div class="box-panel">
-            <div class="panel-header">
-              <span class="panel-header-title"><i data-lucide="bar-chart-2" style="width: 16px; height: 16px;"></i> Performa Mingguan</span>
-            </div>
+            <div class="panel-header"><span>Performa Mingguan</span></div>
             <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="min-width:100%;"><canvas id="barWeeklyChart"></canvas></div></div>
           </div>
 
           <!-- 6. PERFORMA PENJUALAN BULANAN -->
           <div class="box-panel">
-            <div class="panel-header">
-              <span class="panel-header-title"><i data-lucide="table" style="width: 16px; height: 16px;"></i> Performa Bulanan</span>
-            </div>
+            <div class="panel-header"><span>Performa Bulanan</span></div>
             <div class="table-container" style="height: 220px;">
               <table class="custom-table">
                 <thead><tr><th>Bulan</th><th>Total Omzet</th></tr></thead>
@@ -255,17 +253,13 @@
 
           <!-- 7. PENCAPAAN BY BRAND -->
           <div class="box-panel">
-            <div class="panel-header">
-              <span class="panel-header-title"><i data-lucide="pie-chart" style="width: 16px; height: 16px;"></i> Performa By Brand</span>
-            </div>
+            <div class="panel-header"><span>Performa By Brand</span></div>
             <div class="chart-wrapper" style="min-width:100%;"><canvas id="pieBrandChart"></canvas></div>
           </div>
 
           <!-- 8. PENCAPAAN BY DEPARTMENT -->
           <div class="box-panel">
-            <div class="panel-header">
-              <span class="panel-header-title"><i data-lucide="layers" style="width: 16px; height: 16px;"></i> Performa By Department</span>
-            </div>
+            <div class="panel-header"><span>Performa By Department</span></div>
             <div class="chart-wrapper" style="min-width:100%;"><canvas id="barDeptChart"></canvas></div>
           </div>
         </div>
@@ -273,7 +267,7 @@
         <!-- 9. TOP BEST SELLER PRODUCT -->
         <div class="box-panel full-width">
           <div class="panel-header">
-            <span class="panel-header-title"><i data-lucide="award" style="width: 16px; height: 16px;"></i> Top Best Seller Product</span>
+            <span>Top Best Seller Product</span>
             <select id="bestSellerFilter" onchange="changeBestSellerSort(this.value)" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 11px;">
               <option value="omzet">By Omzet (Rp)</option>
               <option value="qty">By Qty (Pcs)</option>
@@ -299,7 +293,7 @@
     let rawBestSellerData = [];
 
     window.addEventListener("DOMContentLoaded", () => {
-      // Inisialisasi ikon Lucide
+      // Inisialisasi ikon Lucide secara bersih & halus
       lucide.createIcons();
 
       const user = checkAuthAndRenderNav();
