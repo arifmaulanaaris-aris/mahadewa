@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- Lucide Icons CDN (Ultra Minimalist Line Icons) -->
+  <!-- Lucide Icons CDN (Line Icons Minimalis) -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Chart.js & Datalabels Plugin CDN -->
@@ -34,7 +34,7 @@
     .brand-section { display: flex; align-items: center; gap: 8px; }
     .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
     .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
-    .page-title-badge { display: flex; align-items: center; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
     
     .header-user { display: flex; align-items: center; gap: 6px; }
     .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
@@ -53,15 +53,15 @@
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
     .menu-item.active { background: #dc2626; color: #ffffff; font-weight: 700; }
-    .menu-item i { width: 16px; height: 16px; stroke-width: 1.75; flex-shrink: 0; color: #64748b; }
+    .menu-item i { width: 15px; height: 15px; stroke-width: 1.75; flex-shrink: 0; color: #64748b; }
     .menu-item.active i { color: #ffffff; }
 
     .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
     .tab-page { display: block; }
 
-    /* KPI CARDS ELEGANT */
+    /* KPI CARDS MINIMALIS */
     .top-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
-    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
     .card.main-card { background: #dc2626; color: white; border: none; }
     .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
     .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -71,19 +71,19 @@
     .card-avg { font-size: 10px; font-weight: 500; color: #64748b; margin-top: 6px; padding-top: 4px; border-top: 1px dashed #f1f5f9; }
     .card.main-card .card-avg { color: #fee2e2; border-top-color: rgba(255,255,255,0.2); }
     
-    /* Icon Soft Circle Badge di Card */
-    .card-icon-badge {
-      width: 24px; height: 24px; border-radius: 50%; background: #f8fafc; display: flex; align-items: center; justify-content: center;
-    }
-    .card-icon-badge i { width: 13px; height: 13px; stroke-width: 2; color: #64748b; }
-    .card.main-card .card-icon-badge { background: rgba(255,255,255,0.15); }
-    .card.main-card .card-icon-badge i { color: #ffffff; }
+    /* Ikon Kecil & Bersih di Card */
+    .card-icon-small { width: 14px; height: 14px; stroke-width: 1.75; color: #94a3b8; }
+    .card.main-card .card-icon-small { color: #fecaca; }
 
     /* DASHBOARD PANELS & GRID */
     .sales-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 16px; }
     .box-panel.full-width { grid-column: span 2; }
+    
+    /* Panel Header dengan Ikon Simpel */
     .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
+    .panel-title-group { display: flex; align-items: center; gap: 6px; }
+    .panel-title-icon { width: 14px; height: 14px; stroke-width: 2; color: #64748b; }
 
     .chart-scroll-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .chart-wrapper { position: relative; width: 100%; height: 260px; min-width: 650px; }
@@ -159,7 +159,7 @@
           <div class="card main-card">
             <div class="card-top-row">
               <span class="card-head">Total Omset</span>
-              <div class="card-icon-badge"><i data-lucide="trending-up"></i></div>
+              <i data-lucide="trending-up" class="card-icon-small"></i>
             </div>
             <div class="card-val" id="pPencapaianToko">Rp 0</div>
             <div class="card-avg" id="pPencapaianTokoAvg">Avg: Rp 0 / hari</div>
@@ -167,7 +167,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Invoice</span>
-              <div class="card-icon-badge"><i data-lucide="receipt"></i></div>
+              <i data-lucide="receipt" class="card-icon-small"></i>
             </div>
             <div class="card-val" id="pTotalInv">0</div>
             <div class="card-avg" id="pTotalInvAvg">Avg: 0 inv / hari</div>
@@ -175,7 +175,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Marketing</span>
-              <div class="card-icon-badge"><i data-lucide="user"></i></div>
+              <i data-lucide="user" class="card-icon-small"></i>
             </div>
             <div class="card-val" id="pMktVal">Rp 0</div>
             <div class="card-avg" id="pMktValAvg">Avg: Rp 0 / hari</div>
@@ -183,7 +183,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Admin</span>
-              <div class="card-icon-badge"><i data-lucide="shield-check"></i></div>
+              <i data-lucide="shield-check" class="card-icon-small"></i>
             </div>
             <div class="card-val" id="pAdmVal">Rp 0</div>
             <div class="card-avg" id="pAdmValAvg">Avg: Rp 0 / hari</div>
@@ -191,7 +191,7 @@
           <div class="card">
             <div class="card-top-row">
               <span class="card-head">Total Teknisi</span>
-              <div class="card-icon-badge"><i data-lucide="wrench"></i></div>
+              <i data-lucide="wrench" class="card-icon-small"></i>
             </div>
             <div class="card-val" id="pTekVal">Rp 0</div>
             <div class="card-avg" id="pTekValAvg">Avg: Rp 0 / hari</div>
@@ -200,7 +200,12 @@
 
         <!-- 2. TABEL KINERJA PERSONAL MARKETING -->
         <div class="box-panel full-width">
-          <div class="panel-header"><span>Kinerja Personal</span></div>
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <i data-lucide="users" class="panel-title-icon"></i>
+              <span>Kinerja Personal</span>
+            </div>
+          </div>
           <div class="table-container">
             <table class="custom-table">
               <thead>
@@ -222,13 +227,23 @@
 
         <!-- 3. PERBANDINGAN REVENUE & PROYEKSI MARKETING -->
         <div class="box-panel full-width">
-          <div class="panel-header"><span>Perbandingan Revenue & Proyeksi Staff</span></div>
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <i data-lucide="bar-chart-3" class="panel-title-icon"></i>
+              <span>Perbandingan Revenue & Proyeksi Staff</span>
+            </div>
+          </div>
           <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="height: 260px;"><canvas id="barMktPerfChart"></canvas></div></div>
         </div>
 
         <!-- 4. DAILY RESULTS (OMZET HARIAN) -->
         <div class="box-panel full-width">
-          <div class="panel-header"><span>Daily Results</span></div>
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <i data-lucide="calendar" class="panel-title-icon"></i>
+              <span>Daily Results</span>
+            </div>
+          </div>
           <div class="chart-scroll-wrapper"><div class="chart-wrapper"><canvas id="barDailyChart"></canvas></div></div>
         </div>
 
@@ -236,13 +251,23 @@
         <div class="sales-grid">
           <!-- 5. PERFORMA PENJUALAN MINGGUAN -->
           <div class="box-panel">
-            <div class="panel-header"><span>Performa Mingguan</span></div>
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="activity" class="panel-title-icon"></i>
+                <span>Performa Mingguan</span>
+              </div>
+            </div>
             <div class="chart-scroll-wrapper"><div class="chart-wrapper" style="min-width:100%;"><canvas id="barWeeklyChart"></canvas></div></div>
           </div>
 
           <!-- 6. PERFORMA PENJUALAN BULANAN -->
           <div class="box-panel">
-            <div class="panel-header"><span>Performa Bulanan</span></div>
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="table" class="panel-title-icon"></i>
+                <span>Performa Bulanan</span>
+              </div>
+            </div>
             <div class="table-container" style="height: 220px;">
               <table class="custom-table">
                 <thead><tr><th>Bulan</th><th>Total Omzet</th></tr></thead>
@@ -253,13 +278,23 @@
 
           <!-- 7. PENCAPAAN BY BRAND -->
           <div class="box-panel">
-            <div class="panel-header"><span>Performa By Brand</span></div>
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="pie-chart" class="panel-title-icon"></i>
+                <span>Performa By Brand</span>
+              </div>
+            </div>
             <div class="chart-wrapper" style="min-width:100%;"><canvas id="pieBrandChart"></canvas></div>
           </div>
 
           <!-- 8. PENCAPAAN BY DEPARTMENT -->
           <div class="box-panel">
-            <div class="panel-header"><span>Performa By Department</span></div>
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="layers" class="panel-title-icon"></i>
+                <span>Performa By Department</span>
+              </div>
+            </div>
             <div class="chart-wrapper" style="min-width:100%;"><canvas id="barDeptChart"></canvas></div>
           </div>
         </div>
@@ -267,7 +302,10 @@
         <!-- 9. TOP BEST SELLER PRODUCT -->
         <div class="box-panel full-width">
           <div class="panel-header">
-            <span>Top Best Seller Product</span>
+            <div class="panel-title-group">
+              <i data-lucide="award" class="panel-title-icon"></i>
+              <span>Top Best Seller Product</span>
+            </div>
             <select id="bestSellerFilter" onchange="changeBestSellerSort(this.value)" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 11px;">
               <option value="omzet">By Omzet (Rp)</option>
               <option value="qty">By Qty (Pcs)</option>
@@ -293,7 +331,7 @@
     let rawBestSellerData = [];
 
     window.addEventListener("DOMContentLoaded", () => {
-      // Inisialisasi ikon Lucide secara bersih & halus
+      // Inisialisasi ikon Lucide secara halus
       lucide.createIcons();
 
       const user = checkAuthAndRenderNav();
