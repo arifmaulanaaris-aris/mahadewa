@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Absensi Staf - mahadewa.id</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,26 +27,29 @@
     .head-actions { display: flex; gap: 8px; }
     .btn-head-action {
       background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-      color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+      color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
     }
     .btn-head-action:hover { background: rgba(255,255,255,0.25); }
 
-    /* Layout Responsive Navigasi */
+    /* Navigasi Mobile Halus (Smooth Scroll) */
     .mobile-nav {
-      display: none; background: #ffffff; padding: 8px 12px; border-bottom: 1px solid #e2e8f0;
-      overflow-x: auto; white-space: nowrap; gap: 8px;
+      display: none; background: #ffffff; padding: 10px 14px; border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto; white-space: nowrap; gap: 8px; -webkit-overflow-scrolling: touch;
+      position: sticky; top: 57px; z-index: 90;
     }
+    .mobile-nav::-webkit-scrollbar { display: none; }
     .mobile-nav-item {
-      display: inline-block; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700;
-      color: #64748b; text-decoration: none; background: #f1f5f9;
+      display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+      color: #64748b; text-decoration: none; background: #f1f5f9; transition: all 0.2s ease;
     }
-    .mobile-nav-item.active { background: #991b1b; color: white; }
+    .mobile-nav-item.active { background: #991b1b; color: white; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25); }
 
+    /* Layout & Sidebar Desktop */
     .container { display: flex; flex: 1; }
     .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
     .menu-item {
       display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
-      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px; transition: all 0.2s;
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
     .menu-item.active { background: #991b1b; color: white; }
@@ -162,7 +165,7 @@
     <!-- Main Content Absensi -->
     <div class="content">
       
-      <div class="greeting-title" id="greetingName">Halo, Arif</div>
+      <div class="greeting-title" id="greetingName">Halo, Staf</div>
       <div class="sub-date-info">
         <span id="currentDateStr">Sel, 3 Nov</span> · <span id="currentBranch">PALOPO</span><br>
         Jadwal hari ini: <span class="jadwal-badge" id="jadwalText">Memuat shift...</span>
@@ -272,7 +275,7 @@
     window.addEventListener("DOMContentLoaded", () => {
       // 1. Panggil Auth & Filter Menu Navigasi Sesuai Hak Akses User
       const user = checkAuthAndRenderNav();
-      filterMobileNavAccess(user);
+      filterNavAccess(user);
 
       if (currentUser) {
         document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
@@ -298,8 +301,8 @@
       fetchAbsensiRiwayat();
     });
 
-    // Filtering Navigasi Mobile Berdasarkan Hak Akses
-    function filterMobileNavAccess(user) {
+    // Filtering Navigasi Sidebar Desktop & Mobile Berdasarkan Hak Akses
+    function filterNavAccess(user) {
       if (!user) return;
       const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
       const akses = user.akses || {};
@@ -310,16 +313,37 @@
         return false;
       };
 
-      const navKebMb = document.getElementById("nav-kebersihan-mb");
-      const navPenjMb = document.getElementById("nav-penjualan-mb");
-      const navKeuMb = document.getElementById("nav-keuangan-mb");
-      const navSipMb = document.getElementById("nav-siplah-mb");
-      const navAdminMb = document.getElementById("nav-admin-users-mb");
+      // Pengecekan Hak Akses Absensi Staf (Sesuai Kolom Akses_Absensi_Staff)
+      const accAbsensi = isUserAdmin || hasAccess(akses.absensi) || hasAccess(akses.Akses_Absensi_Staff) || hasAccess(akses.absensiStaff);
+      
+      const navAbs = document.getElementById("nav-absensi");
+      const navAbsMb = document.getElementById("nav-absensi-mb");
+      if (navAbs) navAbs.style.display = accAbsensi ? "flex" : "none";
+      if (navAbsMb) navAbsMb.style.display = accAbsensi ? "inline-block" : "none";
 
+      const navKeb = document.getElementById("nav-kebersihan");
+      const navKebMb = document.getElementById("nav-kebersihan-mb");
+      if (navKeb) navKeb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "flex" : "none";
       if (navKebMb) navKebMb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "inline-block" : "none";
+
+      const navPenj = document.getElementById("nav-penjualan");
+      const navPenjMb = document.getElementById("nav-penjualan-mb");
+      if (navPenj) navPenj.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "flex" : "none";
       if (navPenjMb) navPenjMb.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "inline-block" : "none";
+
+      const navKeu = document.getElementById("nav-keuangan");
+      const navKeuMb = document.getElementById("nav-keuangan-mb");
+      if (navKeu) navKeu.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "flex" : "none";
       if (navKeuMb) navKeuMb.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "inline-block" : "none";
+
+      const navSip = document.getElementById("nav-siplah");
+      const navSipMb = document.getElementById("nav-siplah-mb");
+      if (navSip) navSip.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "flex" : "none";
       if (navSipMb) navSipMb.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "inline-block" : "none";
+
+      const navAdmin = document.getElementById("nav-admin-users");
+      const navAdminMb = document.getElementById("nav-admin-users-mb");
+      if (navAdmin) navAdmin.style.display = isUserAdmin ? "flex" : "none";
       if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
     }
 
