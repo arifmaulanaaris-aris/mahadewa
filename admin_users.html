@@ -2,79 +2,124 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manajemen Akun - Executive Dashboard mahadewa.id</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kelola Akun & Akses - mahadewa.id</title>
   
+  <!-- Font Plus Jakarta Sans & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* Font Global */
-* { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
-body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
-/* Header Merah */
-.top-header {
-  background: #991b1b; color: white; padding: 14px 20px;
-  display: flex; justify-content: space-between; align-items: center;
-  position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-}
-.user-info-head { display: flex; align-items: center; gap: 8px; }
-.user-name-head { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
-.badge-role-head { background: #ffffff; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    /* Top Header Merah */
+    .top-header {
+      background: #991b1b; color: white; padding: 14px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .user-info-head { display: flex; align-items: center; gap: 8px; }
+    .user-name-head { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
+    .badge-role-head { background: #ffffff; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    
+    .head-actions { display: flex; gap: 8px; }
+    .btn-head-action {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-head-action:hover { background: rgba(255,255,255,0.25); }
 
-.head-actions { display: flex; gap: 8px; }
-.btn-head-action {
-  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-  color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-}
+    /* Navigasi Mobile Halus (Smooth Scroll) */
+    .mobile-nav {
+      display: none; background: #ffffff; padding: 10px 14px; border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto; white-space: nowrap; gap: 8px; -webkit-overflow-scrolling: touch;
+      position: sticky; top: 57px; z-index: 90;
+    }
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav-item {
+      display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+      color: #64748b; text-decoration: none; background: #f1f5f9; transition: all 0.2s ease;
+    }
+    .mobile-nav-item.active { background: #991b1b; color: white; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25); }
 
-/* Navigasi Mobile Halus (Smooth Scroll) */
-.mobile-nav {
-  display: none; background: #ffffff; padding: 10px 14px; border-bottom: 1px solid #e2e8f0;
-  overflow-x: auto; white-space: nowrap; gap: 8px; -webkit-overflow-scrolling: touch;
-  position: sticky; top: 57px; z-index: 90;
-}
-.mobile-nav::-webkit-scrollbar { display: none; }
-.mobile-nav-item {
-  display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
-  color: #64748b; text-decoration: none; background: #f1f5f9; transition: all 0.2s ease;
-}
-.mobile-nav-item.active { background: #991b1b; color: white; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25); }
+    /* Layout & Sidebar Desktop */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px; transition: all 0.2s;
+    }
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #991b1b; color: white; }
 
-@media (max-width: 768px) {
-  .sidebar { display: none; }
-  .mobile-nav { display: flex; }
-}
+    .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
 
-  <!-- Header Utama -->
-  <header>
-    <div class="brand-container">
-      <span class="brand-name">mahadewa.id</span>
-      <span class="brand-sub">Cab. Palopo</span>
+    /* Form & Panel Styling */
+    .box-panel { background: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .panel-header { font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; transition: all 0.2s; }
+    .form-control:focus { border-color: #991b1b; box-shadow: 0 0 0 2px rgba(153, 27, 27, 0.1); }
+
+    .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; }
+    .checkbox-group input { accent-color: #991b1b; width: 16px; height: 16px; }
+
+    .btn-submit { background: #991b1b; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.2s; }
+    .btn-submit:hover { background: #7f1d1d; }
+    .btn-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+    /* Table Styling */
+    .table-container { overflow-x: auto; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; min-width: 650px; }
+    th { background: #f8fafc; padding: 10px 12px; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
+    td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; }
+    
+    .badge-role { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 800; display: inline-block; }
+    .badge-admin { background: #fee2e2; color: #991b1b; }
+    .badge-staff { background: #e0f2fe; color: #0369a1; }
+    
+    .btn-delete { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-delete:hover { background: #dc2626; color: white; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 8px; }
+      .content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Merah -->
+  <div class="top-header">
+    <div class="user-info-head">
+      <span id="headerUserName" class="user-name-head">ADMIN</span>
+      <span id="headerUserRole" class="badge-role-head">Admin</span>
     </div>
-    <div class="header-right">
-      <span id="userBadge" class="user-badge">Memuat...</span>
-      <button class="btn-header" onclick="location.reload()">Refresh</button>
-      <button class="btn-header" onclick="handleLogout()">Keluar</button>
+    <div class="head-actions">
+      <button class="btn-head-action" onclick="fetchAkunList()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      <button class="btn-head-action" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
     </div>
-  </header>
-
-  <!-- Sub-Header Bar -->
-  <div class="sub-header-bar">
-    <div class="page-title">Kelola Akun & Akses</div>
   </div>
 
-  <!-- Menu Navigasi Horizontal Mobile -->
-  <div class="mobile-nav">
-    <a href="absensi.html" class="mobile-nav-item">Absensi Staf</a>
-    <a href="kebersihan.html" class="mobile-nav-item">Kebersihan Toko</a>
-    <a href="penjualan.html" class="mobile-nav-item">Penjualan</a>
-    <a href="keuangan.html" class="mobile-nav-item">Keuangan</a>
-    <a href="siplah.html" class="mobile-nav-item">SIPLah Tertunda</a>
-    <a href="admin_users.html" class="mobile-nav-item active">Kelola Akun & Akses</a>
+  <!-- Mobile Nav Horizontal Terfilter Hak Akses -->
+  <div class="mobile-nav" id="mobileNavContainer">
+    <a href="absensi.html" id="nav-absensi-mb" class="mobile-nav-item">Absensi Staf</a>
+    <a href="kebersihan.html" id="nav-kebersihan-mb" class="mobile-nav-item">Kebersihan Toko</a>
+    <a href="penjualan.html" id="nav-penjualan-mb" class="mobile-nav-item">Penjualan</a>
+    <a href="keuangan.html" id="nav-keuangan-mb" class="mobile-nav-item">Keuangan</a>
+    <a href="siplah.html" id="nav-siplah-mb" class="mobile-nav-item">SIPLah Tertunda</a>
+    <a href="admin_users.html" id="nav-admin-users-mb" class="mobile-nav-item active">Kelola Akun & Akses</a>
   </div>
 
   <div class="container">
@@ -87,7 +132,7 @@ body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: fl
       <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
       <a id="nav-admin-users" href="admin_users.html" class="menu-item active">Kelola Akun & Akses</a>
     </div>
-    
+
     <!-- Area Konten Utama -->
     <div class="content">
       
@@ -151,7 +196,7 @@ body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: fl
         <button id="btnSimpanAkun" class="btn-submit" onclick="submitAkunBaru()">Simpan Akun Baru</button>
       </div>
 
-      <!-- Panel Tabel Daftar Akun yang Telah Dibuat -->
+      <!-- Panel Tabel Daftar Akun Terdaftar -->
       <div class="box-panel">
         <div class="panel-header">Daftar Akun Terdaftar</div>
         <div class="table-container">
@@ -183,17 +228,47 @@ body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: fl
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
+      filterMobileNavAccess(user);
+
       if (user && (user.role || "").toUpperCase() !== "ADMIN") {
         alert("Akses Ditolak! Halaman ini khusus untuk ADMIN.");
-        window.location.href = "kebersihan.html";
+        window.location.href = "absensi.html";
         return;
       }
 
-      // Ambil list akun saat halaman pertama kali di-load
+      if (currentUser) {
+        document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
+        document.getElementById("headerUserRole").innerText = currentUser.role || "Admin";
+      }
+
       fetchAkunList();
     });
 
-    // Fungsi Fetch List Akun dari Spreadsheet
+    function filterMobileNavAccess(user) {
+      if (!user) return;
+      const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+      const akses = user.akses || {};
+
+      const hasAccess = (val) => {
+        if (typeof val === "boolean") return val;
+        if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+        return false;
+      };
+
+      const navKebMb = document.getElementById("nav-kebersihan-mb");
+      const navPenjMb = document.getElementById("nav-penjualan-mb");
+      const navKeuMb = document.getElementById("nav-keuangan-mb");
+      const navSipMb = document.getElementById("nav-siplah-mb");
+      const navAdminMb = document.getElementById("nav-admin-users-mb");
+
+      if (navKebMb) navKebMb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "inline-block" : "none";
+      if (navPenjMb) navPenjMb.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "inline-block" : "none";
+      if (navKeuMb) navKeuMb.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "inline-block" : "none";
+      if (navSipMb) navSipMb.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "inline-block" : "none";
+      if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
+    }
+
+    // Fetch List Akun dari Spreadsheet
     async function fetchAkunList() {
       const tbody = document.getElementById("akunTableBody");
       try {
@@ -225,7 +300,7 @@ body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: fl
       }
     }
 
-    // Fungsi Simpan Akun Baru
+    // Simpan Akun Baru
     async function submitAkunBaru() {
       const username = document.getElementById("newUsername").value.trim();
       const password = document.getElementById("newPassword").value.trim();
@@ -288,7 +363,7 @@ body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: fl
       }
     }
 
-    // Fungsi Hapus Akun
+    // Hapus Akun
     async function hapusAkun(username) {
       if (!confirm(`Apakah Anda yakin ingin menghapus akun '${username}'?`)) return;
 
