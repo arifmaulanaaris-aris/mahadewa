@@ -70,7 +70,6 @@
       display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700;
       color: #334155; margin-bottom: 10px;
     }
-    .badge-remote { background: #fce7f3; color: #be185d; padding: 2px 10px; border-radius: 12px; font-size: 11px; }
     .badge-radius-ok { background: #dcfce7; color: #15803d; padding: 2px 10px; border-radius: 12px; font-size: 11px; }
     .badge-radius-err { background: #fee2e2; color: #b91c1c; padding: 2px 10px; border-radius: 12px; font-size: 11px; }
 
@@ -101,14 +100,16 @@
     .img-summary-box img { width: 100%; height: 100%; object-fit: cover; }
     .empty-summary-text { font-size: 12px; color: #94a3b8; font-weight: 600; }
 
-    /* Section 7 Hari Terakhir & Tabel */
+    /* Section 7 Hari Terakhir Indikator Warna */
     .section-box { background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; padding: 16px; margin-bottom: 20px; }
     .section-header-title { font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
     
     .days-circle-list { display: flex; justify-content: space-between; align-items: center; text-align: center; }
     .day-circle-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .circle-dot { width: 12px; height: 12px; border-radius: 50%; background: #22c55e; }
-    .circle-dot.absent { background: #ef4444; }
+    .circle-dot { width: 14px; height: 14px; border-radius: 50%; }
+    .circle-dot.ok { background: #22c55e; }     /* Hijau: Absen Aman & Tepat Waktu */
+    .circle-dot.late { background: #eab308; }   /* Kuning: Terlambat Masuk */
+    .circle-dot.incomplete { background: #ef4444; } /* Merah: Tidak Lengkap / Tidak Absen */
     .day-num { font-size: 12px; font-weight: 700; color: #64748b; }
 
     /* Table Riwayat */
@@ -116,6 +117,7 @@
     table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
     th { font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; padding: 10px; border-bottom: 1px solid #e2e8f0; }
     td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; }
+    .text-telat { color: #dc2626; font-weight: 700; }
 
     @media (max-width: 768px) {
       .sidebar { display: none; }
@@ -136,14 +138,14 @@
     </div>
   </div>
 
-  <!-- Mobile Nav Horizontal -->
-  <div class="mobile-nav">
-    <a href="absensi.html" class="mobile-nav-item active">Absensi Staf</a>
-    <a href="kebersihan.html" class="mobile-nav-item">Kebersihan Toko</a>
-    <a href="penjualan.html" class="mobile-nav-item">Penjualan</a>
-    <a href="keuangan.html" class="mobile-nav-item">Keuangan</a>
-    <a href="siplah.html" class="mobile-nav-item">SIPLah Tertunda</a>
-    <a href="admin_users.html" class="mobile-nav-item" id="nav-admin-users-mb" style="display:none;">Kelola Akun & Akses</a>
+  <!-- Mobile Nav Horizontal Terfilter Hak Akses -->
+  <div class="mobile-nav" id="mobileNavContainer">
+    <a href="absensi.html" id="nav-absensi-mb" class="mobile-nav-item active">Absensi Staf</a>
+    <a href="kebersihan.html" id="nav-kebersihan-mb" class="mobile-nav-item">Kebersihan Toko</a>
+    <a href="penjualan.html" id="nav-penjualan-mb" class="mobile-nav-item">Penjualan</a>
+    <a href="keuangan.html" id="nav-keuangan-mb" class="mobile-nav-item">Keuangan</a>
+    <a href="siplah.html" id="nav-siplah-mb" class="mobile-nav-item">SIPLah Tertunda</a>
+    <a href="admin_users.html" id="nav-admin-users-mb" class="mobile-nav-item" style="display:none;">Kelola Akun & Akses</a>
   </div>
 
   <div class="container">
@@ -259,7 +261,8 @@
     let imageBase64 = "";
     let streamRef = null;
     let isWithinRadius = false;
-    let currentTipeAbsen = "MASUK"; // Auto detect (MASUK/PULANG)
+    let currentTipeAbsen = "MASUK";
+    let shiftJamMasuk = "08:00"; // Default jam masuk shift
 
     // Lokasi Toko (Mahadewa Palopo)
     const TOKO_LAT = -3.002671;
@@ -267,17 +270,14 @@
     const MAX_RADIUS_METER = 100;
 
     window.addEventListener("DOMContentLoaded", () => {
-      checkAuthAndRenderNav();
+      // 1. Panggil Auth & Filter Menu Navigasi Sesuai Hak Akses User
+      const user = checkAuthAndRenderNav();
+      filterMobileNavAccess(user);
 
       if (currentUser) {
         document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
         document.getElementById("headerUserRole").innerText = currentUser.role || "Staff";
         document.getElementById("greetingName").innerText = "Halo, " + (currentUser.nama || currentUser.username).split(" ")[0];
-
-        if ((currentUser.role || "").toUpperCase() === "ADMIN") {
-          const navAdminMb = document.getElementById("nav-admin-users-mb");
-          if (navAdminMb) navAdminMb.style.display = "inline-block";
-        }
       }
 
       // Format Date Header
@@ -291,17 +291,39 @@
         document.getElementById("liveClockDisplay").innerText = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '.');
       }, 1000);
 
-      // Cek Lokasi GPS
+      // Cek GPS & Load Data
       getUserLocation();
-
-      // Load Kamera, Shift Dinamis, & Data Riwayat
       startCamera();
       fetchJadwalStaf();
-      render7DaysList();
       fetchAbsensiRiwayat();
     });
 
-    // 1. Fetch Shift Staf dari Sheet JADWAL_STAF
+    // Filtering Navigasi Mobile Berdasarkan Hak Akses
+    function filterMobileNavAccess(user) {
+      if (!user) return;
+      const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+      const akses = user.akses || {};
+
+      const hasAccess = (val) => {
+        if (typeof val === "boolean") return val;
+        if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+        return false;
+      };
+
+      const navKebMb = document.getElementById("nav-kebersihan-mb");
+      const navPenjMb = document.getElementById("nav-penjualan-mb");
+      const navKeuMb = document.getElementById("nav-keuangan-mb");
+      const navSipMb = document.getElementById("nav-siplah-mb");
+      const navAdminMb = document.getElementById("nav-admin-users-mb");
+
+      if (navKebMb) navKebMb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "inline-block" : "none";
+      if (navPenjMb) navPenjMb.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "inline-block" : "none";
+      if (navKeuMb) navKeuMb.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "inline-block" : "none";
+      if (navSipMb) navSipMb.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "inline-block" : "none";
+      if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
+    }
+
+    // Ambil Jadwal Shift Staf
     async function fetchJadwalStaf() {
       if (!currentUser) return;
       const namaStaf = currentUser.nama || currentUser.username;
@@ -312,13 +334,16 @@
         
         if (result.success && result.jadwal) {
           document.getElementById("jadwalText").innerText = result.jadwal.text;
+          if (result.jadwal.jamMasuk) {
+            shiftJamMasuk = result.jadwal.jamMasuk;
+          }
         }
       } catch (e) {
         document.getElementById("jadwalText").innerText = "PAGI (08:00 - 17:00)";
       }
     }
 
-    // 2. Geolocation Radius GPS
+    // Geolocation Radius GPS
     function getUserLocation() {
       const badge = document.getElementById("radiusStatusBadge");
       const desc = document.getElementById("locationStatusText");
@@ -366,7 +391,7 @@
       return R * c;
     }
 
-    // 3. Kamera Handlers
+    // Kamera Handlers
     async function startCamera() {
       try {
         const video = document.getElementById("webcam");
@@ -405,7 +430,7 @@
       }
     }
 
-    // 4. Submit Presensi
+    // Submit Presensi
     async function submitPresensi() {
       if (!imageBase64) {
         alert("Harap foto selfie terlebih dahulu sebelum menekan tombol Absen!");
@@ -455,26 +480,54 @@
       }
     }
 
-    // 5. Render 7 Hari Terakhir & Tabel Riwayat
-    function render7DaysList() {
-      const container = document.getElementById("daysCircleContainer");
-      const today = new Date();
-      let html = "";
-
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(today.getDate() - i);
-        const dayNum = d.getDate();
-        html += `
-          <div class="day-circle-item">
-            <div class="circle-dot"></div>
-            <span class="day-num">${dayNum}</span>
-          </div>
-        `;
+    // Helper Format String Tanggal (YYYY-MM-DD)
+    function getCleanDateStr(dateVal) {
+      if (!dateVal) return "";
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) {
+        return String(dateVal).substring(0, 10);
       }
-      container.innerHTML = html;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
     }
 
+    // Helper Extract Jam:Menit (HH:mm)
+    function getCleanTimeStr(dateVal) {
+      if (!dateVal) return "";
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) {
+        const str = String(dateVal);
+        return str.length >= 16 ? str.substring(11, 16) : str;
+      }
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      return `${hh}:${mm}`;
+    }
+
+    // Hitung Keterlambatan
+    function hitungKeterlambatan(jamAbsenStr, shiftMasukStr) {
+      if (!jamAbsenStr || !shiftMasukStr) return "-";
+
+      const [hAbsen, mAbsen] = jamAbsenStr.split(':').map(Number);
+      const [hShift, mShift] = shiftMasukStr.split(':').map(Number);
+
+      const totalMinutesAbsen = (hAbsen * 60) + mAbsen;
+      const totalMinutesShift = (hShift * 60) + mShift;
+
+      const diff = totalMinutesAbsen - totalMinutesShift;
+      if (diff <= 0) return "-";
+
+      if (diff >= 60) {
+        const jam = Math.floor(diff / 60);
+        const sisaMenit = diff % 60;
+        return sisaMenit > 0 ? `${jam} Jam ${sisaMenit} Mnt` : `${jam} Jam`;
+      }
+      return `${diff} Mnt`;
+    }
+
+    // Fetch & Pengelompokan Rekap Data Presensi
     async function fetchAbsensiRiwayat() {
       const tbody = document.getElementById("riwayatTableBody");
       try {
@@ -482,48 +535,123 @@
         const result = await res.json();
 
         if (result.success && result.data && result.data.length > 0) {
-          const userAbsen = result.data.filter(x => (x.nama || "").toLowerCase() === (currentUser.nama || currentUser.username).toLowerCase());
+          // Filter data staf ini
+          const myLogs = result.data.filter(x => (x.nama || "").toLowerCase() === (currentUser.nama || currentUser.username).toLowerCase());
 
-          if (userAbsen.length > 0) {
-            tbody.innerHTML = userAbsen.slice(0, 14).map(item => `
-              <tr>
-                <td>${item.waktu ? item.waktu.substring(0, 10) : '-'}</td>
-                <td>${item.tipe === "MASUK" ? item.waktu.substring(11, 16) : '-'}</td>
-                <td>${item.tipe === "PULANG" ? item.waktu.substring(11, 16) : '-'}</td>
-                <td>-</td>
-              </tr>
-            `).join("");
-            
-            // Cek status hari ini untuk mengatur mode Absen Masuk / Pulang
-            const todayStr = new Date().toISOString().substring(0, 10);
-            const todayAbsenMasuk = userAbsen.find(x => x.tipe === "MASUK" && String(x.waktu).indexOf(todayStr) > -1);
-            const todayAbsenPulang = userAbsen.find(x => x.tipe === "PULANG" && String(x.waktu).indexOf(todayStr) > -1);
+          // Grouping data per tanggal
+          const groupedMap = {};
+          myLogs.forEach(log => {
+            const tgl = getCleanDateStr(log.waktu);
+            if (!tgl) return;
 
-            if (todayAbsenMasuk && todayAbsenMasuk.foto) {
-              document.getElementById("summaryMasukBox").innerHTML = `<img src="${todayAbsenMasuk.foto}">`;
-              
-              // Jika sudah absen masuk tetapi belum absen pulang, ubah status ke PULANG
-              if (!todayAbsenPulang) {
-                currentTipeAbsen = "PULANG";
-                document.getElementById("tipeAbsenLabel").innerText = "Pulang pukul";
-                document.getElementById("btnSubmitAbsen").innerText = "Absen Pulang Sekarang";
-              }
+            if (!groupedMap[tgl]) {
+              groupedMap[tgl] = { tgl: tgl, masuk: null, pulang: null, fotoMasuk: "", fotoPulang: "" };
             }
 
-            if (todayAbsenPulang && todayAbsenPulang.foto) {
-              document.getElementById("summaryPulangBox").innerHTML = `<img src="${todayAbsenPulang.foto}">`;
-              
-              // Jika sudah absen keduanya hari ini
+            if (log.tipe === "MASUK" && !groupedMap[tgl].masuk) {
+              groupedMap[tgl].masuk = getCleanTimeStr(log.waktu);
+              groupedMap[tgl].fotoMasuk = log.foto || "";
+            } else if (log.tipe === "PULANG" && !groupedMap[tgl].pulang) {
+              groupedMap[tgl].pulang = getCleanTimeStr(log.waktu);
+              groupedMap[tgl].fotoPulang = log.foto || "";
+            }
+          });
+
+          // Sort tanggal terbaru di atas
+          const sortedDates = Object.keys(groupedMap).sort().reverse();
+          const todayStr = getCleanDateStr(new Date());
+          const todayData = groupedMap[todayStr];
+
+          // 1. Update Card Snapshot Foto Hari Ini
+          if (todayData) {
+            if (todayData.fotoMasuk) {
+              document.getElementById("summaryMasukBox").innerHTML = `<img src="${todayData.fotoMasuk}">`;
+            }
+            if (todayData.fotoPulang) {
+              document.getElementById("summaryPulangBox").innerHTML = `<img src="${todayData.fotoPulang}">`;
+            }
+
+            // Atur mode tombol utama (MASUK / PULANG)
+            if (todayData.masuk && !todayData.pulang) {
+              currentTipeAbsen = "PULANG";
+              document.getElementById("tipeAbsenLabel").innerText = "Pulang pukul";
+              document.getElementById("btnSubmitAbsen").innerText = "Absen Pulang Sekarang";
+            } else if (todayData.masuk && todayData.pulang) {
               document.getElementById("btnSubmitAbsen").innerText = "Sudah Absen Masuk & Pulang Hari Ini";
               document.getElementById("btnSubmitAbsen").disabled = true;
             }
+          }
+
+          // 2. Render Tabel Riwayat 14 Hari Terakhir
+          if (sortedDates.length > 0) {
+            tbody.innerHTML = sortedDates.slice(0, 14).map(tglKey => {
+              const item = groupedMap[tglKey];
+              const jamM = item.masuk || "-";
+              const jamP = item.pulang || "-";
+              const telatStr = item.masuk ? hitungKeterlambatan(item.masuk, shiftJamMasuk) : "-";
+              const telatClass = telatStr !== "-" ? "text-telat" : "";
+
+              return `
+                <tr>
+                  <td><strong>${item.tgl}</strong></td>
+                  <td>${jamM}</td>
+                  <td>${jamP}</td>
+                  <td class="${telatClass}">${telatStr}</td>
+                </tr>
+              `;
+            }).join("");
           } else {
             tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">Belum ada riwayat presensi.</td></tr>`;
           }
+
+          // 3. Render Dot Indikator Warna 7 Hari Terakhir
+          render7DaysStatusCircles(groupedMap);
+
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">Belum ada data presensi.</td></tr>`;
+          render7DaysStatusCircles({});
         }
       } catch (e) {
         tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ef4444;">Gagal memuat riwayat.</td></tr>`;
       }
+    }
+
+    // Render 7 Hari Terakhir (Hijau = Aman, Kuning = Telat, Merah = Tidak Lengkap/Tidak Absen)
+    function render7DaysStatusCircles(groupedMap) {
+      const container = document.getElementById("daysCircleContainer");
+      const today = new Date();
+      let html = "";
+
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        const tglStr = getCleanDateStr(d);
+        const dayNum = d.getDate();
+
+        const dataTgl = groupedMap[tglStr];
+        let statusClass = "incomplete"; // Red default
+
+        if (dataTgl) {
+          const isLate = dataTgl.masuk && hitungKeterlambatan(dataTgl.masuk, shiftJamMasuk) !== "-";
+          const isComplete = dataTgl.masuk && dataTgl.pulang;
+
+          if (isComplete && !isLate) {
+            statusClass = "ok"; // Green
+          } else if (isLate) {
+            statusClass = "late"; // Yellow
+          } else {
+            statusClass = "incomplete"; // Red
+          }
+        }
+
+        html += `
+          <div class="day-circle-item">
+            <div class="circle-dot ${statusClass}"></div>
+            <span class="day-num">${dayNum}</span>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
     }
   </script>
 </body>
