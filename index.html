@@ -133,14 +133,37 @@
 
   <script src="auth.js"></script>
   <script>
-    // Mencegah looping: Jika user sudah punya sesi valid, langsung arahkan ke kebersihan.html
+    // Helper untuk menentukan target halaman sesuai hak akses
+    function getRedirectTarget(user) {
+      if (!user) return "absensi.html";
+      const role = (user.role || "").toUpperCase();
+      const akses = user.akses || {};
+
+      if (role === "ADMIN") return "absensi.html";
+
+      const hasAccess = (val) => {
+        if (typeof val === "boolean") return val;
+        if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+        return false;
+      };
+
+      // Prioritas redirect: Absensi -> Kebersihan -> Penjualan -> Keuangan -> SIPLah
+      if (hasAccess(akses.kebersihan)) return "kebersihan.html";
+      if (hasAccess(akses.penjualan)) return "penjualan.html";
+      if (hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) return "keuangan.html";
+      if (hasAccess(akses.siplah)) return "siplah.html";
+
+      return "absensi.html"; // Default aman untuk seluruh staf
+    }
+
+    // Mencegah looping: Jika user sudah punya sesi valid, langsung arahkan ke halaman sesuai akses
     window.addEventListener("DOMContentLoaded", () => {
       const session = localStorage.getItem("mahadewa_user");
       if (session) {
         try {
           const user = JSON.parse(session);
           if (user && user.username) {
-            window.location.href = "kebersihan.html";
+            window.location.href = getRedirectTarget(user);
           }
         } catch (e) {
           localStorage.removeItem("mahadewa_user");
@@ -187,7 +210,7 @@
         if (res && res.success) {
           // Simpan data user lengkap dari Apps Script (termasuk devisi dan objek akses)
           localStorage.setItem("mahadewa_user", JSON.stringify(res.user));
-          window.location.href = "kebersihan.html";
+          window.location.href = getRedirectTarget(res.user);
         } else {
           showError(res ? res.message : "Username atau Password salah!");
         }
