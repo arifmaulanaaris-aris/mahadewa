@@ -3,154 +3,232 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Absensi Staf - mahadewa.id</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              DEFAULT: '#dc2626', // Tema Merah Mahadewa
-              dark: '#b91c1c',
-              light: '#fef2f2'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <title>Absensi Staf - Executive Dashboard mahadewa.id</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
 
-  <!-- Header Navigasi -->
-  <header class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50 shadow-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <div class="bg-brand text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-brand/30">
-          M
-        </div>
-        <div>
-          <h1 class="font-bold text-lg leading-tight text-white">mahadewa<span class="text-brand">.id</span></h1>
-          <p class="text-xs text-slate-400">Portal Absensi Presensi</p>
-        </div>
-      </div>
-      <div class="flex items-center space-x-3">
-        <span id="userBadge" class="text-xs bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full font-medium border border-slate-600">
-          Memuat akun...
-        </span>
-        <button onclick="logout()" class="text-xs text-rose-400 hover:text-rose-300 bg-rose-950/40 border border-rose-800/50 px-3 py-1.5 rounded-full transition">
-          <i class="fa-solid fa-right-from-bracket mr-1"></i>Keluar
-        </button>
-      </div>
+  <style>
+    * { box-sizing: border-box; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Header Utama */
+    header {
+      background: #ffffff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    }
+    .brand-container { display: flex; align-items: center; gap: 8px; }
+    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; }
+    .brand-sub { font-size: 11px; color: #64748b; font-weight: 700; }
+    
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .user-badge { font-size: 12px; font-weight: 700; color: #334155; margin-right: 4px; }
+    .btn-header { padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 11px; font-weight: 700; color: #475569; }
+    .btn-header:hover { background: #f1f5f9; }
+
+    /* Sub-Header Bar */
+    .sub-header-bar {
+      background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 10px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-title { font-size: 14px; font-weight: 900; color: #1e293b; }
+
+    /* Menu Navigasi Horizontal Mobile */
+    .mobile-nav {
+      display: none; background: #ffffff; padding: 8px 12px; border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto; white-space: nowrap; gap: 8px;
+    }
+    .mobile-nav-item {
+      display: inline-block; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700;
+      color: #64748b; text-decoration: none; background: #f1f5f9;
+    }
+    .mobile-nav-item.active { background: #dc2626; color: white; }
+
+    /* Container & Layout Utama */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px;
+    }
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #dc2626; color: white; }
+
+    /* Content Area */
+    .content { flex: 1; padding: 20px 24px; max-width: 900px; }
+    .box-panel { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+    .panel-header { font-size: 14px; font-weight: 900; color: #334155; margin-bottom: 16px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+
+    /* Absensi Styling */
+    .type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .type-btn {
+      border: 2px solid #cbd5e1; background: #f8fafc; padding: 14px; border-radius: 8px;
+      text-align: center; cursor: pointer; font-weight: 700; font-size: 13px; color: #475569;
+      transition: all 0.2s ease;
+    }
+    .type-btn input { display: none; }
+    .type-btn:has(input:checked) { border-color: #dc2626; background: #fef2f2; color: #dc2626; }
+
+    .cam-box {
+      width: 100%; height: 260px; background: #0f172a; border-radius: 8px; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; margin-bottom: 12px; border: 1px solid #cbd5e1;
+    }
+    .cam-box video, .cam-box img { width: 100%; height: 100%; object-fit: cover; }
+    .cam-placeholder { color: #94a3b8; text-align: center; font-size: 12px; font-weight: 500; }
+
+    .btn-action-group { display: flex; gap: 8px; margin-bottom: 16px; }
+    .btn-cam {
+      flex: 1; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 700;
+      border: 1px solid #cbd5e1; background: #ffffff; color: #334155; cursor: pointer; text-align: center;
+    }
+    .btn-cam:hover { background: #f1f5f9; }
+    .btn-cam-green { background: #16a34a; color: white; border: none; }
+    .btn-cam-green:hover { background: #15803d; }
+    .btn-cam-green:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
+    .form-control:focus { border-color: #dc2626; }
+
+    .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; }
+    .btn-submit:hover { background: #b91c1c; }
+
+    .status-tag { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; background: #dcfce7; color: #166534; }
+
+    /* Responsive HP */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .sub-header-bar { display: none; }
+      .content { padding: 16px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Utama -->
+  <header>
+    <div class="brand-container">
+      <span class="brand-name">mahadewa.id</span>
+      <span class="brand-sub">Cab. Palopo</span>
+    </div>
+    <div class="header-right">
+      <span id="userBadge" class="user-badge">Memuat...</span>
+      <button class="btn-header" onclick="location.reload()">Refresh</button>
+      <button class="btn-header" onclick="handleLogout()">Keluar</button>
     </div>
   </header>
 
-  <!-- Konten Utama -->
-  <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
+  <!-- Sub-Header Bar -->
+  <div class="sub-header-bar">
+    <div class="page-title">Absensi Presensi Staf</div>
+  </div>
 
-    <!-- Card Form Absensi -->
-    <div class="bg-slate-800 rounded-2xl border border-slate-700 p-5 md:p-7 shadow-xl">
-      <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700">
-        <div>
-          <h2 class="text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-user-check text-brand"></i> Form Presensi Harian
-          </h2>
-          <p class="text-xs text-slate-400 mt-1" id="clockDisplay">Memuat jam...</p>
+  <!-- Menu Navigasi Horizontal Mobile -->
+  <div class="mobile-nav">
+    <a href="absensi.html" class="mobile-nav-item active">Absensi Staf</a>
+    <a href="kebersihan.html" class="mobile-nav-item">Kebersihan Toko</a>
+    <a href="penjualan.html" class="mobile-nav-item">Penjualan</a>
+    <a href="keuangan.html" class="mobile-nav-item">Keuangan</a>
+    <a href="siplah.html" class="mobile-nav-item">SIPLah Tertunda</a>
+    <a href="admin_users.html" class="mobile-nav-item" id="nav-admin-users-mb" style="display:none;">Kelola Akun & Akses</a>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Desktop -->
+    <div class="sidebar">
+      <a id="nav-absensi" href="absensi.html" class="menu-item active">Absensi Staf</a>
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">Penjualan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
+      <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">Kelola Akun & Akses</a>
+    </div>
+    
+    <!-- Area Konten Utama -->
+    <div class="content">
+      
+      <!-- Panel Form Absensi -->
+      <div class="box-panel">
+        <div class="panel-header">
+          <span>Form Presensi Harian</span>
+          <span class="status-tag" id="liveClock">Memuat jam...</span>
         </div>
-        <span id="statusSpan" class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-          Sistem Siap
-        </span>
-      </div>
 
-      <form id="absensForm" onsubmit="handleAbsenSubmit(event)" class="space-y-5">
-        
-        <!-- Pilihan Tipe Absen -->
-        <div class="grid grid-cols-2 gap-4">
-          <label class="relative cursor-pointer">
-            <input type="radio" name="tipeAbsen" value="MASUK" checked class="peer sr-only">
-            <div class="p-4 rounded-xl border border-slate-700 bg-slate-900/50 text-center peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:text-brand transition">
-              <i class="fa-solid fa-right-to-bracket text-2xl mb-1 block"></i>
-              <span class="font-bold text-sm">Absen Masuk</span>
-            </div>
-          </label>
-          <label class="relative cursor-pointer">
-            <input type="radio" name="tipeAbsen" value="PULANG" class="peer sr-only">
-            <div class="p-4 rounded-xl border border-slate-700 bg-slate-900/50 text-center peer-checked:border-brand peer-checked:bg-brand/10 peer-checked:text-brand transition">
-              <i class="fa-solid fa-right-from-bracket text-2xl mb-1 block"></i>
-              <span class="font-bold text-sm">Absen Pulang</span>
-            </div>
-          </label>
-        </div>
+        <form id="formAbsensi" onsubmit="submitPresensi(event)">
+          <!-- Pilih Tipe Absen -->
+          <div class="type-selector">
+            <label class="type-btn">
+              <input type="radio" name="tipeAbsen" value="MASUK" checked>
+              <i class="fa-solid fa-right-to-bracket"></i> Absen Masuk
+            </label>
+            <label class="type-btn">
+              <input type="radio" name="tipeAbsen" value="PULANG">
+              <i class="fa-solid fa-right-from-bracket"></i> Absen Pulang
+            </label>
+          </div>
 
-        <!-- Kamera Selfie -->
-        <div class="space-y-2">
-          <label class="block text-xs font-medium text-slate-300">Foto Verifikasi (Selfie Bukti)</label>
-          <div class="relative bg-slate-900 border-2 border-dashed border-slate-700 rounded-xl overflow-hidden aspect-video flex flex-col items-center justify-center">
-            <video id="webcam" autoplay playsinline class="w-full h-full object-cover hidden"></video>
-            <canvas id="canvas" class="hidden"></canvas>
-            <img id="photoPreview" class="w-full h-full object-cover hidden">
+          <!-- Area Kamera Kamera / Snapshot -->
+          <div class="cam-box">
+            <video id="webcam" autoplay playsinline style="display:none;"></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <img id="photoPreview" style="display:none;">
             
-            <div id="camPlaceholder" class="text-center p-4">
-              <i class="fa-solid fa-camera text-3xl text-slate-500 mb-2"></i>
-              <p class="text-xs text-slate-400">Klik tombol di bawah untuk membuka kamera</p>
+            <div id="camPlaceholder" class="cam-placeholder">
+              <i class="fa-solid fa-camera" style="font-size: 32px; margin-bottom: 8px;"></i><br>
+              Klik tombol 'Buka Kamera' di bawah
             </div>
           </div>
-          
-          <div class="flex gap-2">
-            <button type="button" onclick="startCamera()" id="btnStartCam" class="flex-1 py-2 px-3 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-2">
+
+          <div class="btn-action-group">
+            <button type="button" class="btn-cam" onclick="startCamera()">
               <i class="fa-solid fa-video"></i> Buka Kamera
             </button>
-            <button type="button" onclick="takeSnapshot()" id="btnSnap" disabled class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-camera-retro"></i> Ambil Foto
+            <button type="button" id="btnSnap" class="btn-cam btn-cam-green" onclick="takeSnapshot()" disabled>
+              <i class="fa-solid fa-camera-retro"></i> Ambil Foto Selfie
             </button>
           </div>
-        </div>
 
-        <!-- Catatan Opsional -->
-        <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">Catatan / Lokasi (Opsional)</label>
-          <input type="text" id="catatanInput" placeholder="Contoh: Di toko / Dalam perjalanan dinas" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:border-brand text-slate-100 placeholder-slate-500">
-        </div>
+          <!-- Catatan / Lokasi -->
+          <div class="form-group">
+            <label class="form-label">Catatan / Keterangan Lokasi (Opsional)</label>
+            <input type="text" id="catatanInput" class="form-control" placeholder="Contoh: Di Toko / Perjalanan Dinas">
+          </div>
 
-        <!-- Submit Button -->
-        <button type="submit" id="btnSubmit" class="w-full py-3.5 bg-brand hover:bg-brand-dark text-white font-bold text-sm rounded-xl transition shadow-lg shadow-brand/20 flex items-center justify-center gap-2">
-          <i class="fa-solid fa-paper-plane"></i> Kirim Absensi
-        </button>
-      </form>
+          <button type="submit" id="btnSubmitAbsen" class="btn-submit">
+            Kirim Presensi Presensi
+          </button>
+        </form>
+      </div>
+
     </div>
+  </div>
 
-  </main>
-
+  <script src="auth.js"></script>
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU0F715356lw2g1_5X8RW9so1GSE3QVNzO4CTrgl366pHXAd_5umSI-IYOPsTgdgIkvw/exec";
-    
-    let currentUser = null;
     let imageBase64 = "";
     let streamRef = null;
 
-    // Load User dari Session LocalStorage (Diselaraskan dengan auth.js)
-    window.onload = function() {
-      const stored = localStorage.getItem("mahadewa_user");
-      if (!stored) {
-        alert("Sesi login tidak ditemukan. Silakan login terlebih dahulu.");
-        window.location.href = "index.html"; // Kembalikan ke halaman login
-        return;
+    window.addEventListener("DOMContentLoaded", () => {
+      checkAuthAndRenderNav();
+
+      // Cek tombol admin navigasi mobile
+      if (currentUser && (currentUser.role || "").toUpperCase() === "ADMIN") {
+        const navAdminMb = document.getElementById("nav-admin-users-mb");
+        if (navAdminMb) navAdminMb.style.display = "inline-block";
       }
-      
-      currentUser = JSON.parse(stored);
-      document.getElementById("userBadge").innerText = `${currentUser.nama} (${currentUser.devisi || 'STAF'})`;
-      
-      // Jam realtime
+
+      // Live Clock
       setInterval(() => {
         const now = new Date();
-        document.getElementById("clockDisplay").innerText = now.toLocaleString("id-ID", { dateStyle: "full", timeStyle: "medium" });
+        document.getElementById("liveClock").innerText = now.toLocaleTimeString("id-ID");
       }, 1000);
-    };
+    });
 
-    // Fungsi Pengoperasian Kamera
     async function startCamera() {
       try {
         const video = document.getElementById("webcam");
@@ -159,9 +237,9 @@
 
         streamRef = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
         video.srcObject = streamRef;
-        video.classList.remove("hidden");
-        placeholder.classList.add("hidden");
-        photoPreview.classList.add("hidden");
+        video.style.display = "block";
+        placeholder.style.display = "none";
+        photoPreview.style.display = "none";
         
         document.getElementById("btnSnap").disabled = false;
       } catch (err) {
@@ -182,30 +260,28 @@
       imageBase64 = canvas.toDataURL("image/jpeg", 0.7);
 
       photoPreview.src = imageBase64;
-      photoPreview.classList.remove("hidden");
-      video.classList.add("hidden");
+      photoPreview.style.display = "block";
+      video.style.display = "none";
 
-      // Stop camera stream
       if (streamRef) {
         streamRef.getTracks().forEach(track => track.stop());
       }
     }
 
-    // Submit Absensi ke Apps Script Backend
-    async function handleAbsenSubmit(e) {
+    async function submitPresensi(e) {
       e.preventDefault();
 
       if (!imageBase64) {
-        alert("Wajib menyertakan foto selfie presensi!");
+        alert("Harap ambil foto selfie verifikasi terlebih dahulu!");
         return;
       }
 
       const tipeAbsen = document.querySelector('input[name="tipeAbsen"]:checked').value;
       const catatan = document.getElementById("catatanInput").value;
-      const btnSubmit = document.getElementById("btnSubmit");
+      const btn = document.getElementById("btnSubmitAbsen");
 
-      btnSubmit.disabled = true;
-      btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...`;
+      btn.innerText = "Mengirim Data Presensi...";
+      btn.disabled = true;
 
       const payload = {
         action: "simpanAbsensi",
@@ -217,29 +293,26 @@
       };
 
       try {
-        const response = await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify(payload)
         });
 
-        const res = await response.json();
-        if (res.success) {
-          alert("✅ Presensi Berhasil Dikirim!");
+        const result = await res.json();
+        btn.innerText = "Kirim Presensi Presensi";
+        btn.disabled = false;
+
+        if (result.success) {
+          alert("✅ Presensi berhasil dicatat!");
           window.location.reload();
         } else {
-          alert("❌ Gagal: " + res.message);
+          alert("Gagal: " + result.message);
         }
       } catch (err) {
-        alert("Terjadi kesalahan jaringan atau server.");
-      } finally {
-        btnSubmit.disabled = false;
-        btnSubmit.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Kirim Absensi`;
+        btn.innerText = "Kirim Presensi Presensi";
+        btn.disabled = false;
+        alert("Terjadi kesalahan koneksi saat mengirim absensi.");
       }
-    }
-
-    function logout() {
-      localStorage.removeItem("mahadewa_user");
-      window.location.href = "index.html";
     }
   </script>
 </body>
