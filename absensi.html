@@ -14,11 +14,11 @@
     * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
     body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* Header Merah Atas Sesuai Gambar */
+    /* Top Header Merah */
     .top-header {
       background: #991b1b; color: white; padding: 14px 20px;
       display: flex; justify-content: space-between; align-items: center;
-      position: sticky; top: 0; z-index: 100; shadow: 0 2px 10px rgba(0,0,0,0.15);
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
     .user-info-head { display: flex; align-items: center; gap: 8px; }
     .user-name-head { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
@@ -51,14 +51,14 @@
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
     .menu-item.active { background: #991b1b; color: white; }
 
-    /* Content Styling Sesuai Gambar */
+    /* Content Styling */
     .content { flex: 1; padding: 20px; max-width: 540px; margin: 0 auto; width: 100%; }
     
     .greeting-title { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
     .sub-date-info { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 16px; }
     .jadwal-badge { font-weight: 700; color: #334155; }
 
-    /* Card Utam Absensi */
+    /* Card Utama Absensi */
     .card-absen-main {
       background: #ffffff; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0;
       box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px;
@@ -163,7 +163,7 @@
       <div class="greeting-title" id="greetingName">Halo, Arif</div>
       <div class="sub-date-info">
         <span id="currentDateStr">Sel, 3 Nov</span> · <span id="currentBranch">PALOPO</span><br>
-        Jadwal hari ini: <span class="jadwal-badge">P6 - Pagi 6 (09:00-21:00)</span>
+        Jadwal hari ini: <span class="jadwal-badge" id="jadwalText">Memuat shift...</span>
       </div>
 
       <!-- Main Card Absensi -->
@@ -259,6 +259,7 @@
     let imageBase64 = "";
     let streamRef = null;
     let isWithinRadius = false;
+    let currentTipeAbsen = "MASUK"; // Auto detect (MASUK/PULANG)
 
     // Lokasi Toko (Mahadewa Palopo)
     const TOKO_LAT = -3.002671;
@@ -293,12 +294,31 @@
       // Cek Lokasi GPS
       getUserLocation();
 
-      // Load Kamera & Data Riwayat
+      // Load Kamera, Shift Dinamis, & Data Riwayat
       startCamera();
+      fetchJadwalStaf();
       render7DaysList();
       fetchAbsensiRiwayat();
     });
 
+    // 1. Fetch Shift Staf dari Sheet JADWAL_STAF
+    async function fetchJadwalStaf() {
+      if (!currentUser) return;
+      const namaStaf = currentUser.nama || currentUser.username;
+      
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getJadwalStaf&namaStaf=${encodeURIComponent(namaStaf)}`);
+        const result = await res.json();
+        
+        if (result.success && result.jadwal) {
+          document.getElementById("jadwalText").innerText = result.jadwal.text;
+        }
+      } catch (e) {
+        document.getElementById("jadwalText").innerText = "PAGI (08:00 - 17:00)";
+      }
+    }
+
+    // 2. Geolocation Radius GPS
     function getUserLocation() {
       const badge = document.getElementById("radiusStatusBadge");
       const desc = document.getElementById("locationStatusText");
@@ -346,6 +366,7 @@
       return R * c;
     }
 
+    // 3. Kamera Handlers
     async function startCamera() {
       try {
         const video = document.getElementById("webcam");
@@ -384,6 +405,7 @@
       }
     }
 
+    // 4. Submit Presensi
     async function submitPresensi() {
       if (!imageBase64) {
         alert("Harap foto selfie terlebih dahulu sebelum menekan tombol Absen!");
@@ -404,7 +426,7 @@
         action: "simpanAbsensi",
         namaStaf: currentUser.nama || currentUser.username,
         divisi: currentUser.devisi || "UMUM",
-        tipeAbsen: "MASUK", // Bisa diganti fleksibel
+        tipeAbsen: currentTipeAbsen,
         lat: userLat,
         lng: userLng,
         base64Image: imageBase64
@@ -417,22 +439,23 @@
         });
         const result = await res.json();
 
-        btn.innerText = "Absen Masuk Sekarang";
+        btn.innerText = `Absen ${currentTipeAbsen} Sekarang`;
         btn.disabled = false;
 
         if (result.success) {
-          alert("✅ Presensi Berhasil!");
+          alert(`✅ Presensi ${currentTipeAbsen} Berhasil!`);
           window.location.reload();
         } else {
           alert("❌ Gagal: " + result.message);
         }
       } catch (e) {
-        btn.innerText = "Absen Masuk Sekarang";
+        btn.innerText = `Absen ${currentTipeAbsen} Sekarang`;
         btn.disabled = false;
         alert("Terjadi kesalahan koneksi ke server.");
       }
     }
 
+    // 5. Render 7 Hari Terakhir & Tabel Riwayat
     function render7DaysList() {
       const container = document.getElementById("daysCircleContainer");
       const today = new Date();
@@ -459,7 +482,6 @@
         const result = await res.json();
 
         if (result.success && result.data && result.data.length > 0) {
-          // Filter hanya user ini
           const userAbsen = result.data.filter(x => (x.nama || "").toLowerCase() === (currentUser.nama || currentUser.username).toLowerCase());
 
           if (userAbsen.length > 0) {
@@ -472,10 +494,28 @@
               </tr>
             `).join("");
             
-            // Cek foto terbaru untuk dipasang pada card summary atas
-            const latestMasuk = userAbsen.find(x => x.tipe === "MASUK");
-            if (latestMasuk && latestMasuk.foto) {
-              document.getElementById("summaryMasukBox").innerHTML = `<img src="${latestMasuk.foto}">`;
+            // Cek status hari ini untuk mengatur mode Absen Masuk / Pulang
+            const todayStr = new Date().toISOString().substring(0, 10);
+            const todayAbsenMasuk = userAbsen.find(x => x.tipe === "MASUK" && String(x.waktu).indexOf(todayStr) > -1);
+            const todayAbsenPulang = userAbsen.find(x => x.tipe === "PULANG" && String(x.waktu).indexOf(todayStr) > -1);
+
+            if (todayAbsenMasuk && todayAbsenMasuk.foto) {
+              document.getElementById("summaryMasukBox").innerHTML = `<img src="${todayAbsenMasuk.foto}">`;
+              
+              // Jika sudah absen masuk tetapi belum absen pulang, ubah status ke PULANG
+              if (!todayAbsenPulang) {
+                currentTipeAbsen = "PULANG";
+                document.getElementById("tipeAbsenLabel").innerText = "Pulang pukul";
+                document.getElementById("btnSubmitAbsen").innerText = "Absen Pulang Sekarang";
+              }
+            }
+
+            if (todayAbsenPulang && todayAbsenPulang.foto) {
+              document.getElementById("summaryPulangBox").innerHTML = `<img src="${todayAbsenPulang.foto}">`;
+              
+              // Jika sudah absen keduanya hari ini
+              document.getElementById("btnSubmitAbsen").innerText = "Sudah Absen Masuk & Pulang Hari Ini";
+              document.getElementById("btnSubmitAbsen").disabled = true;
             }
           } else {
             tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">Belum ada riwayat presensi.</td></tr>`;
