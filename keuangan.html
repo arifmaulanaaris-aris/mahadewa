@@ -3,150 +3,163 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Keuangan - Executive Dashboard mahadewa.id</title>
+  <title>Kebersihan Toko - mahadewa.id</title>
   
-  <!-- Google Font: Roboto -->
+  <!-- Font Plus Jakarta Sans & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; 
-      margin: 0; 
-      padding: 0; 
-    }
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
     body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* HEADER */
-    header {
-      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    /* Top Header Merah */
+    .top-header {
+      background: #991b1b; color: white; padding: 14px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
-    .brand-section { display: flex; align-items: center; gap: 8px; }
-    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
-    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
-    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    .user-info-head { display: flex; align-items: center; gap: 8px; }
+    .user-name-head { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
+    .badge-role-head { background: #ffffff; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     
-    .header-user { display: flex; align-items: center; gap: 6px; }
-    .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
-    .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
-    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .head-actions { display: flex; gap: 8px; }
+    .btn-head-action {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-head-action:hover { background: rgba(255,255,255,0.25); }
 
-    /* LAYOUT & SIDEBAR */
+    /* Navigasi Mobile Halus (Smooth Scroll) */
+    .mobile-nav {
+      display: none; background: #ffffff; padding: 10px 14px; border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto; white-space: nowrap; gap: 8px; -webkit-overflow-scrolling: touch;
+      position: sticky; top: 57px; z-index: 90;
+    }
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav-item {
+      display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+      color: #64748b; text-decoration: none; background: #f1f5f9; transition: all 0.2s ease;
+    }
+    .mobile-nav-item.active { background: #991b1b; color: white; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25); }
+
+    /* Layout & Sidebar Desktop */
     .container { display: flex; flex: 1; }
-    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
     .menu-item {
       display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
-      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 4px; text-decoration: none;
-      transition: all 0.2s; text-align: left;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px; transition: all 0.2s;
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
-    .menu-item.active { background: #dc2626; color: white; }
+    .menu-item.active { background: #991b1b; color: white; }
 
     .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
     .tab-page { display: none; }
     .tab-page.active { display: block; }
 
-    /* SUB TAB NAVIGASI KEUANGAN */
+    /* SUB TAB NAVIGASI KEBERSIHAN */
     .sub-tab-nav { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
     .sub-tab-btn {
-      padding: 8px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc;
+      padding: 8px 16px; border-radius: 20px; border: 1px solid #cbd5e1; background: #f8fafc;
       font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; transition: all 0.2s;
     }
-    .sub-tab-btn.active { background: #dc2626; color: white; border-color: #dc2626; }
+    .sub-tab-btn.active { background: #991b1b; color: white; border-color: #991b1b; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.2); }
 
-    /* FINANCE KPI CARDS */
-    .finance-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-    .card { background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
-    .card.main-card { background: #dc2626; color: white; border: none; }
+    /* KPI CARDS */
+    .finance-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .card { background: #ffffff; border-radius: 14px; padding: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .card.main-card { background: #991b1b; color: white; border: none; }
     .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-    .card-head { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-head { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
     .card.main-card .card-head { color: #fecaca; }
-    .card-val { font-size: 17px; font-weight: 900; color: #0f172a; line-height: 1.2; margin-top: 2px; }
+    .card-val { font-size: 18px; font-weight: 800; color: #0f172a; line-height: 1.2; margin-top: 4px; }
     .card.main-card .card-val { color: #ffffff; }
 
     /* PANELS & TABLES */
-    .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; flex-wrap: wrap; gap: 8px; }
+    .box-panel { background: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .panel-header { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; flex-wrap: wrap; gap: 8px; }
 
     .table-container { height: 380px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
     .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
-    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+    .custom-table th { background: #f8fafc; padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 800; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; text-transform: uppercase; }
+    .custom-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; white-space: nowrap; }
     .custom-table tr:hover td { background: #f8fafc; }
 
     @media (max-width: 768px) {
-      .container { flex-direction: column; }
-      .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
-      .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
-      .finance-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .finance-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .card.main-card { grid-column: span 2; }
+      .content { padding: 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="brand-section">
-      <div>
-        <span class="brand-name">mahadewa.id</span>
-        <span class="brand-sub">Cab. Palopo</span>
-      </div>
-      <div class="page-title-badge" id="headerPageTitle">Keuangan</div>
+  <!-- Top Header Merah -->
+  <div class="top-header">
+    <div class="user-info-head">
+      <span id="headerUserName" class="user-name-head">MAHADEWA</span>
+      <span id="headerUserRole" class="badge-role-head">Staff</span>
     </div>
-    <div class="header-user">
-      <span class="user-name" id="userBadge">Memuat...</span>
-      <button class="btn-badge-gray" onclick="fetchStats()">🔄 Refresh</button>
-      <button class="btn-badge-red" onclick="showProfile()">Profil</button>
-      <button class="btn-badge-gray" onclick="handleLogout()">Keluar</button>
+    <div class="head-actions">
+      <button class="btn-head-action" onclick="fetchStats()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      <button class="btn-head-action" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
     </div>
-  </header>
+  </div>
+
+  <!-- Mobile Nav Horizontal Terfilter Hak Akses -->
+  <div class="mobile-nav" id="mobileNavContainer">
+    <a href="absensi.html" id="nav-absensi-mb" class="mobile-nav-item">Absensi Staf</a>
+    <a href="kebersihan.html" id="nav-kebersihan-mb" class="mobile-nav-item active">Kebersihan Toko</a>
+    <a href="penjualan.html" id="nav-penjualan-mb" class="mobile-nav-item">Penjualan</a>
+    <a href="keuangan.html" id="nav-keuangan-mb" class="mobile-nav-item">Keuangan</a>
+    <a href="siplah.html" id="nav-siplah-mb" class="mobile-nav-item">SIPLah Tertunda</a>
+    <a href="admin_users.html" id="nav-admin-users-mb" class="mobile-nav-item" style="display:none;">Kelola Akun & Akses</a>
+  </div>
 
   <div class="container">
-    <!-- SIDEBAR NAVIGATION -->
+    <!-- Sidebar Desktop -->
     <div class="sidebar">
       <a id="nav-absensi" href="absensi.html" class="menu-item">Absensi Staf</a>
-      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">Kebersihan Toko</a>
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item active">Kebersihan Toko</a>
       <a id="nav-penjualan" href="penjualan.html" class="menu-item">Penjualan</a>
-      <a id="nav-keuangan" href="keuangan.html" class="menu-item active">Keuangan</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">Keuangan</a>
       <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
       <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">Kelola Akun & Akses</a>
     </div>
 
+    <!-- Main Content -->
     <div class="content">
       
-      <!-- SUB TAB NAVIGASI KEUANGAN -->
+      <!-- SUB TAB NAVIGASI KEBERSIHAN -->
       <div class="sub-tab-nav">
-        <button id="subBtn-mtk" class="sub-tab-btn active" onclick="switchKeuanganSubTab('mtk')">Keuangan MTK</button>
-        <button id="subBtn-service" class="sub-tab-btn" onclick="switchKeuanganSubTab('service')">Keuangan Service</button>
+        <button id="subBtn-mtk" class="sub-tab-btn active" onclick="switchKeuanganSubTab('mtk')">Kebersihan Toko (Laporan Staf)</button>
+        <button id="subBtn-service" class="sub-tab-btn" onclick="switchKeuanganSubTab('service')">KPI & Audit Kebersihan</button>
       </div>
 
-      <!-- TAB 1: KEUANGAN MTK (KASIR) -->
+      <!-- TAB 1: KEBERSIHAN TOKO (LAPORAN STAF) -->
       <div id="subTab-mtk" class="tab-page active">
         <div class="finance-cards">
           <div class="card main-card" style="grid-column: span 2;">
-            <div class="card-top-row"><span class="card-head">Total Penjualan</span></div>
-            <div class="card-val" id="kTotalPenjualan">Rp 0</div>
+            <div class="card-top-row"><span class="card-head">Total Area Terdaftar</span></div>
+            <div class="card-val" id="kTotalPenjualan">0 Area</div>
           </div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Total Transfer</span></div><div class="card-val" id="kTotalTransfer">Rp 0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Total QRIS/EDC</span></div><div class="card-val" id="kTotalQrisEdc">Rp 0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Total Pembiayaan</span></div><div class="card-val" id="kTotalPembiayaan">Rp 0</div></div>
-          <div class="card" style="border-color: #cbd5e1; background: #f8fafc;"><div class="card-top-row"><span class="card-head" style="color: #0284c7;">Total TNT</span></div><div class="card-val" id="kTotalTnt" style="color: #0369a1;">Rp 0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Total DP/PP</span></div><div class="card-val" id="kTotalDpPp">Rp 0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Total Tunai</span></div><div class="card-val" id="kTotalTunai">Rp 0</div></div>
-          <div class="card" style="border-color: #fca5a5; background: #fff5f5;"><div class="card-top-row"><span class="card-head" style="color: #dc2626;">Total Piutang</span></div><div class="card-val" id="kTotalPiutang" style="color: #dc2626;">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Selesai Hari Ini</span></div><div class="card-val" id="kTotalTransfer">0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Pending After</span></div><div class="card-val" id="kTotalQrisEdc">0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Total Denda Toko</span></div><div class="card-val" id="kTotalPembiayaan" style="color:#dc2626;">Rp 0</div></div>
+          <div class="card" style="border-color: #cbd5e1; background: #f8fafc;"><div class="card-top-row"><span class="card-head" style="color: #0284c7;">Status Kebersihan</span></div><div class="card-val" id="kTotalTnt" style="color: #0369a1;">Baik</div></div>
         </div>
 
         <div class="box-panel">
           <div class="panel-header">
-            <span>Rekap Keuangan MTK (Hari)</span>
+            <span>Rekap Kebersihan Harian Staf</span>
             <div style="display: flex; align-items: center; gap: 8px;">
               <label style="font-size: 11px; color: #64748b; font-weight: bold;">Filter Bulan:</label>
-              <input type="month" id="filterBulanMtk" onchange="applyFilterMtk()" style="padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">
-              <button onclick="resetFilterMtk()" style="padding: 4px 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold;">Reset</button>
+              <input type="month" id="filterBulanMtk" onchange="applyFilterMtk()" style="padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-weight: 700; color: #334155;">
+              <button onclick="resetFilterMtk()" style="padding: 6px 12px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">Reset</button>
             </div>
           </div>
           <div class="table-container">
@@ -154,62 +167,53 @@
               <thead>
                 <tr>
                   <th>Tanggal</th>
-                  <th>Total Penjualan</th>
-                  <th>Transfer</th>
-                  <th>QRIS / EDC</th>
-                  <th>Pembiayaan</th>
-                  <th>TNT</th>
-                  <th>DP / PP</th>
-                  <th>Tunai</th>
-                  <th>Piutang</th>
+                  <th>Nama Staf</th>
+                  <th>Nama Area</th>
+                  <th>Foto Before</th>
+                  <th>Foto After</th>
+                  <th>Status</th>
+                  <th>Denda</th>
                 </tr>
               </thead>
               <tbody id="tblKeuanganHarian">
-                <tr><td colspan="9" style="text-align:center;">Memuat data...</td></tr>
+                <tr><td colspan="7" style="text-align:center;">Memuat data kebersihan...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- TAB 2: KEUANGAN SERVICE -->
+      <!-- TAB 2: KPI & AUDIT KEBERSIHAN -->
       <div id="subTab-service" class="tab-page">
         <div class="finance-cards">
           <div class="card main-card" style="grid-column: span 2;">
-            <div class="card-top-row"><span class="card-head">Total Pendapatan Service</span></div>
-            <div class="card-val" id="ksTotalPenjualan">Rp 0</div>
+            <div class="card-top-row"><span class="card-head">Overall Clean Rate</span></div>
+            <div class="card-val" id="ksTotalPenjualan">92%</div>
           </div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Transfer Service</span></div><div class="card-val" id="ksTotalTransfer">Rp 0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">QRIS / EDC Service</span></div><div class="card-val" id="ksTotalQrisEdc">Rp 0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">DP / PP Service</span></div><div class="card-val" id="ksTotalDpPp">Rp 0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Tunai Service</span></div><div class="card-val" id="ksTotalTunai">Rp 0</div></div>
-          <div class="card" style="border-color: #fca5a5; background: #fff5f5;"><div class="card-top-row"><span class="card-head" style="color: #dc2626;">Piutang Service</span></div><div class="card-val" id="ksTotalPiutang" style="color: #dc2626;">Rp 0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Total Laporan Audit</span></div><div class="card-val" id="ksTotalTransfer">0</div></div>
+          <div class="card"><div class="card-top-row"><span class="card-head">Area Terlewat</span></div><div class="card-val" id="ksTotalQrisEdc">0</div></div>
         </div>
 
         <div class="box-panel">
           <div class="panel-header">
-            <span>REKAP KEUANGAN SERVICE (HARI)</span>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <label style="font-size: 11px; color: #64748b; font-weight: bold;">Filter Bulan:</label>
-              <input type="month" id="filterBulanService" onchange="applyFilterService()" style="padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">
-              <button onclick="resetFilterService()" style="padding: 4px 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold;">Reset</button>
-            </div>
+            <span>RIWAYAT AUDIT KEBERSIHAN</span>
           </div>
           <div class="table-container">
             <table class="custom-table">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>Total Penjualan</th>
-                  <th>Transfer</th>
-                  <th>QRIS / EDC</th>
-                  <th>DP / PP</th>
-                  <th>Tunai</th>
-                  <th>Piutang</th>
+                  <th>Waktu Audit</th>
+                  <th>Auditor</th>
+                  <th>Staf Diaudit</th>
+                  <th>Divisi Target</th>
+                  <th>Area Target</th>
+                  <th>Status Audit</th>
+                  <th>Catatan</th>
+                  <th>Foto Audit</th>
                 </tr>
               </thead>
               <tbody id="tblKeuanganServiceHarian">
-                <tr><td colspan="7" style="text-align:center;">Memuat data...</td></tr>
+                <tr><td colspan="8" style="text-align:center;">Memuat data audit...</td></tr>
               </tbody>
             </table>
           </div>
@@ -226,10 +230,39 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
-      if (user) {
-        fetchStats();
+      filterMobileNavAccess(user);
+
+      if (currentUser) {
+        document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
+        document.getElementById("headerUserRole").innerText = currentUser.role || "Staff";
       }
+
+      fetchStats();
     });
+
+    function filterMobileNavAccess(user) {
+      if (!user) return;
+      const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+      const akses = user.akses || {};
+
+      const hasAccess = (val) => {
+        if (typeof val === "boolean") return val;
+        if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+        return false;
+      };
+
+      const navKebMb = document.getElementById("nav-kebersihan-mb");
+      const navPenjMb = document.getElementById("nav-penjualan-mb");
+      const navKeuMb = document.getElementById("nav-keuangan-mb");
+      const navSipMb = document.getElementById("nav-siplah-mb");
+      const navAdminMb = document.getElementById("nav-admin-users-mb");
+
+      if (navKebMb) navKebMb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "inline-block" : "none";
+      if (navPenjMb) navPenjMb.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "inline-block" : "none";
+      if (navKeuMb) navKeuMb.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "inline-block" : "none";
+      if (navSipMb) navSipMb.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "inline-block" : "none";
+      if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
+    }
 
     function switchKeuanganSubTab(tabName) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
@@ -248,15 +281,15 @@
     }
 
     function fetchStats() {
-      document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="9" style="text-align:center;">Memuat data terbaru...</td></tr>';
-      document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="7" style="text-align:center;">Memuat data terbaru...</td></tr>';
+      document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="7" style="text-align:center;">Memuat data terbaru...</td></tr>';
+      document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="8" style="text-align:center;">Memuat data terbaru...</td></tr>';
 
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?callback=renderUI&ts=${new Date().getTime()}`;
+      script.src = `${SCRIPT_URL}?action=getKebersihanOnly&callback=renderUI&ts=${new Date().getTime()}`;
 
       script.onerror = () => {
-        document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="9" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
-        document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="7" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
+        document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="7" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
+        document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="8" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
       };
 
       script.onload = () => {
@@ -267,53 +300,33 @@
     }
 
     function renderUI(data) {
-      if (!data) return;
-      rawKeuanganData = data;
+      if (!data || !data.kebersihan) return;
+      rawKeuanganData = data.kebersihan;
 
-      renderKeuanganMtk();
-      renderKeuanganService();
+      renderKebersihanMtk();
+      renderKebersihanAudit();
     }
 
-    // KEUANGAN MTK (KASIR)
-    function renderKeuanganMtk() {
-      if (!rawKeuanganData || !rawKeuanganData.keuangan) return;
-      const k = rawKeuanganData.keuangan;
-
-      document.getElementById("kTotalPenjualan").innerText = formatRupiah(k.totalPenjualan || 0);
-      document.getElementById("kTotalTransfer").innerText = formatRupiah(k.totalTransfer || 0);
-      document.getElementById("kTotalQrisEdc").innerText = formatRupiah(k.totalQrisEdc || 0);
-      document.getElementById("kTotalPembiayaan").innerText = formatRupiah(k.totalPembiayaan || 0);
-      document.getElementById("kTotalTnt").innerText = formatRupiah(k.totalTnt || 0);
-      document.getElementById("kTotalDpPp").innerText = formatRupiah(k.totalDpPp || 0);
-      document.getElementById("kTotalTunai").innerText = formatRupiah(k.totalTunai || 0);
-      document.getElementById("kTotalPiutang").innerText = formatRupiah(k.totalPiutang || 0);
-
+    // RIWAYAT KEBERSIHAN
+    function renderKebersihanMtk() {
+      if (!rawKeuanganData || !rawKeuanganData.riwayat) return;
       applyFilterMtk();
     }
 
     function applyFilterMtk() {
-      if (!rawKeuanganData || !rawKeuanganData.keuangan || !rawKeuanganData.keuangan.breakdownHarian) return;
+      if (!rawKeuanganData || !rawKeuanganData.riwayat) return;
       
       const filterVal = document.getElementById("filterBulanMtk").value;
-      let list = rawKeuanganData.keuangan.breakdownHarian;
+      let list = rawKeuanganData.riwayat;
 
       if (filterVal) {
         const [year, month] = filterVal.split("-");
         list = list.filter(row => {
-          if (!row.tanggal) return false;
-          let parts = row.tanggal.split(/[\/\-]/);
-          if (parts.length === 3) {
-            let rowMonth, rowYear;
-            if (parts[0].length === 4) {
-              rowYear = parts[0];
-              rowMonth = parts[1].padStart(2, '0');
-            } else {
-              rowMonth = parts[1].padStart(2, '0');
-              rowYear = parts[2];
-            }
-            return rowMonth === month && rowYear === year;
-          }
-          return true;
+          if (!row.tgl) return false;
+          let d = new Date(row.tgl);
+          let rowMonth = String(d.getMonth() + 1).padStart(2, '0');
+          let rowYear = String(d.getFullYear());
+          return rowMonth === month && rowYear === year;
         });
       }
 
@@ -328,93 +341,56 @@
     function renderTableMtk(list) {
       const tbody = document.getElementById("tblKeuanganHarian");
       if (list && list.length > 0) {
-        tbody.innerHTML = list.map(row => `
-          <tr>
-            <td><b>${row.tanggal || '-'}</b></td>
-            <td><b>${formatRupiah(row.total || 0)}</b></td>
-            <td>${formatRupiah(row.transfer || 0)}</td>
-            <td>${formatRupiah(row.qris || 0)}</td>
-            <td>${formatRupiah(row.pembiayaan || 0)}</td>
-            <td><b>${formatRupiah(row.tnt || 0)}</b></td>
-            <td>${formatRupiah(row.dppp || 0)}</td>
-            <td>${formatRupiah(row.tunai || 0)}</td>
-            <td style="color:${(row.piutang || 0) > 0 ? '#dc2626' : 'inherit'}; font-weight:${(row.piutang || 0) > 0 ? 'bold' : 'normal'};">
-              ${formatRupiah(row.piutang || 0)}
-            </td>
-          </tr>
-        `).join('');
+        tbody.innerHTML = list.map(row => {
+          let tglStr = row.tgl ? new Date(row.tgl).toLocaleDateString('id-ID') : '-';
+          let imgB = row.urlBefore ? `<a href="${row.urlBefore}" target="_blank" style="color:#0284c7; font-weight:bold;">Lihat Foto</a>` : '-';
+          let imgA = row.urlAfter ? `<a href="${row.urlAfter}" target="_blank" style="color:#0284c7; font-weight:bold;">Lihat Foto</a>` : '-';
+
+          return `
+            <tr>
+              <td><b>${tglStr}</b></td>
+              <td><b>${row.nama || '-'}</b></td>
+              <td>${row.area || '-'}</td>
+              <td>${imgB}</td>
+              <td>${imgA}</td>
+              <td><b>${row.status || '-'}</b></td>
+              <td style="color:${(row.denda || 0) > 0 ? '#dc2626' : 'inherit'}; font-weight:${(row.denda || 0) > 0 ? 'bold' : 'normal'};">
+                ${formatRupiah(row.denda || 0)}
+              </td>
+            </tr>
+          `;
+        }).join('');
       } else {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Tidak ada data keuangan pada bulan ini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Tidak ada laporan kebersihan.</td></tr>`;
       }
     }
 
-    // KEUANGAN SERVICE
-    function renderKeuanganService() {
-      if (!rawKeuanganData || !rawKeuanganData.keuanganService) return;
-      const ks = rawKeuanganData.keuanganService;
-
-      document.getElementById("ksTotalPenjualan").innerText = formatRupiah(ks.totalPenjualan || 0);
-      document.getElementById("ksTotalTransfer").innerText = formatRupiah(ks.totalTransfer || 0);
-      document.getElementById("ksTotalQrisEdc").innerText = formatRupiah(ks.totalQrisEdc || 0);
-      document.getElementById("ksTotalDpPp").innerText = formatRupiah(ks.totalDpPp || 0);
-      document.getElementById("ksTotalTunai").innerText = formatRupiah(ks.totalTunai || 0);
-      document.getElementById("ksTotalPiutang").innerText = formatRupiah(ks.totalPiutang || 0);
-
-      applyFilterService();
-    }
-
-    function applyFilterService() {
-      if (!rawKeuanganData || !rawKeuanganData.keuanganService || !rawKeuanganData.keuanganService.breakdownHarian) return;
-      
-      const filterVal = document.getElementById("filterBulanService").value;
-      let list = rawKeuanganData.keuanganService.breakdownHarian;
-
-      if (filterVal) {
-        const [year, month] = filterVal.split("-");
-        list = list.filter(row => {
-          if (!row.tanggal) return false;
-          let parts = row.tanggal.split(/[\/\-]/);
-          if (parts.length === 3) {
-            let rowMonth, rowYear;
-            if (parts[0].length === 4) {
-              rowYear = parts[0];
-              rowMonth = parts[1].padStart(2, '0');
-            } else {
-              rowMonth = parts[1].padStart(2, '0');
-              rowYear = parts[2];
-            }
-            return rowMonth === month && rowYear === year;
-          }
-          return true;
-        });
-      }
-
-      renderTableService(list);
-    }
-
-    function resetFilterService() {
-      document.getElementById("filterBulanService").value = "";
-      applyFilterService();
-    }
-
-    function renderTableService(list) {
+    // AUDIT KEBERSIHAN
+    function renderKebersihanAudit() {
+      if (!rawKeuanganData || !rawKeuanganData.audit) return;
+      const list = rawKeuanganData.audit;
       const tbody = document.getElementById("tblKeuanganServiceHarian");
+
       if (list && list.length > 0) {
-        tbody.innerHTML = list.map(row => `
-          <tr>
-            <td><b>${row.tanggal || '-'}</b></td>
-            <td><b>${formatRupiah(row.total || 0)}</b></td>
-            <td>${formatRupiah(row.transfer || 0)}</td>
-            <td>${formatRupiah(row.qris || 0)}</td>
-            <td>${formatRupiah(row.dppp || 0)}</td>
-            <td>${formatRupiah(row.tunai || 0)}</td>
-            <td style="color:${(row.piutang || 0) > 0 ? '#dc2626' : 'inherit'}; font-weight:${(row.piutang || 0) > 0 ? 'bold' : 'normal'};">
-              ${formatRupiah(row.piutang || 0)}
-            </td>
-          </tr>
-        `).join('');
+        tbody.innerHTML = list.map(row => {
+          let tglStr = row.waktu ? new Date(row.waktu).toLocaleString('id-ID') : '-';
+          let imgFoto = row.urlFoto ? `<a href="${row.urlFoto}" target="_blank" style="color:#0284c7; font-weight:bold;">Lihat Foto</a>` : '-';
+
+          return `
+            <tr>
+              <td><b>${tglStr}</b></td>
+              <td>${row.auditor || '-'}</td>
+              <td><b>${row.stafTarget || '-'}</b></td>
+              <td>${row.divisiTarget || '-'}</td>
+              <td>${row.areaTarget || '-'}</td>
+              <td><b>${row.status || '-'}</b></td>
+              <td>${row.catatan || '-'}</td>
+              <td>${imgFoto}</td>
+            </tr>
+          `;
+        }).join('');
       } else {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Tidak ada data keuangan service pada bulan ini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Belum ada riwayat audit kebersihan.</td></tr>`;
       }
     }
   </script>
