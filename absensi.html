@@ -506,25 +506,37 @@
       return `${hh}:${mm}`;
     }
 
-    // Hitung Keterlambatan
+    // -------------------------------------------------------------------------
+    // LOGIKA PERHITUNGAN TELAT DARI SELISIH WAKTU JADWAL SHIFT
+    // -------------------------------------------------------------------------
     function hitungKeterlambatan(jamAbsenStr, shiftMasukStr) {
       if (!jamAbsenStr || !shiftMasukStr) return "-";
 
-      const [hAbsen, mAbsen] = jamAbsenStr.split(':').map(Number);
-      const [hShift, mShift] = shiftMasukStr.split(':').map(Number);
+      // Bersihkan & pisahkan jam dan menit
+      const cleanAbsen = jamAbsenStr.trim().replace('.', ':');
+      const cleanShift = shiftMasukStr.trim().replace('.', ':');
 
-      const totalMinutesAbsen = (hAbsen * 60) + mAbsen;
-      const totalMinutesShift = (hShift * 60) + mShift;
+      const partsAbsen = cleanAbsen.split(':').map(Number);
+      const partsShift = cleanShift.split(':').map(Number);
 
-      const diff = totalMinutesAbsen - totalMinutesShift;
-      if (diff <= 0) return "-";
+      if (partsAbsen.length < 2 || partsShift.length < 2) return "-";
 
-      if (diff >= 60) {
-        const jam = Math.floor(diff / 60);
-        const sisaMenit = diff % 60;
+      const totalMinutesAbsen = (partsAbsen[0] * 60) + partsAbsen[1];
+      const totalMinutesShift = (partsShift[0] * 60) + partsShift[1];
+
+      // Hitung selisih waktu murni
+      const diffMinutes = totalMinutesAbsen - totalMinutesShift;
+
+      // Jika absen sama dengan atau sebelum jam shift, tidak telat
+      if (diffMinutes <= 0) return "-";
+
+      // Format tampilan output selisih keterlambatan
+      if (diffMinutes >= 60) {
+        const jam = Math.floor(diffMinutes / 60);
+        const sisaMenit = diffMinutes % 60;
         return sisaMenit > 0 ? `${jam} Jam ${sisaMenit} Mnt` : `${jam} Jam`;
       }
-      return `${diff} Mnt`;
+      return `${diffMinutes} Mnt`;
     }
 
     // Fetch & Pengelompokan Rekap Data Presensi
