@@ -63,13 +63,14 @@
     /* Layout Grids */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 
     .form-group { margin-bottom: 12px; }
     .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
     .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
     .form-control:focus { border-color: #dc2626; }
 
-    .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; cursor: pointer; }
 
     .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 12px; }
     .btn-submit:hover { background: #b91c1c; }
@@ -94,7 +95,7 @@
       .mobile-nav { display: flex; }
       .sub-header-bar { display: none; }
       .content { padding: 16px 12px; }
-      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 8px; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 8px; }
     }
   </style>
 </head>
@@ -113,7 +114,7 @@
     </div>
   </header>
 
- <!-- Sub-Header Bar -->
+  <!-- Sub-Header Bar -->
   <div class="sub-header-bar">
     <div class="page-title">Kelola Akun & Akses</div>
   </div>
@@ -188,7 +189,8 @@
         </div>
 
         <div class="panel-header" style="margin-top: 16px; font-size: 12px;">Hak Akses Menu:</div>
-        <div class="grid-3">
+        <div class="grid-4">
+          <label class="checkbox-group"><input type="checkbox" id="chkAbsensi" checked>Absensi Staf</label>
           <label class="checkbox-group"><input type="checkbox" id="chkPenjualan" checked>Penjualan</label>
           <label class="checkbox-group"><input type="checkbox" id="chkKeuanganMtk">Keuangan MTK</label>
           <label class="checkbox-group"><input type="checkbox" id="chkKeuanganService">Keuangan Service</label>
@@ -300,6 +302,7 @@
         devisi: devisi,
         role: role,
         akses: {
+          absensi: document.getElementById("chkAbsensi").checked,
           penjualan: document.getElementById("chkPenjualan").checked,
           keuanganMtk: document.getElementById("chkKeuanganMtk").checked,
           keuanganService: document.getElementById("chkKeuanganService").checked,
@@ -317,7 +320,7 @@
         });
         const result = await res.json();
 
-        btn.innerText = "Simpan Akun Baru ke Spreadsheet";
+        btn.innerText = "Simpan Akun Baru";
         btn.disabled = false;
 
         if (result.success) {
@@ -326,19 +329,18 @@
           document.getElementById("newPassword").value = "";
           document.getElementById("newNama").value = "";
           
-          // Refresh tabel list akun secara otomatis setelah menyimpan
           fetchAkunList();
         } else {
           alert("Gagal: " + result.message);
         }
       } catch (e) {
-        btn.innerText = "Simpan Akun Baru ke Spreadsheet";
+        btn.innerText = "Simpan Akun Baru";
         btn.disabled = false;
         alert("Terjadi kesalahan koneksi saat menyimpan akun.");
       }
     }
 
-    // Fungsi Hapus Akun (Opsional)
+    // Fungsi Hapus Akun
     async function hapusAkun(username) {
       if (!confirm(`Apakah Anda yakin ingin menghapus akun '${username}'?`)) return;
 
