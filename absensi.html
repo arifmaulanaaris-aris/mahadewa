@@ -3,39 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Absensi Staf - Executive Dashboard mahadewa.id</title>
+  <title>Absensi Staf - mahadewa.id</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * { box-sizing: border-box; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
     body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* Header Utama */
-    header {
-      background: #ffffff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    /* Header Merah Atas Sesuai Gambar */
+    .top-header {
+      background: #991b1b; color: white; padding: 14px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100; shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
-    .brand-container { display: flex; align-items: center; gap: 8px; }
-    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; }
-    .brand-sub { font-size: 11px; color: #64748b; font-weight: 700; }
+    .user-info-head { display: flex; align-items: center; gap: 8px; }
+    .user-name-head { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
+    .badge-role-head { background: #ffffff; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     
-    .header-right { display: flex; align-items: center; gap: 8px; }
-    .user-badge { font-size: 12px; font-weight: 700; color: #334155; margin-right: 4px; }
-    .btn-header { padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer; font-size: 11px; font-weight: 700; color: #475569; }
-    .btn-header:hover { background: #f1f5f9; }
-
-    /* Sub-Header Bar */
-    .sub-header-bar {
-      background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 10px 20px;
-      display: flex; align-items: center; justify-content: space-between;
+    .head-actions { display: flex; gap: 8px; }
+    .btn-head-action {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
     }
-    .page-title { font-size: 14px; font-weight: 900; color: #1e293b; }
+    .btn-head-action:hover { background: rgba(255,255,255,0.25); }
 
-    /* Menu Navigasi Horizontal Mobile */
+    /* Layout Responsive Navigasi */
     .mobile-nav {
       display: none; background: #ffffff; padding: 8px 12px; border-bottom: 1px solid #e2e8f0;
       overflow-x: auto; white-space: nowrap; gap: 8px;
@@ -44,9 +40,8 @@
       display: inline-block; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700;
       color: #64748b; text-decoration: none; background: #f1f5f9;
     }
-    .mobile-nav-item.active { background: #dc2626; color: white; }
+    .mobile-nav-item.active { background: #991b1b; color: white; }
 
-    /* Container & Layout Utama */
     .container { display: flex; flex: 1; }
     .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
     .menu-item {
@@ -54,81 +49,94 @@
       font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px;
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
-    .menu-item.active { background: #dc2626; color: white; }
+    .menu-item.active { background: #991b1b; color: white; }
 
-    /* Content Area */
-    .content { flex: 1; padding: 20px 24px; max-width: 900px; }
-    .box-panel { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
-    .panel-header { font-size: 14px; font-weight: 900; color: #334155; margin-bottom: 16px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+    /* Content Styling Sesuai Gambar */
+    .content { flex: 1; padding: 20px; max-width: 540px; margin: 0 auto; width: 100%; }
+    
+    .greeting-title { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .sub-date-info { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 16px; }
+    .jadwal-badge { font-weight: 700; color: #334155; }
 
-    /* Absensi Styling */
-    .type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .type-btn {
-      border: 2px solid #cbd5e1; background: #f8fafc; padding: 14px; border-radius: 8px;
-      text-align: center; cursor: pointer; font-weight: 700; font-size: 13px; color: #475569;
-      transition: all 0.2s ease;
+    /* Card Utam Absensi */
+    .card-absen-main {
+      background: #ffffff; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px;
     }
-    .type-btn input { display: none; }
-    .type-btn:has(input:checked) { border-color: #dc2626; background: #fef2f2; color: #dc2626; }
-
-    .cam-box {
-      width: 100%; height: 260px; background: #0f172a; border-radius: 8px; overflow: hidden;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; margin-bottom: 12px; border: 1px solid #cbd5e1;
+    .time-label { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 4px; }
+    .time-large { font-size: 40px; font-weight: 800; color: #0f172a; letter-spacing: -1px; margin-bottom: 12px; }
+    
+    .location-tag-box {
+      display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700;
+      color: #334155; margin-bottom: 10px;
     }
-    .cam-box video, .cam-box img { width: 100%; height: 100%; object-fit: cover; }
-    .cam-placeholder { color: #94a3b8; text-align: center; font-size: 12px; font-weight: 500; }
+    .badge-remote { background: #fce7f3; color: #be185d; padding: 2px 10px; border-radius: 12px; font-size: 11px; }
+    .badge-radius-ok { background: #dcfce7; color: #15803d; padding: 2px 10px; border-radius: 12px; font-size: 11px; }
+    .badge-radius-err { background: #fee2e2; color: #b91c1c; padding: 2px 10px; border-radius: 12px; font-size: 11px; }
 
-    .btn-action-group { display: flex; gap: 8px; margin-bottom: 16px; }
-    .btn-cam {
-      flex: 1; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 700;
-      border: 1px solid #cbd5e1; background: #ffffff; color: #334155; cursor: pointer; text-align: center;
+    .location-desc { font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 16px; padding: 0 10px; }
+
+    /* Preview Camera Box */
+    .camera-viewport {
+      width: 100%; height: 320px; background: #0f172a; border-radius: 14px; overflow: hidden;
+      position: relative; margin-bottom: 16px; display: flex; justify-content: center; align-items: center;
     }
-    .btn-cam:hover { background: #f1f5f9; }
-    .btn-cam-green { background: #16a34a; color: white; border: none; }
-    .btn-cam-green:hover { background: #15803d; }
-    .btn-cam-green:disabled { background: #cbd5e1; cursor: not-allowed; }
+    .camera-viewport video, .camera-viewport img { width: 100%; height: 100%; object-fit: cover; }
+    .cam-placeholder-text { color: #94a3b8; font-size: 13px; text-align: center; font-weight: 500; }
 
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
-    .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
-    .form-control:focus { border-color: #dc2626; }
+    .btn-main-absen {
+      background: #b91c1c; color: white; border: none; width: 100%; padding: 14px;
+      border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-main-absen:hover { background: #991b1b; }
+    .btn-main-absen:disabled { background: #cbd5e1; cursor: not-allowed; }
 
-    .btn-submit { background: #dc2626; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; }
-    .btn-submit:hover { background: #b91c1c; }
+    /* Card Masuk & Pulang Terpisah */
+    .grid-summary-today { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .card-summary-item {
+      background: #ffffff; border-radius: 14px; padding: 14px; border: 1px solid #e2e8f0; text-align: center;
+    }
+    .summary-title { font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 10px; }
+    .img-summary-box { width: 100%; height: 130px; border-radius: 10px; overflow: hidden; background: #f1f5f9; display: flex; align-items: center; justify-content: center; }
+    .img-summary-box img { width: 100%; height: 100%; object-fit: cover; }
+    .empty-summary-text { font-size: 12px; color: #94a3b8; font-weight: 600; }
 
-    .status-tag { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; background: #dcfce7; color: #166534; }
+    /* Section 7 Hari Terakhir & Tabel */
+    .section-box { background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; padding: 16px; margin-bottom: 20px; }
+    .section-header-title { font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+    
+    .days-circle-list { display: flex; justify-content: space-between; align-items: center; text-align: center; }
+    .day-circle-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .circle-dot { width: 12px; height: 12px; border-radius: 50%; background: #22c55e; }
+    .circle-dot.absent { background: #ef4444; }
+    .day-num { font-size: 12px; font-weight: 700; color: #64748b; }
 
-    /* Responsive HP */
+    /* Table Riwayat */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
+    th { font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; padding: 10px; border-bottom: 1px solid #e2e8f0; }
+    td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; }
+
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .mobile-nav { display: flex; }
-      .sub-header-bar { display: none; }
-      .content { padding: 16px 12px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header Utama -->
-  <header>
-    <div class="brand-container">
-      <span class="brand-name">mahadewa.id</span>
-      <span class="brand-sub">Cab. Palopo</span>
+  <!-- Top Header Merah -->
+  <div class="top-header">
+    <div class="user-info-head">
+      <span id="headerUserName" class="user-name-head">ARIF MAULANA</span>
+      <span id="headerUserRole" class="badge-role-head">Staff</span>
     </div>
-    <div class="header-right">
-      <span id="userBadge" class="user-badge">Memuat...</span>
-      <button class="btn-header" onclick="location.reload()">Refresh</button>
-      <button class="btn-header" onclick="handleLogout()">Keluar</button>
+    <div class="head-actions">
+      <button class="btn-head-action" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
     </div>
-  </header>
-
-  <!-- Sub-Header Bar -->
-  <div class="sub-header-bar">
-    <div class="page-title">Absensi Presensi Staf</div>
   </div>
 
-  <!-- Menu Navigasi Horizontal Mobile -->
+  <!-- Mobile Nav Horizontal -->
   <div class="mobile-nav">
     <a href="absensi.html" class="mobile-nav-item active">Absensi Staf</a>
     <a href="kebersihan.html" class="mobile-nav-item">Kebersihan Toko</a>
@@ -148,61 +156,97 @@
       <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
       <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">Kelola Akun & Akses</a>
     </div>
-    
-    <!-- Area Konten Utama -->
+
+    <!-- Main Content Absensi -->
     <div class="content">
       
-      <!-- Panel Form Absensi -->
-      <div class="box-panel">
-        <div class="panel-header">
-          <span>Form Presensi Harian</span>
-          <span class="status-tag" id="liveClock">Memuat jam...</span>
+      <div class="greeting-title" id="greetingName">Halo, Arif</div>
+      <div class="sub-date-info">
+        <span id="currentDateStr">Sel, 3 Nov</span> · <span id="currentBranch">PALOPO</span><br>
+        Jadwal hari ini: <span class="jadwal-badge">P6 - Pagi 6 (09:00-21:00)</span>
+      </div>
+
+      <!-- Main Card Absensi -->
+      <div class="card-absen-main">
+        <div class="time-label" id="tipeAbsenLabel">Masuk pukul</div>
+        <div class="time-large" id="liveClockDisplay">00.00</div>
+
+        <div class="location-tag-box">
+          Cabang: <strong>PALOPO</strong> 
+          <span id="radiusStatusBadge" class="badge-radius-ok">Mengecek Lokasi...</span>
         </div>
 
-        <form id="formAbsensi" onsubmit="submitPresensi(event)">
-          <!-- Pilih Tipe Absen -->
-          <div class="type-selector">
-            <label class="type-btn">
-              <input type="radio" name="tipeAbsen" value="MASUK" checked>
-              <i class="fa-solid fa-right-to-bracket"></i> Absen Masuk
-            </label>
-            <label class="type-btn">
-              <input type="radio" name="tipeAbsen" value="PULANG">
-              <i class="fa-solid fa-right-from-bracket"></i> Absen Pulang
-            </label>
-          </div>
+        <div class="location-desc" id="locationStatusText">
+          Memeriksa koordinat lokasi GPS perangkat Anda...
+        </div>
 
-          <!-- Area Kamera Kamera / Snapshot -->
-          <div class="cam-box">
-            <video id="webcam" autoplay playsinline style="display:none;"></video>
-            <canvas id="canvas" style="display:none;"></canvas>
-            <img id="photoPreview" style="display:none;">
-            
-            <div id="camPlaceholder" class="cam-placeholder">
-              <i class="fa-solid fa-camera" style="font-size: 32px; margin-bottom: 8px;"></i><br>
-              Klik tombol 'Buka Kamera' di bawah
-            </div>
+        <!-- Camera Viewport -->
+        <div class="camera-viewport">
+          <video id="webcam" autoplay playsinline style="display:none;"></video>
+          <canvas id="canvas" style="display:none;"></canvas>
+          <img id="photoPreview" style="display:none;">
+          <div id="camPlaceholder" class="cam-placeholder-text">
+            <i class="fa-solid fa-camera" style="font-size: 32px; margin-bottom: 8px;"></i><br>
+            Kamera otomatis aktif untuk verifikasi selfie
           </div>
+        </div>
 
-          <div class="btn-action-group">
-            <button type="button" class="btn-cam" onclick="startCamera()">
-              <i class="fa-solid fa-video"></i> Buka Kamera
-            </button>
-            <button type="button" id="btnSnap" class="btn-cam btn-cam-green" onclick="takeSnapshot()" disabled>
-              <i class="fa-solid fa-camera-retro"></i> Ambil Foto Selfie
-            </button>
-          </div>
-
-          <!-- Catatan / Lokasi -->
-          <div class="form-group">
-            <label class="form-label">Catatan / Keterangan Lokasi (Opsional)</label>
-            <input type="text" id="catatanInput" class="form-control" placeholder="Contoh: Di Toko / Perjalanan Dinas">
-          </div>
-
-          <button type="submit" id="btnSubmitAbsen" class="btn-submit">
-            Kirim Presensi Presensi
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button type="button" class="btn-head-action" style="flex:1; color:#334155; border-color:#cbd5e1;" onclick="startCamera()">
+            <i class="fa-solid fa-video"></i> Buka Kamera
           </button>
-        </form>
+          <button type="button" class="btn-head-action" style="flex:1; background:#16a34a; color:white;" id="btnSnap" onclick="takeSnapshot()" disabled>
+            <i class="fa-solid fa-camera-retro"></i> Ambil Foto
+          </button>
+        </div>
+
+        <button type="button" id="btnSubmitAbsen" class="btn-main-absen" onclick="submitPresensi()">
+          Absen Masuk Sekarang
+        </button>
+      </div>
+
+      <!-- Summary Foto Absen Hari Ini -->
+      <div class="grid-summary-today">
+        <div class="card-summary-item">
+          <div class="summary-title">Masuk</div>
+          <div class="img-summary-box" id="summaryMasukBox">
+            <span class="empty-summary-text">belum absen</span>
+          </div>
+        </div>
+        <div class="card-summary-item">
+          <div class="summary-title">Pulang</div>
+          <div class="img-summary-box" id="summaryPulangBox">
+            <span class="empty-summary-text">belum absen</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 Hari Terakhir -->
+      <div class="section-box">
+        <div class="section-header-title">7 Hari Terakhir</div>
+        <div class="days-circle-list" id="daysCircleContainer">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Riwayat 14 Hari Terakhir -->
+      <div class="section-box">
+        <div class="section-header-title">Riwayat 14 Hari Terakhir</div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>MASUK</th>
+                <th>PULANG</th>
+                <th>TELAT</th>
+              </tr>
+            </thead>
+            <tbody id="riwayatTableBody">
+              <tr><td colspan="4" style="text-align:center; color:#94a3b8;">Memuat riwayat presensi...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>
@@ -210,24 +254,97 @@
 
   <script src="auth.js"></script>
   <script>
+    let userLat = 0;
+    let userLng = 0;
     let imageBase64 = "";
     let streamRef = null;
+    let isWithinRadius = false;
+
+    // Lokasi Toko (Mahadewa Palopo)
+    const TOKO_LAT = -2.9928;
+    const TOKO_LNG = 120.1983;
+    const MAX_RADIUS_METER = 100;
 
     window.addEventListener("DOMContentLoaded", () => {
       checkAuthAndRenderNav();
 
-      // Cek tombol admin navigasi mobile
-      if (currentUser && (currentUser.role || "").toUpperCase() === "ADMIN") {
-        const navAdminMb = document.getElementById("nav-admin-users-mb");
-        if (navAdminMb) navAdminMb.style.display = "inline-block";
+      if (currentUser) {
+        document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
+        document.getElementById("headerUserRole").innerText = currentUser.role || "Staff";
+        document.getElementById("greetingName").innerText = "Halo, " + (currentUser.nama || currentUser.username).split(" ")[0];
+
+        if ((currentUser.role || "").toUpperCase() === "ADMIN") {
+          const navAdminMb = document.getElementById("nav-admin-users-mb");
+          if (navAdminMb) navAdminMb.style.display = "inline-block";
+        }
       }
+
+      // Format Date Header
+      const now = new Date();
+      const options = { weekday: 'short', day: 'numeric', month: 'short' };
+      document.getElementById("currentDateStr").innerText = now.toLocaleDateString('id-ID', options);
 
       // Live Clock
       setInterval(() => {
-        const now = new Date();
-        document.getElementById("liveClock").innerText = now.toLocaleTimeString("id-ID");
+        const d = new Date();
+        document.getElementById("liveClockDisplay").innerText = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '.');
       }, 1000);
+
+      // Cek Lokasi GPS
+      getUserLocation();
+
+      // Load Kamera & Data Riwayat
+      startCamera();
+      render7DaysList();
+      fetchAbsensiRiwayat();
     });
+
+    function getUserLocation() {
+      const badge = document.getElementById("radiusStatusBadge");
+      const desc = document.getElementById("locationStatusText");
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            userLat = pos.coords.latitude;
+            userLng = pos.coords.longitude;
+
+            const dist = getDistanceMeter(TOKO_LAT, TOKO_LNG, userLat, userLng);
+
+            if (dist <= MAX_RADIUS_METER) {
+              isWithinRadius = true;
+              badge.className = "badge-radius-ok";
+              badge.innerText = "Dalam Radius";
+              desc.innerHTML = `Lokasi didapat (akurasi GPS perangkat Anda). Anda berada dalam radius cabang (jarak ~${Math.round(dist)} meter).`;
+            } else {
+              isWithinRadius = false;
+              badge.className = "badge-radius-err";
+              badge.innerText = "Luar Radius";
+              desc.innerHTML = `Lokasi terdeteksi di luar radius toko (jarak ~${Math.round(dist)}m dari toko). Batas radius max: ${MAX_RADIUS_METER}m.`;
+            }
+          },
+          (err) => {
+            badge.className = "badge-radius-err";
+            badge.innerText = "GPS Matikan / Gagal";
+            desc.innerHTML = "Gagal mengambil koordinat lokasi GPS. Harap izinkan akses lokasi di browser HP Anda.";
+          },
+          { enableHighAccuracy: true }
+        );
+      } else {
+        desc.innerText = "Browser perangkat Anda tidak mendukung fitur Geolocation.";
+      }
+    }
+
+    function getDistanceMeter(lat1, lon1, lat2, lon2) {
+      const R = 6371000;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
 
     async function startCamera() {
       try {
@@ -243,7 +360,7 @@
         
         document.getElementById("btnSnap").disabled = false;
       } catch (err) {
-        alert("Gagal mengakses kamera: " + err.message);
+        console.warn("Kamera error:", err.message);
       }
     }
 
@@ -258,7 +375,6 @@
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       imageBase64 = canvas.toDataURL("image/jpeg", 0.7);
-
       photoPreview.src = imageBase64;
       photoPreview.style.display = "block";
       video.style.display = "none";
@@ -268,27 +384,29 @@
       }
     }
 
-    async function submitPresensi(e) {
-      e.preventDefault();
-
+    async function submitPresensi() {
       if (!imageBase64) {
-        alert("Harap ambil foto selfie verifikasi terlebih dahulu!");
+        alert("Harap foto selfie terlebih dahulu sebelum menekan tombol Absen!");
         return;
       }
 
-      const tipeAbsen = document.querySelector('input[name="tipeAbsen"]:checked').value;
-      const catatan = document.getElementById("catatanInput").value;
-      const btn = document.getElementById("btnSubmitAbsen");
+      if (!isWithinRadius) {
+        if (!confirm("Lokasi GPS Anda terdeteksi di luar radius toko. Tetap mencoba kirim presensi?")) {
+          return;
+        }
+      }
 
-      btn.innerText = "Mengirim Data Presensi...";
+      const btn = document.getElementById("btnSubmitAbsen");
+      btn.innerText = "Mengirim Absen...";
       btn.disabled = true;
 
       const payload = {
         action: "simpanAbsensi",
         namaStaf: currentUser.nama || currentUser.username,
         divisi: currentUser.devisi || "UMUM",
-        tipeAbsen: tipeAbsen,
-        catatan: catatan,
+        tipeAbsen: "MASUK", // Bisa diganti fleksibel
+        lat: userLat,
+        lng: userLng,
         base64Image: imageBase64
       };
 
@@ -297,21 +415,74 @@
           method: "POST",
           body: JSON.stringify(payload)
         });
-
         const result = await res.json();
-        btn.innerText = "Kirim Presensi Presensi";
+
+        btn.innerText = "Absen Masuk Sekarang";
         btn.disabled = false;
 
         if (result.success) {
-          alert("✅ Presensi berhasil dicatat!");
+          alert("✅ Presensi Berhasil!");
           window.location.reload();
         } else {
-          alert("Gagal: " + result.message);
+          alert("❌ Gagal: " + result.message);
         }
-      } catch (err) {
-        btn.innerText = "Kirim Presensi Presensi";
+      } catch (e) {
+        btn.innerText = "Absen Masuk Sekarang";
         btn.disabled = false;
-        alert("Terjadi kesalahan koneksi saat mengirim absensi.");
+        alert("Terjadi kesalahan koneksi ke server.");
+      }
+    }
+
+    function render7DaysList() {
+      const container = document.getElementById("daysCircleContainer");
+      const today = new Date();
+      let html = "";
+
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        const dayNum = d.getDate();
+        html += `
+          <div class="day-circle-item">
+            <div class="circle-dot"></div>
+            <span class="day-num">${dayNum}</span>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    async function fetchAbsensiRiwayat() {
+      const tbody = document.getElementById("riwayatTableBody");
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getAbsensiList`);
+        const result = await res.json();
+
+        if (result.success && result.data && result.data.length > 0) {
+          // Filter hanya user ini
+          const userAbsen = result.data.filter(x => (x.nama || "").toLowerCase() === (currentUser.nama || currentUser.username).toLowerCase());
+
+          if (userAbsen.length > 0) {
+            tbody.innerHTML = userAbsen.slice(0, 14).map(item => `
+              <tr>
+                <td>${item.waktu ? item.waktu.substring(0, 10) : '-'}</td>
+                <td>${item.tipe === "MASUK" ? item.waktu.substring(11, 16) : '-'}</td>
+                <td>${item.tipe === "PULANG" ? item.waktu.substring(11, 16) : '-'}</td>
+                <td>-</td>
+              </tr>
+            `).join("");
+            
+            // Cek foto terbaru untuk dipasang pada card summary atas
+            const latestMasuk = userAbsen.find(x => x.tipe === "MASUK");
+            if (latestMasuk && latestMasuk.foto) {
+              document.getElementById("summaryMasukBox").innerHTML = `<img src="${latestMasuk.foto}">`;
+            }
+          } else {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">Belum ada riwayat presensi.</td></tr>`;
+          }
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ef4444;">Gagal memuat riwayat.</td></tr>`;
       }
     }
   </script>
