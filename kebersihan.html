@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Kebersihan Toko - Executive Dashboard mahadewa.id</title>
   
-  <!-- Google Font: Roboto -->
+  <!-- Google Font: Plus Jakarta Sans & Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     * { 
       box-sizing: border-box; 
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; 
+      font-family: 'Plus Jakarta Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; 
       margin: 0; 
       padding: 0; 
     }
@@ -21,97 +21,100 @@
 
     /* HEADER */
     header {
-      background: #ffffff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      background: #ffffff; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
     }
     .brand-section { display: flex; align-items: center; gap: 8px; }
-    .brand-name { font-size: 18px; font-weight: 900; color: #dc2626; line-height: 1; }
-    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 2px; }
-    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+    .brand-name { font-size: 19px; font-weight: 800; color: #991b1b; line-height: 1; letter-spacing: -0.5px; }
+    .brand-sub { font-size: 10px; color: #64748b; font-weight: 700; display: block; margin-top: 3px; }
+    .page-title-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: #334155; margin-left: 12px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
     
     .header-user { display: flex; align-items: center; gap: 6px; }
     .user-name { font-size: 12px; color: #64748b; font-weight: 700; margin-right: 4px; }
-    .btn-badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
-    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-badge-red { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-badge-red:hover { background: #fee2e2; }
+    .btn-badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-badge-gray:hover { background: #e2e8f0; }
 
     /* LAYOUT & SIDEBAR */
     .container { display: flex; flex: 1; }
-    .sidebar { width: 210px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .sidebar { width: 220px; padding: 18px 14px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
     .menu-item {
-      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
-      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 4px; text-decoration: none;
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 14px; border-radius: 10px;
+      border: none; background: transparent; font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; margin-bottom: 6px; text-decoration: none;
       transition: all 0.2s; text-align: left;
     }
     .menu-item:hover { background: #f8fafc; color: #0f172a; }
-    .menu-item.active { background: #dc2626; color: white; }
+    .menu-item.active { background: #991b1b; color: white; }
 
-    .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
+    .content { flex: 1; padding: 22px 26px; width: 100%; overflow-x: hidden; }
     .tab-page { display: none; }
     .tab-page.active { display: block; }
 
     /* SUB TAB NAVIGASI KEBERSIHAN */
-    .sub-tab-nav { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+    .sub-tab-nav { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
     .sub-tab-btn {
-      padding: 8px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc;
+      padding: 9px 16px; border-radius: 10px; border: 1px solid #cbd5e1; background: #ffffff;
       font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; transition: all 0.2s;
     }
-    .sub-tab-btn.active { background: #dc2626; color: white; border-color: #dc2626; }
+    .sub-tab-btn.active { background: #991b1b; color: white; border-color: #991b1b; }
 
     /* PANELS & TABLES */
-    .box-panel { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-    .panel-header { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
+    .box-panel { background: #ffffff; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+    .panel-header { font-size: 13px; font-weight: 800; color: #1e293b; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* SUMMARY DENDA BANNER ATAS */
     .denda-summary-banner {
       background: #fef2f2;
       border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 14px 18px;
-      margin-bottom: 16px;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
-    .denda-summary-title { font-size: 12px; font-weight: 900; color: #991b1b; text-transform: uppercase; }
-    .denda-summary-amount { font-size: 20px; font-weight: 900; color: #dc2626; }
+    .denda-summary-title { font-size: 13px; font-weight: 800; color: #991b1b; text-transform: uppercase; }
+    .denda-summary-amount { font-size: 22px; font-weight: 800; color: #b91c1c; }
     .denda-admin-breakdown { font-size: 11px; color: #7f1d1d; width: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #fca5a5; display: flex; flex-wrap: wrap; gap: 12px; }
 
     /* CARD TUGAS HARIAN STAF */
-    .task-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 8px; }
-    .card-task-item { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; position: relative; }
+    .task-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 8px; }
+    .card-task-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; position: relative; transition: all 0.2s; }
     .card-task-item.completed { background: #f0fdf4; border-color: #86efac; }
     .card-task-item.partially-completed { border-color: #fcd34d; background: #fffbeb; }
-    .card-task-title { font-size: 13px; font-weight: 900; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .card-task-title { font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
     
-    .sub-task-box { background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .sub-task-box { background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; }
 
-    .kpi-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
-    .card-kpi { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: center; }
-    .card-kpi .val { font-size: 18px; font-weight: 900; color: #0f172a; margin-top: 4px; }
+    .kpi-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+    .card-kpi { background: #ffffff; border: 1px solid #e2e8f0; padding: 14px; border-radius: 16px; text-align: center; }
+    .card-kpi .val { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 4px; }
     .card-kpi .lbl { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
     .table-container { height: 320px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
     .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-    .custom-table th { background: #f8fafc; padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
-    .custom-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+    .custom-table th { background: #f8fafc; padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+    .custom-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
     .custom-table tr:hover td { background: #f8fafc; }
 
-    .form-group { margin-bottom: 6px; }
-    .form-label { display: block; font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
-    .form-control { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11px; outline: none; background: #ffffff; }
-    .btn-submit { background: #dc2626; color: white; border: none; padding: 8px 10px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 6px; }
-    .btn-submit:hover { opacity: 0.9; }
+    .form-group { margin-bottom: 8px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; outline: none; background: #ffffff; }
+    .form-control:focus { border-color: #b91c1c; }
+    .btn-submit { background: #b91c1c; color: white; border: none; padding: 10px 12px; font-size: 12px; font-weight: 800; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px; transition: background 0.2s; }
+    .btn-submit:hover { background: #991b1b; }
 
-    .badge-status { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; display: inline-block; }
+    .badge-status { padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; display: inline-block; }
     .badge-green { background: #dcfce7; color: #15803d; }
-    .badge-red { background: #fee2e2; color: #b91c1c; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
     .badge-orange { background: #fef3c7; color: #b45309; }
 
     @media (max-width: 768px) {
       .container { flex-direction: column; }
-      .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 8px; border-right: none; border-bottom: 1px solid #e2e8f0; }
+      .sidebar { width: 100%; display: flex; overflow-x: auto; padding: 10px; border-right: none; border-bottom: 1px solid #e2e8f0; }
       .menu-item { flex-shrink: 0; width: auto; font-size: 12px; }
       .task-cards-grid { grid-template-columns: 1fr; }
       .kpi-cards { grid-template-columns: repeat(2, 1fr); }
@@ -164,7 +167,7 @@
         <div id="dendaSummaryBanner" class="denda-summary-banner">
           <div>
             <div id="dendaSummaryTitle" class="denda-summary-title">AKUMULASI DENDA SAYA HARI INI</div>
-            <div style="font-size: 10px; color: #7f1d1d;">Terlambat lapor / Temuan kotor hasil audit</div>
+            <div style="font-size: 11px; color: #7f1d1d; margin-top: 2px;">Terlambat lapor / Temuan kotor hasil audit</div>
           </div>
           <div id="dendaSummaryAmount" class="denda-summary-amount">Rp 0</div>
           <div id="dendaAdminBreakdown" class="denda-admin-breakdown" style="display: none;"></div>
@@ -174,7 +177,7 @@
         <div class="box-panel">
           <div class="panel-header">
             <span>DAFTAR TUGAS KEBERSIHAN HARIAN SAYA</span>
-            <span style="font-size: 10px; color: #dc2626; text-transform: none;">*Terlambat lewat hari dikenakan denda Rp 15.000 / tugas</span>
+            <span style="font-size: 11px; color: #b91c1c; text-transform: none; font-weight: 700;">*Terlambat lewat hari dikenakan denda Rp 15.000 / tugas</span>
           </div>
 
           <div id="tasksContainer" class="task-cards-grid">
@@ -186,7 +189,7 @@
         <div class="box-panel">
           <div class="panel-header">
             <span>REKAPITULASI LAPORAN KEBERSIHAN</span>
-            <span id="labelScopeView" style="font-size: 10px; color: #dc2626;">(Memuat...)</span>
+            <span id="labelScopeView" style="font-size: 11px; color: #b91c1c; font-weight: 700;">(Memuat...)</span>
           </div>
           <div class="table-container">
             <table class="custom-table">
@@ -292,11 +295,11 @@
           </div>
           <div class="card-kpi">
             <div class="lbl">Total Temuan Kotor</div>
-            <div class="val" id="kpiTotalTemuan" style="color:#dc2626;">0</div>
+            <div class="val" id="kpiTotalTemuan" style="color:#b91c1c;">0</div>
           </div>
           <div class="card-kpi">
             <div class="lbl">Total Sanksi / Denda</div>
-            <div class="val" id="kpiTotalDenda" style="color:#dc2626;">Rp 0</div>
+            <div class="val" id="kpiTotalDenda" style="color:#b91c1c;">Rp 0</div>
           </div>
           <div class="card-kpi">
             <div class="lbl">Tugas Selesai Hari Ini</div>
@@ -337,6 +340,7 @@
     let globalUsersMap = {};
     let globalRiwayatData = [];
     let globalAuditData = [];
+    let globalStartDate = "2026-11-01"; // Fallback default start date
 
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
@@ -384,13 +388,10 @@
 
     function fetchStats() {
       const script = document.createElement('script');
-      // Pemuatan super cepat khusus modul kebersihan
       script.src = `${SCRIPT_URL}?action=getKebersihanOnly&callback=renderUI&ts=${new Date().getTime()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
-
-    let globalStartDate = "2026-11-01"; // Fallback default
 
     function renderUI(data) {
       if (!data) return;
@@ -477,17 +478,32 @@
       // 1. Akumulasi Denda Laporan Terlambat dari Log Kebersihan
       globalRiwayatData.forEach(r => {
         let staf = (r.nama || "").trim().toUpperCase();
-        if (staf && (r.status === "TERLAMBAT" || Number(r.denda) > 0)) {
-          let nominal = Number(r.denda) || 15000;
-          dendaByStaff[staf] = (dendaByStaff[staf] || 0) + nominal;
-          totalDendaKeseluruhan += nominal;
+        if (staf) {
+          let nominal = Number(r.denda) || 0;
+          const rTgl = parseToLocalDateStr(r.tgl);
+          const hasBefore = r.urlBefore && r.urlBefore.trim() !== "";
+          const hasAfter = r.urlAfter && r.urlAfter.trim() !== "";
+
+          // Pengecekan Start Date & Offday
+          if (rTgl < globalStartDate || r.isOffday) {
+            nominal = 0;
+          } else if (r.status === "TERLAMBAT" || nominal > 0 || (rTgl < todayStr && (!hasBefore || !hasAfter))) {
+            nominal = nominal > 0 ? nominal : 15000;
+          }
+
+          if (nominal > 0) {
+            dendaByStaff[staf] = (dendaByStaff[staf] || 0) + nominal;
+            totalDendaKeseluruhan += nominal;
+          }
         }
       });
 
       // 2. Akumulasi Denda Hasil Audit Kotor
       globalAuditData.forEach(a => {
         let staf = (a.stafTarget || "").trim().toUpperCase();
-        if (staf && a.status === "KOTOR") {
+        let aTgl = parseToLocalDateStr(a.waktu);
+
+        if (staf && a.status === "KOTOR" && aTgl >= globalStartDate) {
           let nominal = 15000;
           dendaByStaff[staf] = (dendaByStaff[staf] || 0) + nominal;
           totalDendaKeseluruhan += nominal;
@@ -540,7 +556,7 @@
       }
     }
 
-    // Render Kartu Tugas Harian Staf Per Area (Terkunci jika sudah diisi pada hari ini)
+    // Render Kartu Tugas Harian Staf Per Area
     function renderTaskCards() {
       const container = document.getElementById("tasksContainer");
       if (!container || !currentUser) return;
@@ -548,7 +564,6 @@
       const userDev = (currentUser.devisi || "TEKNISI").trim().toUpperCase();
       const areaList = globalAreaMap[userDev] || ["Area Kerja 1", "Area Kerja 2", "Area Kerja 3", "Area Kerja 4"];
       const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
-
       const todayStr = parseToLocalDateStr(new Date());
 
       const myTodayLogs = globalRiwayatData.filter(r => {
@@ -556,6 +571,18 @@
         const rTgl = parseToLocalDateStr(r.tgl);
         return isMe && rTgl === todayStr;
       });
+
+      // Pengecekan Jadwal Libur/Offday Hari Ini
+      const todayLog = myTodayLogs[0];
+      if (todayLog && todayLog.isOffday) {
+        container.innerHTML = `
+          <div style="grid-column: span 2; background: #f0fdf4; border: 1px solid #86efac; padding: 20px; border-radius: 16px; text-align: center; color: #166534; font-weight: bold;">
+            🌴 HARI INI JADWAL LIBUR / OFFDAY (${userAkunName})<br>
+            <span style="font-size: 11px; font-weight: normal; color: #15803d;">Anda bebas dari tugas kebersihan harian dan tidak dikenakan sanksi denda.</span>
+          </div>
+        `;
+        return;
+      }
 
       let html = "";
       areaList.forEach((areaName, index) => {
@@ -578,7 +605,7 @@
                 Waktu Lapor: <b>${record.tgl ? new Date(record.tgl).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) : '-'}</b>
               </div>
               <div style="display: flex; gap: 12px; font-size: 11px; font-weight: bold;">
-                <a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto Before</a>
+                <a href="${record.urlBefore}" target="_blank" style="color:#b91c1c; text-decoration: underline;">Lihat Foto Before</a>
                 <a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto After</a>
               </div>
             </div>
@@ -599,7 +626,7 @@
                   <label class="form-label">FOTO BEFORE (SEBELUM)</label>
                   ${hasBefore ? `
                     <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 4px 0;">
-                      ✅ Sudah Diisi Hari Ini (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto</a>)
+                      ✅ Sudah Diisi Hari Ini (<a href="${record.urlBefore}" target="_blank" style="color:#b91c1c; text-decoration: underline;">Lihat Foto</a>)
                     </div>
                   ` : `
                     <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment">
@@ -733,7 +760,7 @@
             <td><b>${r.nama}</b></td>
             <td>${r.area}</td>
             <td>
-              ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#dc2626; font-weight:bold;">Before</a>` : '-'} | 
+              ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#b91c1c; font-weight:bold;">Before</a>` : '-'} | 
               ${r.urlAfter ? `<a href="${r.urlAfter}" target="_blank" style="color:#15803d; font-weight:bold;">After</a>` : '-'}
             </td>
             <td><span class="badge-status ${r.status === 'TERLAMBAT' ? 'badge-red' : (r.status === 'SELESAI' ? 'badge-green' : 'badge-orange')}">${r.status || 'PENDING'}</span></td>
@@ -766,7 +793,7 @@
             <td>${a.areaTarget || a.area || '-'}</td>
             <td><span class="badge-status ${a.status === 'BERSIH' ? 'badge-green' : 'badge-red'}">${a.status}</span></td>
             <td>${a.catatan || '-'}</td>
-            <td>${a.urlFoto ? `<a href="${a.urlFoto}" target="_blank" style="color:#dc2626; font-weight:bold;">Lihat Foto</a>` : '-'}</td>
+            <td>${a.urlFoto ? `<a href="${a.urlFoto}" target="_blank" style="color:#b91c1c; font-weight:bold;">Lihat Foto</a>` : '-'}</td>
           </tr>
         `).join('');
       } else {
@@ -825,9 +852,9 @@
               <td><b>${k}</b></td>
               <td>${dev}</td>
               <td style="color:#16a34a; font-weight:bold;">${item.done} / ${expectedTasks}</td>
-              <td style="color:${missCount > 0 ? '#dc2626' : 'inherit'}; font-weight:bold;">${missCount} Tugas</td>
-              <td style="color:${item.kotorAudit > 0 ? '#dc2626' : 'inherit'}; font-weight:bold;">${item.kotorAudit} Area</td>
-              <td><b style="color:${itemTotalDenda > 0 ? '#dc2626' : 'inherit'};">Rp ${itemTotalDenda.toLocaleString('id-ID')}</b></td>
+              <td style="color:${missCount > 0 ? '#b91c1c' : 'inherit'}; font-weight:bold;">${missCount} Tugas</td>
+              <td style="color:${item.kotorAudit > 0 ? '#b91c1c' : 'inherit'}; font-weight:bold;">${item.kotorAudit} Area</td>
+              <td><b style="color:${itemTotalDenda > 0 ? '#b91c1c' : 'inherit'};">Rp ${itemTotalDenda.toLocaleString('id-ID')}</b></td>
               <td><b>${skor}%</b></td>
             </tr>
           `;
@@ -898,18 +925,16 @@
           body: JSON.stringify(payload)
         });
 
-        btn.innerText = "Kirim Hasil Audit";
-        btn.disabled = false;
-
         alert("Hasil audit berhasil disimpan!");
         document.getElementById("auditCatatan").value = "";
         document.getElementById("auditFoto").value = "";
         fetchStats();
 
       } catch (err) {
+        alert("Terjadi kesalahan koneksi saat mengirim audit.");
+      } finally {
         btn.innerText = "Kirim Hasil Audit";
         btn.disabled = false;
-        alert("Terjadi kesalahan koneksi saat mengirim audit.");
       }
     }
   </script>
