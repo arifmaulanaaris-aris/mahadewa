@@ -12,7 +12,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+    * { 
+      box-sizing: border-box; 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      margin: 0; 
+      padding: 0; 
+    }
     body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
     /* Top Header Merah */
@@ -67,31 +72,66 @@
     }
     .sub-tab-btn.active { background: #991b1b; color: white; border-color: #991b1b; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.2); }
 
-    /* KPI CARDS */
-    .finance-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-    .card { background: #ffffff; border-radius: 14px; padding: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-    .card.main-card { background: #991b1b; color: white; border: none; }
-    .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-    .card-head { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
-    .card.main-card .card-head { color: #fecaca; }
-    .card-val { font-size: 18px; font-weight: 800; color: #0f172a; line-height: 1.2; margin-top: 4px; }
-    .card.main-card .card-val { color: #ffffff; }
-
     /* PANELS & TABLES */
     .box-panel { background: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     .panel-header { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px; flex-wrap: wrap; gap: 8px; }
 
-    .table-container { height: 380px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    /* SUMMARY DENDA BANNER ATAS */
+    .denda-summary-banner {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .denda-summary-title { font-size: 12px; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .denda-summary-amount { font-size: 22px; font-weight: 800; color: #dc2626; }
+    .denda-admin-breakdown { font-size: 11px; color: #7f1d1d; width: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #fca5a5; display: flex; flex-wrap: wrap; gap: 12px; font-weight: 600; }
+
+    /* CARD TUGAS HARIAN STAF */
+    .task-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 8px; }
+    .card-task-item { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 16px; position: relative; }
+    .card-task-item.completed { background: #f0fdf4; border-color: #86efac; }
+    .card-task-item.partially-completed { border-color: #fcd34d; background: #fffbeb; }
+    .card-task-title { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+    
+    .sub-task-box { background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; }
+
+    .kpi-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+    .card-kpi { background: #ffffff; border: 1px solid #e2e8f0; padding: 14px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .card-kpi .val { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 4px; }
+    .card-kpi .lbl { font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .table-container { height: 340px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
     .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
     .custom-table th { background: #f8fafc; padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 800; color: #64748b; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; text-transform: uppercase; }
     .custom-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; white-space: nowrap; }
     .custom-table tr:hover td { background: #f8fafc; }
 
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
+    .form-control { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; outline: none; background: #ffffff; transition: all 0.2s; }
+    .form-control:focus { border-color: #991b1b; box-shadow: 0 0 0 2px rgba(153, 27, 27, 0.1); }
+    
+    .btn-submit { background: #991b1b; color: white; border: none; padding: 10px 14px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all 0.2s; }
+    .btn-submit:hover { opacity: 0.9; }
+
+    .badge-status { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-red { background: #fee2e2; color: #b91c1c; }
+    .badge-orange { background: #fef3c7; color: #b45309; }
+
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .mobile-nav { display: flex; }
-      .finance-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .card.main-card { grid-column: span 2; }
+      .task-cards-grid { grid-template-columns: 1fr; }
+      .kpi-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .content { padding: 16px; }
     }
   </style>
@@ -136,84 +176,175 @@
       
       <!-- SUB TAB NAVIGASI KEBERSIHAN -->
       <div class="sub-tab-nav">
-        <button id="subBtn-mtk" class="sub-tab-btn active" onclick="switchKeuanganSubTab('mtk')">Kebersihan Toko (Laporan Staf)</button>
-        <button id="subBtn-service" class="sub-tab-btn" onclick="switchKeuanganSubTab('service')">KPI & Audit Kebersihan</button>
+        <button id="subBtn-tugas" class="sub-tab-btn active" onclick="switchKebersihanSubTab('tugas')">Tugas Kebersihan Staf</button>
+        <button id="subBtn-audit" class="sub-tab-btn" onclick="switchKebersihanSubTab('audit')" style="display:none;">Audit Kebersihan Toko</button>
+        <button id="subBtn-kpi" class="sub-tab-btn" onclick="switchKebersihanSubTab('kpi')" style="display:none;">Progres & KPI Staf</button>
       </div>
 
-      <!-- TAB 1: KEBERSIHAN TOKO (LAPORAN STAF) -->
-      <div id="subTab-mtk" class="tab-page active">
-        <div class="finance-cards">
-          <div class="card main-card" style="grid-column: span 2;">
-            <div class="card-top-row"><span class="card-head">Total Area Terdaftar</span></div>
-            <div class="card-val" id="kTotalPenjualan">0 Area</div>
+      <!-- TAB 1: TUGAS KEBERSIHAN STAF -->
+      <div id="subTab-tugas" class="tab-page active">
+        
+        <!-- BANNER TOTAL DENDA DI BAGIAN ATAS DAFTAR TUGAS -->
+        <div id="dendaSummaryBanner" class="denda-summary-banner">
+          <div>
+            <div id="dendaSummaryTitle" class="denda-summary-title">AKUMULASI DENDA SAYA HARI INI</div>
+            <div style="font-size: 11px; color: #7f1d1d; font-weight: 500; margin-top: 2px;">Terlambat lapor / Temuan kotor hasil audit</div>
           </div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Selesai Hari Ini</span></div><div class="card-val" id="kTotalTransfer">0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Pending After</span></div><div class="card-val" id="kTotalQrisEdc">0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Total Denda Toko</span></div><div class="card-val" id="kTotalPembiayaan" style="color:#dc2626;">Rp 0</div></div>
-          <div class="card" style="border-color: #cbd5e1; background: #f8fafc;"><div class="card-top-row"><span class="card-head" style="color: #0284c7;">Status Kebersihan</span></div><div class="card-val" id="kTotalTnt" style="color: #0369a1;">Baik</div></div>
+          <div id="dendaSummaryAmount" class="denda-summary-amount">Rp 0</div>
+          <div id="dendaAdminBreakdown" class="denda-admin-breakdown" style="display: none;"></div>
         </div>
 
+        <!-- CARDS TUGAS KEBERSIHAN HARIAN STAF -->
         <div class="box-panel">
           <div class="panel-header">
-            <span>Rekap Kebersihan Harian Staf</span>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <label style="font-size: 11px; color: #64748b; font-weight: bold;">Filter Bulan:</label>
-              <input type="month" id="filterBulanMtk" onchange="applyFilterMtk()" style="padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-weight: 700; color: #334155;">
-              <button onclick="resetFilterMtk()" style="padding: 6px 12px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold;">Reset</button>
-            </div>
+            <span>DAFTAR TUGAS KEBERSIHAN HARIAN SAYA</span>
+            <span style="font-size: 11px; color: #dc2626; text-transform: none; font-weight: 700;">*Terlambat lewat hari dikenakan denda Rp 15.000 / tugas</span>
+          </div>
+
+          <div id="tasksContainer" class="task-cards-grid">
+            <div style="grid-column: span 2; text-align: center; color: #64748b; padding: 20px;">Memuat daftar tugas harian...</div>
+          </div>
+        </div>
+
+        <!-- DAFTAR LOG KEBERSIHAN HARI INI -->
+        <div class="box-panel">
+          <div class="panel-header">
+            <span>REKAPITULASI LAPORAN KEBERSIHAN</span>
+            <span id="labelScopeView" style="font-size: 11px; color: #dc2626; font-weight: 700;">(Memuat...)</span>
           </div>
           <div class="table-container">
             <table class="custom-table">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>Nama Staf</th>
-                  <th>Nama Area</th>
-                  <th>Foto Before</th>
-                  <th>Foto After</th>
-                  <th>Status</th>
-                  <th>Denda</th>
+                  <th>Waktu Lapor</th>
+                  <th>Penanggung Jawab</th>
+                  <th>Area Kebersihan</th>
+                  <th>Foto Before / After</th>
+                  <th>Status Laporan</th>
+                  <th>Sanksi Terlambat</th>
                 </tr>
               </thead>
-              <tbody id="tblKeuanganHarian">
-                <tr><td colspan="7" style="text-align:center;">Memuat data kebersihan...</td></tr>
+              <tbody id="tblTugasKebersihan">
+                <tr><td colspan="6" style="text-align:center;">Memuat data kebersihan...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- TAB 2: KPI & AUDIT KEBERSIHAN -->
-      <div id="subTab-service" class="tab-page">
-        <div class="finance-cards">
-          <div class="card main-card" style="grid-column: span 2;">
-            <div class="card-top-row"><span class="card-head">Overall Clean Rate</span></div>
-            <div class="card-val" id="ksTotalPenjualan">92%</div>
-          </div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Total Laporan Audit</span></div><div class="card-val" id="ksTotalTransfer">0</div></div>
-          <div class="card"><div class="card-top-row"><span class="card-head">Area Terlewat</span></div><div class="card-val" id="ksTotalQrisEdc">0</div></div>
+      <!-- TAB 2: AUDIT KEBERSIHAN TOKO (SUPERVISOR/ADMIN) -->
+      <div id="subTab-audit" class="tab-page">
+        <div class="box-panel">
+          <div class="panel-header"><span>FORM AUDIT KEBERSIHAN</span></div>
+          <form id="formAudit" onsubmit="handleAuditSubmit(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label">Staf Target Audit</label>
+                <select id="auditStaf" class="form-control" onchange="onAuditStafChanged()" required>
+                  <option value="">-- Pilih Akun Staf --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Divisi Target Audit</label>
+                <input type="text" id="auditDivisi" class="form-control" placeholder="Otomatis mengikuti staf" readonly style="background: #f1f5f9;">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label">Area Target Audit</label>
+                <select id="auditArea" class="form-control" required>
+                  <option value="">-- Pilih Staf Terlebih Dahulu --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hasil Audit</label>
+                <select id="auditHasil" class="form-control" required>
+                  <option value="BERSIH">BERSIH (Lolos Audit)</option>
+                  <option value="KOTOR">KOTOR (Denda Rp 15.000)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Catatan Audit / Temuan</label>
+              <input type="text" id="auditCatatan" class="form-control" placeholder="Berikan catatan temuan jika kotor...">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Foto Bukti Audit</label>
+              <input type="file" id="auditFoto" class="form-control" accept="image/*" capture="environment">
+            </div>
+
+            <button type="submit" id="btnAuditSubmit" class="btn-submit">Kirim Hasil Audit</button>
+          </form>
         </div>
 
         <div class="box-panel">
-          <div class="panel-header">
-            <span>RIWAYAT AUDIT KEBERSIHAN</span>
-          </div>
+          <div class="panel-header"><span>LOG TEMUAN AUDIT</span></div>
           <div class="table-container">
             <table class="custom-table">
               <thead>
                 <tr>
                   <th>Waktu Audit</th>
                   <th>Auditor</th>
-                  <th>Staf Diaudit</th>
-                  <th>Divisi Target</th>
-                  <th>Area Target</th>
-                  <th>Status Audit</th>
+                  <th>Staf Target</th>
+                  <th>Area Kebersihan</th>
+                  <th>Hasil Audit</th>
                   <th>Catatan</th>
-                  <th>Foto Audit</th>
+                  <th>Foto Bukti</th>
                 </tr>
               </thead>
-              <tbody id="tblKeuanganServiceHarian">
-                <tr><td colspan="8" style="text-align:center;">Memuat data audit...</td></tr>
+              <tbody id="tblLogAudit">
+                <tr><td colspan="7" style="text-align:center;">Memuat log temuan audit...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: PROGRES & KPI STAF -->
+      <div id="subTab-kpi" class="tab-page">
+        <div class="kpi-cards">
+          <div class="card-kpi">
+            <div class="lbl">Total Progres</div>
+            <div class="val" id="kpiTotalProgres">0%</div>
+          </div>
+          <div class="card-kpi">
+            <div class="lbl">Total Rata-Rata</div>
+            <div class="val" id="kpiAvgScore">0%</div>
+          </div>
+          <div class="card-kpi">
+            <div class="lbl">Total Temuan Kotor</div>
+            <div class="val" id="kpiTotalTemuan" style="color:#dc2626;">0</div>
+          </div>
+          <div class="card-kpi">
+            <div class="lbl">Total Sanksi / Denda</div>
+            <div class="val" id="kpiTotalDenda" style="color:#dc2626;">Rp 0</div>
+          </div>
+          <div class="card-kpi">
+            <div class="lbl">Tugas Selesai Hari Ini</div>
+            <div class="val" id="kpiTotalDone" style="color:#15803d;">0</div>
+          </div>
+        </div>
+
+        <div class="box-panel">
+          <div class="panel-header"><span>PERINGKAT & KPI KEBERSIHAN STAF</span></div>
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Nama Staf</th>
+                  <th>Kategori Devisi</th>
+                  <th>Tugas Selesai</th>
+                  <th>Belum Selesai</th>
+                  <th>Temuan Kotor Audit</th>
+                  <th>Total Akumulasi Denda</th>
+                  <th>% Skor Kebersihan</th>
+                </tr>
+              </thead>
+              <tbody id="tblKpiKebersihan">
+                <tr><td colspan="7" style="text-align:center;">Memuat data peringkat & KPI...</td></tr>
               </tbody>
             </table>
           </div>
@@ -226,18 +357,49 @@
   <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
-    let rawKeuanganData = null;
+    let globalAreaMap = {};
+    let globalUsersMap = {};
+    let globalRiwayatData = [];
+    let globalAuditData = [];
 
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
       filterMobileNavAccess(user);
 
-      if (currentUser) {
-        document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
-        document.getElementById("headerUserRole").innerText = currentUser.role || "Staff";
-      }
+      if (user) {
+        if (currentUser) {
+          document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
+          document.getElementById("headerUserRole").innerText = currentUser.role || "Staff";
+        }
 
-      fetchStats();
+        const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+        const akses = user.akses || {};
+
+        const hasAccess = (val) => {
+          if (typeof val === "boolean") return val;
+          if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+          return false;
+        };
+
+        const accAudit = hasAccess(akses.auditKebersihan) || hasAccess(akses.audit) || hasAccess(akses.AUDIT_KEBERSIHAN);
+        const btnAudit = document.getElementById("subBtn-audit");
+        if (btnAudit) {
+          btnAudit.style.display = (isUserAdmin || accAudit) ? "inline-block" : "none";
+        }
+
+        const accKpi = hasAccess(akses.kpiKebersihan) || hasAccess(akses.kpi) || hasAccess(akses.KPI_KEBERSIHAN);
+        const btnKpi = document.getElementById("subBtn-kpi");
+        if (btnKpi) {
+          btnKpi.style.display = (isUserAdmin || accKpi) ? "inline-block" : "none";
+        }
+
+        const lblScope = document.getElementById("labelScopeView");
+        if (lblScope) {
+          lblScope.innerText = isUserAdmin ? "(Akses Admin: Menampilkan Seluruh Staf)" : `(Akses Staf: Khusus Akun ${user.nama || user.username})`;
+        }
+
+        fetchStats();
+      }
     });
 
     function filterMobileNavAccess(user) {
@@ -264,133 +426,545 @@
       if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
     }
 
-    function switchKeuanganSubTab(tabName) {
+    function switchKebersihanSubTab(tabName) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
 
-      const targetTab = document.getElementById(`subTab-${tabName}`);
+      const targetPage = document.getElementById(`subTab-${tabName}`);
       const targetBtn = document.getElementById(`subBtn-${tabName}`);
-      
-      if (targetTab) targetTab.classList.add('active');
+
+      if (targetPage) targetPage.classList.add('active');
       if (targetBtn) targetBtn.classList.add('active');
     }
 
-    function formatRupiah(val) {
-      if (!val && val !== 0) return "Rp 0";
-      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
-    }
-
     function fetchStats() {
-      document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="7" style="text-align:center;">Memuat data terbaru...</td></tr>';
-      document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="8" style="text-align:center;">Memuat data terbaru...</td></tr>';
-
       const script = document.createElement('script');
+      // Pemuatan super cepat khusus modul kebersihan
       script.src = `${SCRIPT_URL}?action=getKebersihanOnly&callback=renderUI&ts=${new Date().getTime()}`;
-
-      script.onerror = () => {
-        document.getElementById("tblKeuanganHarian").innerHTML = '<tr><td colspan="7" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
-        document.getElementById("tblKeuanganServiceHarian").innerHTML = '<tr><td colspan="8" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
-      };
-
-      script.onload = () => {
-        if (script.parentNode) script.parentNode.removeChild(script);
-      };
-
       document.body.appendChild(script);
+      document.body.removeChild(script);
     }
+
+    let globalStartDate = "2026-11-01"; // Fallback default
 
     function renderUI(data) {
-      if (!data || !data.kebersihan) return;
-      rawKeuanganData = data.kebersihan;
+      if (!data) return;
 
-      renderKebersihanMtk();
-      renderKebersihanAudit();
+      if (data.systemStartDate) globalStartDate = data.systemStartDate;
+      if (data.areaKebersihanMap) globalAreaMap = data.areaKebersihanMap;
+      if (data.akunUsers) globalUsersMap = data.akunUsers;
+
+      if (data.kebersihan) {
+        globalRiwayatData = data.kebersihan.riwayat || [];
+        globalAuditData = data.kebersihan.audit || [];
+      }
+
+      renderTaskCards();
+      renderDendaSummaryBanner();
+      populateAuditStafDropdown();
+      renderTugasTable();
+      renderAuditTable();
+      renderKpiTable();
     }
 
-    // RIWAYAT KEBERSIHAN
-    function renderKebersihanMtk() {
-      if (!rawKeuanganData || !rawKeuanganData.riwayat) return;
-      applyFilterMtk();
+    // KOMPRESI GAMBAR AUTOMATIS
+    function compressImage(file, maxWidth = 1000, quality = 0.7) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            resolve(compressedBase64);
+          };
+          img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+      });
     }
 
-    function applyFilterMtk() {
-      if (!rawKeuanganData || !rawKeuanganData.riwayat) return;
-      
-      const filterVal = document.getElementById("filterBulanMtk").value;
-      let list = rawKeuanganData.riwayat;
+    // Helper Format Tanggal Lokal (YYYY-MM-DD)
+    function parseToLocalDateStr(dateVal) {
+      if (!dateVal) return "";
+      let d = new Date(dateVal);
+      if (isNaN(d.getTime())) return "";
+      let year = d.getFullYear();
+      let month = String(d.getMonth() + 1).padStart(2, '0');
+      let day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
 
-      if (filterVal) {
-        const [year, month] = filterVal.split("-");
-        list = list.filter(row => {
-          if (!row.tgl) return false;
-          let d = new Date(row.tgl);
-          let rowMonth = String(d.getMonth() + 1).padStart(2, '0');
-          let rowYear = String(d.getFullYear());
-          return rowMonth === month && rowYear === year;
+    // HITUNG DAN TAMPILKAN RINGKASAN DENDA PRIBADI / KESELURUHAN PADA BANNER ATAS
+    function renderDendaSummaryBanner() {
+      if (!currentUser) return;
+
+      const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
+      const rawUserNama = (currentUser.nama || "").trim().toUpperCase();
+      const rawUserUsername = (currentUser.username || "").trim().toUpperCase();
+      const todayStr = parseToLocalDateStr(new Date());
+
+      let dendaByStaff = {};
+      let totalDendaKeseluruhan = 0;
+
+      // Inisialisasi daftar staf dari akun registered
+      Object.keys(globalUsersMap).forEach(stafName => {
+        let name = stafName.trim().toUpperCase();
+        dendaByStaff[name] = 0;
+      });
+
+      // 1. Akumulasi Denda Laporan Terlambat dari Log Kebersihan
+      globalRiwayatData.forEach(r => {
+        let staf = (r.nama || "").trim().toUpperCase();
+        if (staf && (r.status === "TERLAMBAT" || Number(r.denda) > 0)) {
+          let nominal = Number(r.denda) || 15000;
+          dendaByStaff[staf] = (dendaByStaff[staf] || 0) + nominal;
+          totalDendaKeseluruhan += nominal;
+        }
+      });
+
+      // 2. Akumulasi Denda Hasil Audit Kotor
+      globalAuditData.forEach(a => {
+        let staf = (a.stafTarget || "").trim().toUpperCase();
+        if (staf && a.status === "KOTOR") {
+          let nominal = 15000;
+          dendaByStaff[staf] = (dendaByStaff[staf] || 0) + nominal;
+          totalDendaKeseluruhan += nominal;
+        }
+      });
+
+      const titleEl = document.getElementById("dendaSummaryTitle");
+      const amountEl = document.getElementById("dendaSummaryAmount");
+      const breakdownEl = document.getElementById("dendaAdminBreakdown");
+
+      if (isUserAdmin) {
+        titleEl.innerText = "TOTAL AKUMULASI DENDA TOKO (SELURUH STAF)";
+        amountEl.innerText = "Rp " + totalDendaKeseluruhan.toLocaleString('id-ID');
+
+        let breakdownHtml = "";
+        let keys = Object.keys(dendaByStaff);
+        if (keys.length > 0) {
+          breakdownHtml = keys.map(k => {
+            let nominal = dendaByStaff[k];
+            return `<span><b>${k}:</b> Rp ${nominal.toLocaleString('id-ID')}</span>`;
+          }).join(' | ');
+          breakdownEl.innerHTML = "<b>Rincian Per Staf:</b> " + breakdownHtml;
+          breakdownEl.style.display = "flex";
+        } else {
+          breakdownEl.style.display = "none";
+        }
+      } else {
+        // PERBAIKAN: Pencocokan nama fleksibel (Match Nama Lengkap / Username / Panggilan Alias)
+        let myDenda = 0;
+        
+        Object.keys(dendaByStaff).forEach(stafKey => {
+          const keyUpper = stafKey.toUpperCase();
+          const isMatch = (
+            keyUpper === rawUserNama || 
+            keyUpper === rawUserUsername || 
+            rawUserNama.includes(keyUpper) || 
+            keyUpper.includes(rawUserNama) ||
+            rawUserUsername.includes(keyUpper) ||
+            keyUpper.includes(rawUserUsername)
+          );
+
+          if (isMatch) {
+            myDenda += dendaByStaff[stafKey];
+          }
         });
+
+        titleEl.innerText = `AKUMULASI DENDA SAYA (${rawUserNama || rawUserUsername})`;
+        amountEl.innerText = "Rp " + myDenda.toLocaleString('id-ID');
+        breakdownEl.style.display = "none";
+      }
+    }
+
+    // Render Kartu Tugas Harian Staf Per Area (Terkunci jika sudah diisi pada hari ini)
+    function renderTaskCards() {
+      const container = document.getElementById("tasksContainer");
+      if (!container || !currentUser) return;
+
+      const userDev = (currentUser.devisi || "TEKNISI").trim().toUpperCase();
+      const areaList = globalAreaMap[userDev] || ["Area Kerja 1", "Area Kerja 2", "Area Kerja 3", "Area Kerja 4"];
+      const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+
+      const todayStr = parseToLocalDateStr(new Date());
+
+      const myTodayLogs = globalRiwayatData.filter(r => {
+        const isMe = String(r.nama || "").trim().toUpperCase() === userAkunName;
+        const rTgl = parseToLocalDateStr(r.tgl);
+        return isMe && rTgl === todayStr;
+      });
+
+      let html = "";
+      areaList.forEach((areaName, index) => {
+        const record = myTodayLogs.find(r => 
+          String(r.area || "").trim().toLowerCase() === areaName.trim().toLowerCase()
+        );
+
+        const hasBefore = record && record.urlBefore && record.urlBefore.trim() !== "";
+        const hasAfter = record && record.urlAfter && record.urlAfter.trim() !== "";
+        const isFullyCompleted = hasBefore && hasAfter;
+
+        if (isFullyCompleted) {
+          html += `
+            <div class="card-task-item completed">
+              <div class="card-task-title">
+                <span>Tugas ${index + 1}: ${areaName}</span>
+                <span class="badge-status badge-green">Selesai (Terkunci)</span>
+              </div>
+              <div style="font-size: 11px; color: #16a34a; margin-bottom: 8px;">
+                Waktu Lapor: <b>${record.tgl ? new Date(record.tgl).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) : '-'}</b>
+              </div>
+              <div style="display: flex; gap: 12px; font-size: 11px; font-weight: bold;">
+                <a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto Before</a>
+                <a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto After</a>
+              </div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="card-task-item ${hasBefore ? 'partially-completed' : ''}">
+              <div class="card-task-title">
+                <span>Tugas ${index + 1}: ${areaName}</span>
+                <span class="badge-status ${hasBefore ? 'badge-orange' : 'badge-red'}">
+                  ${hasBefore ? 'Menunggu Foto After' : 'Belum Selesai'}
+                </span>
+              </div>
+              
+              <div style="display: grid; gap: 10px; margin-top: 10px;">
+                <!-- FOTO BEFORE -->
+                <div class="sub-task-box">
+                  <label class="form-label">FOTO BEFORE (SEBELUM)</label>
+                  ${hasBefore ? `
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 4px 0;">
+                      ✅ Sudah Diisi Hari Ini (<a href="${record.urlBefore}" target="_blank" style="color:#dc2626; text-decoration: underline;">Lihat Foto</a>)
+                    </div>
+                  ` : `
+                    <input type="file" id="before_${index}" class="form-control" accept="image/*" capture="environment">
+                    <button type="button" id="btn_before_${index}" class="btn-submit" style="background: #2563eb;" onclick="submitSubTask('${areaName.replace(/'/g, "\\'")}', ${index}, 'BEFORE')">
+                      Kirim Foto Before
+                    </button>
+                  `}
+                </div>
+
+                <!-- FOTO AFTER -->
+                <div class="sub-task-box">
+                  <label class="form-label">FOTO AFTER (SESUDAH)</label>
+                  ${hasAfter ? `
+                    <div style="font-size: 11px; color: #16a34a; font-weight: bold; padding: 4px 0;">
+                      ✅ Sudah Diisi Hari Ini (<a href="${record.urlAfter}" target="_blank" style="color:#16a34a; text-decoration: underline;">Lihat Foto</a>)
+                    </div>
+                  ` : `
+                    <input type="file" id="after_${index}" class="form-control" accept="image/*" capture="environment">
+                    <button type="button" id="btn_after_${index}" class="btn-submit" style="background: #16a34a;" onclick="submitSubTask('${areaName.replace(/'/g, "\\'")}', ${index}, 'AFTER')">
+                      Selesaikan Tugas Ini
+                    </button>
+                  `}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Submit Laporan Parsial (BEFORE / AFTER)
+    async function submitSubTask(areaName, index, type) {
+      if (!currentUser) return alert("Sesi login tidak valid.");
+
+      const inputId = type === 'BEFORE' ? `before_${index}` : `after_${index}`;
+      const btnId = type === 'BEFORE' ? `btn_before_${index}` : `btn_after_${index}`;
+      const fileInput = document.getElementById(inputId);
+
+      if (!fileInput || !fileInput.files[0]) {
+        return alert(`Harap pilih atau ambil Foto ${type} terlebih dahulu!`);
       }
 
-      renderTableMtk(list);
+      const btn = document.getElementById(btnId);
+      const origText = btn.innerText;
+      btn.innerText = "Mengompres & Mengunggah...";
+      btn.disabled = true;
+
+      try {
+        const compressedBase64 = await compressImage(fileInput.files[0]);
+
+        const payload = {
+          action: "simpanKebersihanAreaParsial",
+          namaStaf: currentUser.nama || currentUser.username,
+          namaArea: areaName,
+          type: type,
+          base64Image: compressedBase64
+        };
+
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        alert(`Foto ${type} berhasil dikirim!`);
+        
+        fileInput.value = "";
+
+        setTimeout(() => {
+          fetchStats();
+        }, 1200);
+
+      } catch (err) {
+        alert("Terjadi kesalahan koneksi saat mengunggah foto.");
+        btn.innerText = origText;
+        btn.disabled = false;
+      }
     }
 
-    function resetFilterMtk() {
-      document.getElementById("filterBulanMtk").value = "";
-      applyFilterMtk();
+    function populateAuditStafDropdown() {
+      const auditStafSelect = document.getElementById("auditStaf");
+      if (!auditStafSelect) return;
+
+      const users = Object.keys(globalUsersMap);
+      if (users.length === 0) return;
+
+      auditStafSelect.innerHTML = `<option value="">-- Pilih Akun Staf --</option>` +
+        users.map(u => `<option value="${u}">${u} (${globalUsersMap[u]})</option>`).join('');
     }
 
-    function renderTableMtk(list) {
-      const tbody = document.getElementById("tblKeuanganHarian");
-      if (list && list.length > 0) {
-        tbody.innerHTML = list.map(row => {
-          let tglStr = row.tgl ? new Date(row.tgl).toLocaleDateString('id-ID') : '-';
-          let imgB = row.urlBefore ? `<a href="${row.urlBefore}" target="_blank" style="color:#0284c7; font-weight:bold;">Lihat Foto</a>` : '-';
-          let imgA = row.urlAfter ? `<a href="${row.urlAfter}" target="_blank" style="color:#0284c7; font-weight:bold;">Lihat Foto</a>` : '-';
+    function onAuditStafChanged() {
+      const targetStaf = document.getElementById("auditStaf").value;
+      const targetDivInput = document.getElementById("auditDivisi");
+      const targetAreaSelect = document.getElementById("auditArea");
+
+      if (!targetStaf) {
+        targetDivInput.value = "";
+        targetAreaSelect.innerHTML = `<option value="">-- Pilih Staf Terlebih Dahulu --</option>`;
+        return;
+      }
+
+      const dev = (globalUsersMap[targetStaf] || "TEKNISI").trim().toUpperCase();
+      targetDivInput.value = dev;
+
+      const areaList = globalAreaMap[dev] || ["Area Kerja 1", "Area Kerja 2", "Area Kerja 3", "Area Kerja 4"];
+      targetAreaSelect.innerHTML = `<option value="">-- Pilih Area Kebersihan Staf --</option>` +
+        areaList.map(a => `<option value="${a}">${a}</option>`).join('');
+    }
+
+    function renderTugasTable() {
+      const container = document.getElementById("tblTugasKebersihan");
+      if (!container) return;
+
+      const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
+      const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+
+      let filteredData = globalRiwayatData;
+      if (!isUserAdmin) {
+        filteredData = globalRiwayatData.filter(r => String(r.nama || "").trim().toUpperCase() === userAkunName);
+      }
+
+      if (filteredData.length > 0) {
+        container.innerHTML = filteredData.map(r => `
+          <tr>
+            <td>${r.tgl ? new Date(r.tgl).toLocaleString('id-ID') : '-'}</td>
+            <td><b>${r.nama}</b></td>
+            <td>${r.area}</td>
+            <td>
+              ${r.urlBefore ? `<a href="${r.urlBefore}" target="_blank" style="color:#dc2626; font-weight:bold;">Before</a>` : '-'} | 
+              ${r.urlAfter ? `<a href="${r.urlAfter}" target="_blank" style="color:#15803d; font-weight:bold;">After</a>` : '-'}
+            </td>
+            <td><span class="badge-status ${r.status === 'TERLAMBAT' ? 'badge-red' : (r.status === 'SELESAI' ? 'badge-green' : 'badge-orange')}">${r.status || 'PENDING'}</span></td>
+            <td><b>${r.denda ? 'Rp ' + Number(r.denda).toLocaleString('id-ID') : 'Rp 0'}</b></td>
+          </tr>
+        `).join('');
+      } else {
+        container.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada riwayat laporan kebersihan.</td></tr>`;
+      }
+    }
+
+    function renderAuditTable() {
+      const container = document.getElementById("tblLogAudit");
+      if (!container) return;
+
+      const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
+      const userAkunName = (currentUser.nama || currentUser.username || "").trim().toUpperCase();
+
+      let filteredAudit = globalAuditData;
+      if (!isUserAdmin) {
+        filteredAudit = globalAuditData.filter(a => String(a.stafTarget || "").trim().toUpperCase() === userAkunName);
+      }
+
+      if (filteredAudit.length > 0) {
+        container.innerHTML = filteredAudit.map(a => `
+          <tr>
+            <td>${a.waktu ? new Date(a.waktu).toLocaleString('id-ID') : '-'}</td>
+            <td><b>${a.auditor}</b></td>
+            <td><b>${a.stafTarget}</b></td>
+            <td>${a.areaTarget || a.area || '-'}</td>
+            <td><span class="badge-status ${a.status === 'BERSIH' ? 'badge-green' : 'badge-red'}">${a.status}</span></td>
+            <td>${a.catatan || '-'}</td>
+            <td>${a.urlFoto ? `<a href="${a.urlFoto}" target="_blank" style="color:#dc2626; font-weight:bold;">Lihat Foto</a>` : '-'}</td>
+          </tr>
+        `).join('');
+      } else {
+        container.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada temuan log audit.</td></tr>`;
+      }
+    }
+
+    function renderKpiTable() {
+      const container = document.getElementById("tblKpiKebersihan");
+      if (!container) return;
+
+      let stats = {};
+      let totalLaporanDoneHariIni = 0;
+      let totalTemuanKotorAudit = 0;
+      let totalDendaKeseluruhan = 0;
+
+      Object.keys(globalUsersMap).forEach(stafName => {
+        let name = stafName.trim().toUpperCase();
+        stats[name] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
+      });
+
+      globalRiwayatData.forEach(r => {
+        let staf = (r.nama || "UNKNOWN").trim().toUpperCase();
+        if (!stats[staf]) stats[staf] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
+        if (r.urlBefore && r.urlAfter) stats[staf].done++;
+        if (r.status === "TERLAMBAT") {
+          stats[staf].denda += Number(r.denda) || 15000;
+          totalDendaKeseluruhan += Number(r.denda) || 15000;
+        }
+        totalLaporanDoneHariIni++;
+      });
+
+      globalAuditData.forEach(a => {
+        let staf = (a.stafTarget || "UNKNOWN").trim().toUpperCase();
+        if (!stats[staf]) stats[staf] = { done: 0, miss: 0, kotorAudit: 0, denda: 0 };
+        if (a.status === "KOTOR") {
+          stats[staf].kotorAudit++;
+          stats[staf].denda += 15000;
+          totalTemuanKotorAudit++;
+          totalDendaKeseluruhan += 15000;
+        }
+      });
+
+      let keys = Object.keys(stats);
+      if (keys.length > 0) {
+        container.innerHTML = keys.map(k => {
+          let item = stats[k];
+          let dev = globalUsersMap[k] || "STAFF";
+          let expectedTasks = 4;
+          let missCount = Math.max(0, expectedTasks - item.done);
+          let itemTotalDenda = item.denda + (missCount * 15000);
+          let skor = Math.max(0, 100 - (item.kotorAudit * 15) - (missCount * 20));
 
           return `
             <tr>
-              <td><b>${tglStr}</b></td>
-              <td><b>${row.nama || '-'}</b></td>
-              <td>${row.area || '-'}</td>
-              <td>${imgB}</td>
-              <td>${imgA}</td>
-              <td><b>${row.status || '-'}</b></td>
-              <td style="color:${(row.denda || 0) > 0 ? '#dc2626' : 'inherit'}; font-weight:${(row.denda || 0) > 0 ? 'bold' : 'normal'};">
-                ${formatRupiah(row.denda || 0)}
-              </td>
+              <td><b>${k}</b></td>
+              <td>${dev}</td>
+              <td style="color:#16a34a; font-weight:bold;">${item.done} / ${expectedTasks}</td>
+              <td style="color:${missCount > 0 ? '#dc2626' : 'inherit'}; font-weight:bold;">${missCount} Tugas</td>
+              <td style="color:${item.kotorAudit > 0 ? '#dc2626' : 'inherit'}; font-weight:bold;">${item.kotorAudit} Area</td>
+              <td><b style="color:${itemTotalDenda > 0 ? '#dc2626' : 'inherit'};">Rp ${itemTotalDenda.toLocaleString('id-ID')}</b></td>
+              <td><b>${skor}%</b></td>
             </tr>
           `;
         }).join('');
       } else {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Tidak ada laporan kebersihan.</td></tr>`;
+        container.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada akumulasi KPI kebersihan.</td></tr>`;
       }
+
+      document.getElementById("kpiTotalProgres").innerText = totalLaporanDoneHariIni > 0 ? "100%" : "0%";
+      document.getElementById("kpiAvgScore").innerText = "90%";
+      document.getElementById("kpiTotalTemuan").innerText = totalTemuanKotorAudit;
+      document.getElementById("kpiTotalDenda").innerText = "Rp " + totalDendaKeseluruhan.toLocaleString('id-ID');
+      document.getElementById("kpiTotalDone").innerText = totalLaporanDoneHariIni;
     }
 
-    // AUDIT KEBERSIHAN
-    function renderKebersihanAudit() {
-      if (!rawKeuanganData || !rawKeuanganData.audit) return;
-      const list = rawKeuanganData.audit;
-      const tbody = document.getElementById("tblKeuanganServiceHarian");
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
 
-      if (list && list.length > 0) {
-        tbody.innerHTML = list.map(row => {
-          let tglStr = row.waktu ? new Date(row.waktu).toLocaleString('id-ID') : '-';
-          let imgFoto = row.urlFoto ? `<a href="${row.urlFoto}" target="_blank" style="color:#0284c7; font-weight:bold;">Lihat Foto</a>` : '-';
+    async function handleAuditSubmit(e) {
+      e.preventDefault();
+      if (!currentUser) return alert("Sesi login tidak valid.");
 
-          return `
-            <tr>
-              <td><b>${tglStr}</b></td>
-              <td>${row.auditor || '-'}</td>
-              <td><b>${row.stafTarget || '-'}</b></td>
-              <td>${row.divisiTarget || '-'}</td>
-              <td>${row.areaTarget || '-'}</td>
-              <td><b>${row.status || '-'}</b></td>
-              <td>${row.catatan || '-'}</td>
-              <td>${imgFoto}</td>
-            </tr>
-          `;
-        }).join('');
-      } else {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Belum ada riwayat audit kebersihan.</td></tr>`;
+      const stafTarget = document.getElementById("auditStaf").value;
+      const divisiTarget = document.getElementById("auditDivisi").value;
+      const areaTarget = document.getElementById("auditArea").value;
+      const hasil = document.getElementById("auditHasil").value;
+      const catatan = document.getElementById("auditCatatan").value;
+      const fileFotoInput = document.getElementById("auditFoto");
+
+      let base64Foto = "";
+      if (fileFotoInput && fileFotoInput.files[0]) {
+        base64Foto = await compressImage(fileFotoInput.files[0]);
+      }
+
+      if (!stafTarget || !areaTarget) {
+        alert("Harap tentukan Staf Target dan Area Target Audit!");
+        return;
+      }
+
+      const btn = document.getElementById("btnAuditSubmit");
+      btn.innerText = "Menyimpan Audit...";
+      btn.disabled = true;
+
+      try {
+        const payload = {
+          action: "simpanAuditKebersihan",
+          auditor: currentUser.nama || currentUser.username,
+          stafTarget: stafTarget,
+          divisiTarget: divisiTarget,
+          areaTarget: areaTarget,
+          statusAudit: hasil,
+          catatan: catatan,
+          base64Foto: base64Foto || ""
+        };
+
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        btn.innerText = "Kirim Hasil Audit";
+        btn.disabled = false;
+
+        alert("Hasil audit berhasil disimpan!");
+        document.getElementById("auditCatatan").value = "";
+        document.getElementById("auditFoto").value = "";
+        fetchStats();
+
+      } catch (err) {
+        btn.innerText = "Kirim Hasil Audit";
+        btn.disabled = false;
+        alert("Terjadi kesalahan koneksi saat mengirim audit.");
       }
     }
   </script>
