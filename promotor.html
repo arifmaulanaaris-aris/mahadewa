@@ -227,11 +227,33 @@
       const user = checkAuthAndRenderNav();
       filterMobileNavAccess(user);
 
-      // Pastikan menu Promotor tetap aktif di sidebar & mobile nav
+      // Cek Izin Akses Promotor
+      if (user) {
+        const isAdmin = (user.role || "").toUpperCase() === "ADMIN";
+        const akses = user.akses || {};
+        const hasPromotorAccess =
+          isAdmin ||
+          akses.promotor === true ||
+          String(akses.promotor || "").trim().toUpperCase() === "YA";
+
+        if (!hasPromotorAccess) {
+          alert("Akses Ditolak! Anda tidak memiliki izin membuka halaman Promotor.");
+          window.location.href = "absensi.html";
+          return;
+        }
+      }
+
+      // Pastikan menu Promotor tetap aktif & tampil di sidebar & mobile nav
       const navDesktop = document.getElementById("nav-promotor");
       const navMobile = document.getElementById("nav-promotor-mb");
-      if (navDesktop) navDesktop.classList.add("active");
-      if (navMobile) navMobile.classList.add("active");
+      if (navDesktop) {
+        navDesktop.style.display = "flex";
+        navDesktop.classList.add("active");
+      }
+      if (navMobile) {
+        navMobile.style.display = "inline-block";
+        navMobile.classList.add("active");
+      }
 
       if (typeof currentUser !== "undefined" && currentUser) {
         document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
@@ -263,7 +285,7 @@
 
       if (navKebMb) navKebMb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "inline-block" : "none";
       if (navPenjMb) navPenjMb.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "inline-block" : "none";
-      if (navPromMb) navPromMb.style.display = "inline-block";
+      if (navPromMb) navPromMb.style.display = (isUserAdmin || hasAccess(akses.promotor)) ? "inline-block" : "none";
       if (navKeuMb) navKeuMb.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "inline-block" : "none";
       if (navSipMb) navSipMb.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "inline-block" : "none";
       if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
