@@ -76,26 +76,29 @@
       box-shadow: 0 4px 12px rgba(153, 27, 27, 0.22);
     }
     .kpi-label-row {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; gap: 6px;
     }
     .kpi-label {
       font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #64748b;
     }
     .kpi-card.primary-card .kpi-label { color: #fecaca; }
     .kpi-tag {
-      font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 10px;
-      background: #f1f5f9; color: #475569; text-transform: uppercase;
+      font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 10px;
+      background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; white-space: nowrap;
+    }
+    .kpi-tag.neutral {
+      background: #f1f5f9; color: #475569; border: none;
     }
     .kpi-card.primary-card .kpi-tag {
-      background: rgba(255, 255, 255, 0.18); color: #ffffff;
+      background: rgba(255, 255, 255, 0.2); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.28);
     }
     .kpi-val {
       font-size: 22px; font-weight: 800; color: #0f172a; line-height: 1.2; margin: 2px 0 8px;
     }
     .kpi-card.primary-card .kpi-val { color: #ffffff; }
     .kpi-sub {
-      font-size: 11px; font-weight: 600; color: #64748b;
-      padding-top: 8px; border-top: 1px solid #f1f5f9;
+      font-size: 11px; font-weight: 700; color: #475569;
+      padding-top: 8px; border-top: 1px solid #f1f5f9; line-height: 1.4;
     }
     .kpi-card.primary-card .kpi-sub {
       color: #fee2e2; border-top: 1px solid rgba(255, 255, 255, 0.18);
@@ -131,7 +134,7 @@
     }
     .chart-box { position: relative; height: 210px; width: 100%; }
 
-    /* Table Styling (Gaya Kinerja Personal di penjualan.html) */
+    /* Table Styling */
     .table-container { max-height: 360px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
     .custom-table { width: 100%; border-collapse: collapse; min-width: 620px; }
     .custom-table th {
@@ -216,30 +219,30 @@
     <!-- Main Content -->
     <div class="content">
       
-      <!-- 4 KARTU KPI ATAS (Gaya penjualan.html) -->
+      <!-- 4 KARTU KPI ATAS -->
       <div class="kpi-grid">
         <div class="kpi-card primary-card">
           <div class="kpi-label-row">
             <span class="kpi-label">BRAND HP (BY QTY)</span>
-            <span class="kpi-tag">M1:S6</span>
+            <span class="kpi-tag" id="pctHpBadge">0%</span>
           </div>
           <div class="kpi-val" id="valHpQty">0 Unit</div>
-          <div class="kpi-sub" id="subHpAvg">Avg: 0 unit / hari</div>
+          <div class="kpi-sub" id="subHpTarget">Target: -</div>
         </div>
 
         <div class="kpi-card">
           <div class="kpi-label-row">
             <span class="kpi-label">BRAND INFINIX (BY QTY)</span>
-            <span class="kpi-tag">M1:S6</span>
+            <span class="kpi-tag" id="pctInfinixBadge">0%</span>
           </div>
           <div class="kpi-val" id="valInfinixQty">0 Unit</div>
-          <div class="kpi-sub" id="subInfinixAvg">Avg: 0 unit / hari</div>
+          <div class="kpi-sub" id="subInfinixTarget">Target: -</div>
         </div>
 
         <div class="kpi-card">
           <div class="kpi-label-row">
             <span class="kpi-label">OMZET PRODUK HP</span>
-            <span class="kpi-tag">REVENUE</span>
+            <span class="kpi-tag neutral">REVENUE</span>
           </div>
           <div class="kpi-val" id="valHpOmzet">Rp0</div>
           <div class="kpi-sub" id="subHpSku">0 SKU terjual</div>
@@ -248,7 +251,7 @@
         <div class="kpi-card">
           <div class="kpi-label-row">
             <span class="kpi-label">OMZET PRODUK INFINIX</span>
-            <span class="kpi-tag">REVENUE</span>
+            <span class="kpi-tag neutral">REVENUE</span>
           </div>
           <div class="kpi-val" id="valInfinixOmzet">Rp0</div>
           <div class="kpi-sub" id="subInfinixSku">0 SKU terjual</div>
@@ -412,6 +415,15 @@
       return "Rp" + Math.round(Number(val)).toLocaleString('id-ID');
     }
 
+    function formatTargetText(targetList) {
+      if (!Array.isArray(targetList) || targetList.length === 0) {
+        return "Belum ada target";
+      }
+      return "Target: " + targetList
+        .map(t => `(${t.dept} = ${Number(t.target).toLocaleString('id-ID')})`)
+        .join(" ");
+    }
+
     function fetchPromotorStats() {
       document.getElementById("tblBestSellerHp").innerHTML = '<tr><td colspan="5" style="text-align:center;">Memuat data terbaru...</td></tr>';
       document.getElementById("tblBestSellerInfinix").innerHTML = '<tr><td colspan="5" style="text-align:center;">Memuat data terbaru...</td></tr>';
@@ -440,8 +452,11 @@
       }
 
       rawPromotorData = res;
-      const hpQty = Number(res.summary.hpQty) || 0;
-      const infinixQty = Number(res.summary.infinixQty) || 0;
+      const summary = res.summary || {};
+      const hpQty = Number(summary.hpQty) || 0;
+      const infinixQty = Number(summary.infinixQty) || 0;
+      const hpPct = Number(summary.hpPct) || 0;
+      const infinixPct = Number(summary.infinixPct) || 0;
 
       const listHp = res.productsHp || [];
       const listInfinix = res.productsInfinix || [];
@@ -449,13 +464,13 @@
       const totalOmzetHp = listHp.reduce((acc, item) => acc + (Number(item.total) || 0), 0);
       const totalOmzetInfinix = listInfinix.reduce((acc, item) => acc + (Number(item.total) || 0), 0);
 
-      const hariBerjalan = Math.max(1, new Date().getDate());
-
       document.getElementById("valHpQty").innerText = `${hpQty.toLocaleString('id-ID')} Unit`;
-      document.getElementById("subHpAvg").innerText = `Avg: ${(hpQty / hariBerjalan).toFixed(1)} unit / hari`;
+      document.getElementById("pctHpBadge").innerText = `${hpPct}%`;
+      document.getElementById("subHpTarget").innerText = formatTargetText(summary.hpTargets);
 
       document.getElementById("valInfinixQty").innerText = `${infinixQty.toLocaleString('id-ID')} Unit`;
-      document.getElementById("subInfinixAvg").innerText = `Avg: ${(infinixQty / hariBerjalan).toFixed(1)} unit / hari`;
+      document.getElementById("pctInfinixBadge").innerText = `${infinixPct}%`;
+      document.getElementById("subInfinixTarget").innerText = formatTargetText(summary.infinixTargets);
 
       document.getElementById("valHpOmzet").innerText = formatRupiah(totalOmzetHp);
       document.getElementById("subHpSku").innerText = `${listHp.length} jenis produk terjual`;
