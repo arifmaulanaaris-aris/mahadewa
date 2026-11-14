@@ -2,18 +2,19 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Login - Executive Dashboard mahadewa.id</title>
   
-  <!-- Google Font: Roboto -->
+  <!-- Font Plus Jakarta Sans & FontAwesome (Mengikuti siplah.html) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     * {
       box-sizing: border-box;
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       margin: 0;
       padding: 0;
     }
@@ -22,35 +23,84 @@
       color: #1e293b;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Header Merah (Seragam dengan siplah.html) */
+    .top-header {
+      background: #991b1b;
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .brand-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-name-head {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .badge-cab-head {
+      background: #ffffff;
+      color: #991b1b;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Wrapper Tengah untuk Login Card */
+    .login-wrapper {
+      flex: 1;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 20px 16px;
     }
+
     .login-card {
       background: #ffffff;
       width: 100%;
-      max-width: 380px;
-      padding: 32px 24px;
-      border-radius: 12px;
+      max-width: 400px;
+      padding: 32px 26px;
+      border-radius: 14px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
       text-align: center;
     }
+    .login-icon-circle {
+      width: 52px;
+      height: 52px;
+      background: #fef2f2;
+      color: #991b1b;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 14px;
+      border: 1px solid #fecaca;
+    }
     .brand-title {
-      font-size: 24px;
-      font-weight: 900;
-      color: #dc2626;
-      line-height: 1.1;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
     }
     .brand-sub {
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 600;
       color: #64748b;
       margin-top: 4px;
       margin-bottom: 24px;
       display: block;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
     .form-group {
       margin-bottom: 16px;
@@ -59,76 +109,121 @@
     .form-label {
       display: block;
       font-size: 11px;
-      font-weight: 700;
-      color: #475569;
+      font-weight: 800;
+      color: #64748b;
       margin-bottom: 6px;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap i {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 13px;
     }
     .form-control {
       width: 100%;
-      padding: 10px 14px;
+      padding: 11px 14px 11px 38px;
       border: 1px solid #cbd5e1;
-      border-radius: 6px;
+      border-radius: 10px;
       font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      background-color: #f8fafc;
       outline: none;
       transition: all 0.2s;
     }
     .form-control:focus {
-      border-color: #dc2626;
-      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+      background-color: #ffffff;
+      border-color: #991b1b;
+      box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.12);
     }
     .btn-login {
-      background: #dc2626;
+      background: #991b1b;
       color: white;
       border: none;
-      padding: 12px;
+      padding: 12px 16px;
       font-size: 13px;
       font-weight: 700;
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
       width: 100%;
       margin-top: 8px;
-      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25);
+      transition: all 0.2s;
     }
     .btn-login:hover {
-      background: #b91c1c;
+      background: #7f1d1d;
     }
     .btn-login:disabled {
       background: #94a3b8;
+      box-shadow: none;
       cursor: not-allowed;
     }
     .error-msg {
       background: #fef2f2;
       color: #991b1b;
       border: 1px solid #fecaca;
-      padding: 8px 12px;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 10px;
       font-size: 12px;
       font-weight: 700;
       margin-bottom: 16px;
       display: none;
+      text-align: left;
     }
   </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <span class="brand-title">mahadewa.id</span>
-    <span class="brand-sub">Cab. Palopo - Portal Login</span>
+  <!-- Top Header Merah -->
+  <div class="top-header">
+    <div class="brand-head">
+      <span class="brand-name-head">MAHADEWA.ID</span>
+      <span class="badge-cab-head">Cab. Palopo</span>
+    </div>
+  </div>
 
-    <div id="errorAlert" class="error-msg"></div>
+  <!-- Login Form Container -->
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-icon-circle">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h1 class="brand-title">Executive Dashboard</h1>
+      <span class="brand-sub">Silakan masuk menggunakan akun staf Anda</span>
 
-    <form onsubmit="handleLogin(event)">
-      <div class="form-group">
-        <label class="form-label">Username</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="Masukkan ID Login" required autocomplete="username">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Masukkan Password" required autocomplete="current-password">
-      </div>
-      <button type="submit" id="btnLogin" class="btn-login">Masuk ke System</button>
-    </form>
+      <div id="errorAlert" class="error-msg"></div>
+
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="inputUsername" class="form-control" placeholder="Masukkan ID Login" required autocomplete="username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Masukkan Password" required autocomplete="current-password">
+          </div>
+        </div>
+        <button type="submit" id="btnLogin" class="btn-login">
+          <i class="fa-solid fa-right-to-bracket"></i> Masuk ke System
+        </button>
+      </form>
+    </div>
   </div>
 
   <script src="auth.js"></script>
@@ -173,7 +268,7 @@
 
     function showError(msg) {
       const errBox = document.getElementById("errorAlert");
-      errBox.innerText = msg;
+      errBox.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
       errBox.style.display = "block";
     }
 
@@ -195,7 +290,7 @@
         return;
       }
 
-      btn.innerText = "Memverifikasi...";
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memverifikasi...`;
       btn.disabled = true;
 
       // Panggil API Backend Apps Script dengan JSONP callback
@@ -204,7 +299,7 @@
         delete window[callbackName];
         if (script.parentNode) script.parentNode.removeChild(script);
 
-        btn.innerText = "Masuk ke System";
+        btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Masuk ke System`;
         btn.disabled = false;
 
         if (res && res.success) {
@@ -220,7 +315,7 @@
       script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&callback=${callbackName}&ts=${new Date().getTime()}`;
       script.onerror = function() {
         delete window[callbackName];
-        btn.innerText = "Masuk ke System";
+        btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Masuk ke System`;
         btn.disabled = false;
         showError("Terjadi kesalahan koneksi ke server Apps Script.");
       };
