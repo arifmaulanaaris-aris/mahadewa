@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Promotor Dashboard - mahadewa.id</title>
-
+  <title>Promotor - mahadewa.id</title>
+  
   <!-- Font Plus Jakarta Sans & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,333 +12,96 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      margin: 0;
-      padding: 0;
+    * { 
+      box-sizing: border-box; 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      margin: 0; 
+      padding: 0; 
     }
-    body {
-      background-color: #f8fafc;
-      color: #1e293b;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* Top Header Merah (Seragam dengan index.html) */
+    /* Top Header Merah */
     .top-header {
-      background: #991b1b;
-      color: white;
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      background: #991b1b; color: white; padding: 14px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
-    .brand-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .user-info-head { display: flex; align-items: center; gap: 8px; }
+    .user-name-head { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
+    .badge-role-head { background: #ffffff; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    
+    .head-actions { display: flex; gap: 8px; }
+    .btn-head-action {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
     }
-    .brand-name-head {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-    .badge-cab-head {
-      background: #ffffff;
-      color: #991b1b;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .user-pill {
-      font-size: 12px;
-      font-weight: 600;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 5px 12px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-header {
-      background: #7f1d1d;
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.25);
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-    .btn-header:hover {
-      background: #ffffff;
-      color: #991b1b;
-    }
+    .btn-head-action:hover { background: rgba(255,255,255,0.25); }
 
-    /* Main Container */
-    .main-container {
-      width: 100%;
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
-      flex: 1;
+    /* Navigasi Mobile Halus (Smooth Scroll) */
+    .mobile-nav {
+      display: none; background: #ffffff; padding: 10px 14px; border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto; white-space: nowrap; gap: 8px; -webkit-overflow-scrolling: touch;
+      position: sticky; top: 57px; z-index: 90;
     }
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav-item {
+      display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+      color: #64748b; text-decoration: none; background: #f1f5f9; transition: all 0.2s ease;
+    }
+    .mobile-nav-item.active { background: #991b1b; color: white; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25); }
 
-    /* Page Title Row */
-    .page-head-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 10px;
+    /* Layout & Sidebar Desktop */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px; transition: all 0.2s;
     }
-    .page-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: #0f172a;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .page-sub {
-      font-size: 12px;
-      color: #64748b;
-      font-weight: 600;
-      margin-top: 2px;
-    }
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #991b1b; color: white; }
 
-    /* 2 Grid Cards Atas: Brand HP & Brand Infinix (by QTY) */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .kpi-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 22px 24px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
-    .kpi-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: #991b1b;
-    }
-    .kpi-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-    .kpi-label {
-      font-size: 14px;
-      font-weight: 700;
-      color: #334155;
-    }
-    .kpi-badge {
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 4px 9px;
-      border-radius: 20px;
-      background: #fef2f2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-    .kpi-value-wrap {
-      text-align: center;
-      padding: 8px 0 6px;
-    }
-    .kpi-value {
-      font-size: 34px;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.5px;
-    }
-    .kpi-unit {
-      font-size: 26px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-left: 4px;
-    }
+    .content { flex: 1; padding: 20px 24px; width: 100%; overflow-x: hidden; }
 
-    /* Section Card untuk Top Best Seller Product */
-    .table-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 20px 22px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      margin-bottom: 22px;
+    /* PROMOTOR KPI CARDS (Brand HP & Brand Infinix by QTY) */
+    .promotor-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
+    .card {
+      background: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0;
+      display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
-    .table-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      gap: 12px;
-      flex-wrap: wrap;
+    .card-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .card-head { font-size: 13px; font-weight: 800; color: #334155; }
+    .card-badge { font-size: 10px; font-weight: 800; background: #fef2f2; color: #991b1b; padding: 3px 8px; border-radius: 12px; border: 1px solid #fecaca; }
+    .card-val-center { text-align: center; padding: 12px 0 6px; font-size: 32px; font-weight: 800; color: #0f172a; }
+
+    /* PANELS & TABLES */
+    .box-panel { background: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .panel-header {
+      font-size: 12px; font-weight: 800; color: #0f172a; margin-bottom: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      text-transform: uppercase; letter-spacing: 0.5px; flex-wrap: wrap; gap: 8px;
     }
-    .table-title-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .table-title-prefix {
-      font-size: 11px;
-      font-weight: 800;
-      color: #0f172a;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .table-title-brand {
-      font-size: 15px;
-      font-weight: 800;
-      color: #991b1b;
-    }
+    .brand-highlight { color: #991b1b; font-size: 14px; text-transform: none; margin-left: 4px; }
     .sort-select {
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      font-size: 12px;
-      font-weight: 700;
-      color: #334155;
-      outline: none;
-      cursor: pointer;
-    }
-    .sort-select:focus {
-      border-color: #991b1b;
+      padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 8px;
+      font-size: 12px; font-weight: 700; color: #334155; background: #f8fafc; cursor: pointer;
     }
 
-    /* Scrollable Table Wrapper */
-    .table-responsive {
-      width: 100%;
-      max-height: 360px;
-      overflow-y: auto;
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid #f1f5f9;
+    .table-container { max-height: 360px; overflow-y: auto; overflow-x: auto; font-size: 12px; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+    .custom-table th {
+      background: #f8fafc; padding: 10px 12px; text-align: left; font-size: 10px; font-weight: 800;
+      color: #94a3b8; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10;
+      white-space: nowrap; text-transform: uppercase;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 520px;
-    }
-    thead th {
-      position: sticky;
-      top: 0;
-      background: #f8fafc;
-      color: #94a3b8;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      padding: 11px 14px;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-      z-index: 2;
-    }
-    thead th.text-right {
-      text-align: right;
-    }
-    tbody tr {
-      border-bottom: 1px solid #f1f5f9;
-      transition: background 0.15s;
-    }
-    tbody tr:hover {
-      background: #fef2f2;
-    }
-    tbody td {
-      padding: 12px 14px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-    td.col-rank {
-      width: 64px;
-      color: #64748b;
-      font-weight: 800;
-    }
-    td.col-rank.top-3 {
-      color: #991b1b;
-    }
-    td.col-qty {
-      text-align: right;
-      color: #475569;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    td.col-total {
-      text-align: right;
-      color: #0f172a;
-      font-weight: 800;
-      white-space: nowrap;
-    }
+    .custom-table th.text-right, .custom-table td.text-right { text-align: right; }
+    .custom-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-weight: 700; white-space: nowrap; }
+    .custom-table tr:hover td { background: #f8fafc; }
 
-    /* Loading & Error State */
-    .state-box {
-      text-align: center;
-      padding: 36px 16px;
-      color: #64748b;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .error-banner {
-      background: #fef2f2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 18px;
-      display: none;
-    }
-
-    @media (max-width: 640px) {
-      .kpi-grid {
-        grid-template-columns: 1fr;
-      }
-      .kpi-value {
-        font-size: 28px;
-      }
-      .kpi-unit {
-        font-size: 22px;
-      }
-      .user-pill span {
-        display: none;
-      }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .promotor-cards { grid-template-columns: 1fr; gap: 12px; }
+      .content { padding: 16px; }
     }
   </style>
 </head>
@@ -346,262 +109,233 @@
 
   <!-- Top Header Merah -->
   <div class="top-header">
-    <div class="brand-head">
-      <span class="brand-name-head">MAHADEWA.ID</span>
-      <span class="badge-cab-head">Cab. Palopo</span>
+    <div class="user-info-head">
+      <span id="headerUserName" class="user-name-head">MAHADEWA</span>
+      <span id="headerUserRole" class="badge-role-head">Staff</span>
     </div>
-    <div class="header-actions">
-      <div class="user-pill" id="userBadge">
-        <i class="fa-solid fa-user-tie"></i>
-        <span id="userNameText">Promotor</span>
-      </div>
-      <button type="button" class="btn-header" onclick="loadPromotorData()" title="Refresh Data">
-        <i class="fa-solid fa-rotate-right" id="iconRefresh"></i> Refresh
-      </button>
-      <button type="button" class="btn-header" onclick="handleLogout()" title="Keluar">
-        <i class="fa-solid fa-right-from-bracket"></i>
-      </button>
+    <div class="head-actions">
+      <button class="btn-head-action" onclick="fetchPromotorStats()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      <button class="btn-head-action" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
     </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-container">
-    <div class="page-head-row">
-      <div>
-        <h1 class="page-title"><i class="fa-solid fa-chart-simple" style="color:#991b1b;"></i> Performa Brand Promotor</h1>
-        <p class="page-sub">Ringkasan pencapaian unit & produk terlaris Brand HP dan Infinix</p>
-      </div>
+  <!-- Mobile Nav Horizontal Terfilter Hak Akses -->
+  <div class="mobile-nav" id="mobileNavContainer">
+    <a href="absensi.html" id="nav-absensi-mb" class="mobile-nav-item">Absensi Staf</a>
+    <a href="kebersihan.html" id="nav-kebersihan-mb" class="mobile-nav-item">Kebersihan Toko</a>
+    <a href="penjualan.html" id="nav-penjualan-mb" class="mobile-nav-item">Penjualan</a>
+    <a href="promotor.html" id="nav-promotor-mb" class="mobile-nav-item active">Promotor</a>
+    <a href="keuangan.html" id="nav-keuangan-mb" class="mobile-nav-item">Keuangan</a>
+    <a href="siplah.html" id="nav-siplah-mb" class="mobile-nav-item">SIPLah Tertunda</a>
+    <a href="admin_users.html" id="nav-admin-users-mb" class="mobile-nav-item" style="display:none;">Kelola Akun & Akses</a>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Desktop -->
+    <div class="sidebar">
+      <a id="nav-absensi" href="absensi.html" class="menu-item">Absensi Staf</a>
+      <a id="nav-kebersihan" href="kebersihan.html" class="menu-item">Kebersihan Toko</a>
+      <a id="nav-penjualan" href="penjualan.html" class="menu-item">Penjualan</a>
+      <a id="nav-promotor" href="promotor.html" class="menu-item active">Promotor</a>
+      <a id="nav-keuangan" href="keuangan.html" class="menu-item">Keuangan</a>
+      <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
+      <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">Kelola Akun & Akses</a>
     </div>
 
-    <div id="errorAlert" class="error-banner"></div>
+    <!-- Main Content -->
+    <div class="content">
+      
+      <!-- 2 KARTU SUMMARY ATAS (M1:S6) -->
+      <div class="promotor-cards">
+        <div class="card">
+          <div class="card-top-row">
+            <span class="card-head">Brand HP</span>
+            <span class="card-badge">BY QTY</span>
+          </div>
+          <div class="card-val-center" id="valHpQty">0 Unit</div>
+        </div>
+        <div class="card">
+          <div class="card-top-row">
+            <span class="card-head">Brand Infinix</span>
+            <span class="card-badge">BY QTY</span>
+          </div>
+          <div class="card-val-center" id="valInfinixQty">0 Unit</div>
+        </div>
+      </div>
 
-    <!-- 2 Kartu Summary Atas (M1:S6) -->
-    <div class="kpi-grid">
-      <!-- Card Brand HP -->
-      <div class="kpi-card">
-        <div class="kpi-header">
-          <span class="kpi-label">Brand HP</span>
-          <span class="kpi-badge">BY QTY</span>
+      <!-- TABEL 1: TOP BEST SELLER PRODUCT BRAND HP -->
+      <div class="box-panel">
+        <div class="panel-header">
+          <div>TOP BEST SELLER PRODUCT <span class="brand-highlight">Brand HP</span></div>
+          <select id="sortHp" class="sort-select" onchange="renderPromotorTables()">
+            <option value="omzet">By Omzet (Rp)</option>
+            <option value="qty">By Qty (Pcs)</option>
+          </select>
         </div>
-        <div class="kpi-value-wrap">
-          <span class="kpi-value" id="valHpQty">-</span><span class="kpi-unit">Unit</span>
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">RANK</th>
+                <th>NAMA PRODUK</th>
+                <th class="text-right" style="width: 110px;">QTY</th>
+                <th class="text-right" style="width: 150px;">TOTAL OMZET</th>
+              </tr>
+            </thead>
+            <tbody id="tblBestSellerHp">
+              <tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- Card Brand Infinix -->
-      <div class="kpi-card">
-        <div class="kpi-header">
-          <span class="kpi-label">Brand Infinix</span>
-          <span class="kpi-badge">BY QTY</span>
+      <!-- TABEL 2: TOP BEST SELLER PRODUCT BRAND INFINIX -->
+      <div class="box-panel">
+        <div class="panel-header">
+          <div>TOP BEST SELLER PRODUCT <span class="brand-highlight">Brand Infinix</span></div>
+          <select id="sortInfinix" class="sort-select" onchange="renderPromotorTables()">
+            <option value="omzet">By Omzet (Rp)</option>
+            <option value="qty">By Qty (Pcs)</option>
+          </select>
         </div>
-        <div class="kpi-value-wrap">
-          <span class="kpi-value" id="valInfinixQty">-</span><span class="kpi-unit">Unit</span>
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">RANK</th>
+                <th>NAMA PRODUK</th>
+                <th class="text-right" style="width: 110px;">QTY</th>
+                <th class="text-right" style="width: 150px;">TOTAL OMZET</th>
+              </tr>
+            </thead>
+            <tbody id="tblBestSellerInfinix">
+              <tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
 
-    <!-- Tabel 1: Top Best Seller Product Brand HP -->
-    <div class="table-card">
-      <div class="table-card-header">
-        <div class="table-title-group">
-          <span class="table-title-prefix">TOP BEST SELLER PRODUCT</span>
-          <span class="table-title-brand">Brand HP</span>
-        </div>
-        <select id="sortHp" class="sort-select" onchange="renderTables()">
-          <option value="omzet">By Omzet (Rp)</option>
-          <option value="qty">By Qty (Pcs)</option>
-        </select>
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:70px;">RANK</th>
-              <th>NAMA PRODUK</th>
-              <th class="text-right" style="width:110px;">QTY</th>
-              <th class="text-right" style="width:150px;">TOTAL OMZET</th>
-            </tr>
-          </thead>
-          <tbody id="tbodyHp">
-            <tr>
-              <td colspan="4" class="state-box">
-                <i class="fa-solid fa-spinner fa-spin"></i> Memuat data produk Brand HP...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Tabel 2: Top Best Seller Product Brand Infinix -->
-    <div class="table-card">
-      <div class="table-card-header">
-        <div class="table-title-group">
-          <span class="table-title-prefix">TOP BEST SELLER PRODUCT</span>
-          <span class="table-title-brand">Brand Infinix</span>
-        </div>
-        <select id="sortInfinix" class="sort-select" onchange="renderTables()">
-          <option value="omzet">By Omzet (Rp)</option>
-          <option value="qty">By Qty (Pcs)</option>
-        </select>
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:70px;">RANK</th>
-              <th>NAMA PRODUK</th>
-              <th class="text-right" style="width:110px;">QTY</th>
-              <th class="text-right" style="width:150px;">TOTAL OMZET</th>
-            </tr>
-          </thead>
-          <tbody id="tbodyInfinix">
-            <tr>
-              <td colspan="4" class="state-box">
-                <i class="fa-solid fa-spinner fa-spin"></i> Memuat data produk Brand Infinix...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   </div>
 
-  <!-- Menggunakan auth.js yang sama (berisi SCRIPT_URL) -->
+  <!-- SCRIPT UTAMA -->
   <script src="auth.js"></script>
   <script>
-    let dataProdukHp = [];
-    let dataProdukInfinix = [];
+    let rawPromotorData = { productsHp: [], productsInfinix: [] };
 
-    // Format Rupiah (Rp81.000.000)
-    function formatRupiah(angka) {
-      const num = Math.round(Number(angka) || 0);
-      return "Rp" + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-
-    // Format Angka Ribuan
-    function formatAngka(angka) {
-      const num = Number(angka) || 0;
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-
-    // Cek Sesi Login
     window.addEventListener("DOMContentLoaded", () => {
-      const session = localStorage.getItem("mahadewa_user");
-      if (!session) {
-        window.location.href = "index.html";
-        return;
-      }
-      try {
-        const user = JSON.parse(session);
-        if (user && user.nama) {
-          document.getElementById("userNameText").textContent = user.nama;
-        }
-      } catch (e) {
-        localStorage.removeItem("mahadewa_user");
-        window.location.href = "index.html";
-        return;
+      const user = checkAuthAndRenderNav();
+      filterMobileNavAccess(user);
+
+      // Pastikan menu Promotor tetap aktif di sidebar & mobile nav
+      const navDesktop = document.getElementById("nav-promotor");
+      const navMobile = document.getElementById("nav-promotor-mb");
+      if (navDesktop) navDesktop.classList.add("active");
+      if (navMobile) navMobile.classList.add("active");
+
+      if (typeof currentUser !== "undefined" && currentUser) {
+        document.getElementById("headerUserName").innerText = (currentUser.nama || currentUser.username).toUpperCase();
+        document.getElementById("headerUserRole").innerText = currentUser.role || "Staff";
       }
 
-      loadPromotorData();
+      if (user) {
+        fetchPromotorStats();
+      }
     });
 
-    function handleLogout() {
-      localStorage.removeItem("mahadewa_user");
-      window.location.href = "index.html";
+    function filterMobileNavAccess(user) {
+      if (!user) return;
+      const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+      const akses = user.akses || {};
+
+      const hasAccess = (val) => {
+        if (typeof val === "boolean") return val;
+        if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
+        return false;
+      };
+
+      const navKebMb = document.getElementById("nav-kebersihan-mb");
+      const navPenjMb = document.getElementById("nav-penjualan-mb");
+      const navPromMb = document.getElementById("nav-promotor-mb");
+      const navKeuMb = document.getElementById("nav-keuangan-mb");
+      const navSipMb = document.getElementById("nav-siplah-mb");
+      const navAdminMb = document.getElementById("nav-admin-users-mb");
+
+      if (navKebMb) navKebMb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "inline-block" : "none";
+      if (navPenjMb) navPenjMb.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "inline-block" : "none";
+      if (navPromMb) navPromMb.style.display = "inline-block";
+      if (navKeuMb) navKeuMb.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "inline-block" : "none";
+      if (navSipMb) navSipMb.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "inline-block" : "none";
+      if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
     }
 
-    function showError(msg) {
-      const box = document.getElementById("errorAlert");
-      box.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
-      box.style.display = "block";
+    function formatRupiah(val) {
+      if (!val && val !== 0) return "Rp0";
+      return "Rp" + Math.round(Number(val)).toLocaleString('id-ID');
     }
 
-    function hideError() {
-      document.getElementById("errorAlert").style.display = "none";
-    }
+    function fetchPromotorStats() {
+      document.getElementById("tblBestSellerHp").innerHTML = '<tr><td colspan="4" style="text-align:center;">Memuat data terbaru...</td></tr>';
+      document.getElementById("tblBestSellerInfinix").innerHTML = '<tr><td colspan="4" style="text-align:center;">Memuat data terbaru...</td></tr>';
 
-    // Ambil data dari Apps Script via JSONP (mengikuti pola index.html)
-    function loadPromotorData() {
-      hideError();
-      const icon = document.getElementById("iconRefresh");
-      if (icon) icon.classList.add("fa-spin");
+      const script = document.createElement('script');
+      script.src = `${SCRIPT_URL}?action=getPromotorData&callback=renderPromotorUI&ts=${new Date().getTime()}`;
 
-      const callbackName = "onPromotorData_" + Math.floor(Math.random() * 100000);
-      window[callbackName] = function(res) {
-        delete window[callbackName];
+      script.onerror = () => {
+        document.getElementById("tblBestSellerHp").innerHTML = '<tr><td colspan="4" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
+        document.getElementById("tblBestSellerInfinix").innerHTML = '<tr><td colspan="4" style="text-align:center; color:#dc2626;">Gagal memuat data. Periksa koneksi internet.</td></tr>';
+      };
+
+      script.onload = () => {
         if (script.parentNode) script.parentNode.removeChild(script);
-        if (icon) icon.classList.remove("fa-spin");
-
-        if (res && res.success) {
-          document.getElementById("valHpQty").textContent = formatAngka(res.summary.hpQty);
-          document.getElementById("valInfinixQty").textContent = formatAngka(res.summary.infinixQty);
-
-          dataProdukHp = Array.isArray(res.productsHp) ? res.productsHp : [];
-          dataProdukInfinix = Array.isArray(res.productsInfinix) ? res.productsInfinix : [];
-
-          renderTables();
-        } else {
-          showError(res && res.message ? res.message : "Gagal memuat data dari server.");
-        }
       };
 
-      const script = document.createElement("script");
-      script.src = `${SCRIPT_URL}?action=getPromotorData&callback=${callbackName}&ts=${new Date().getTime()}`;
-      script.onerror = function() {
-        delete window[callbackName];
-        if (icon) icon.classList.remove("fa-spin");
-        showError("Terjadi kesalahan koneksi ke server Apps Script.");
-      };
       document.body.appendChild(script);
     }
 
-    function renderSingleTable(tbodyId, rawList, sortBy) {
-      const tbody = document.getElementById(tbodyId);
-      if (!rawList || rawList.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="4" class="state-box">Belum ada data penjualan produk untuk brand ini.</td>
-          </tr>
-        `;
+    function renderPromotorUI(res) {
+      if (!res || !res.success) {
+        const errMsg = (res && res.message) ? res.message : "Data tidak ditemukan.";
+        document.getElementById("tblBestSellerHp").innerHTML = `<tr><td colspan="4" style="text-align:center; color:#dc2626;">${errMsg}</td></tr>`;
+        document.getElementById("tblBestSellerInfinix").innerHTML = `<tr><td colspan="4" style="text-align:center; color:#dc2626;">${errMsg}</td></tr>`;
         return;
       }
 
-      const sorted = [...rawList].sort((a, b) => {
-        if (sortBy === "qty") {
-          return b.qty - a.qty || b.total - a.total;
-        }
-        return b.total - a.total || b.qty - a.qty;
-      });
+      rawPromotorData = res;
+      document.getElementById("valHpQty").innerText = `${(res.summary.hpQty || 0).toLocaleString('id-ID')} Unit`;
+      document.getElementById("valInfinixQty").innerText = `${(res.summary.infinixQty || 0).toLocaleString('id-ID')} Unit`;
 
-      tbody.innerHTML = sorted.map((row, idx) => {
-        const rank = idx + 1;
-        const rankClass = rank <= 3 ? "col-rank top-3" : "col-rank";
-        return `
-          <tr>
-            <td class="${rankClass}">#${rank}</td>
-            <td>${escapeHtml(row.item)}</td>
-            <td class="col-qty">${formatAngka(row.qty)} Pcs</td>
-            <td class="col-total">${formatRupiah(row.total)}</td>
-          </tr>
-        `;
-      }).join("");
+      renderPromotorTables();
     }
 
-    function renderTables() {
+    function renderPromotorTables() {
       const sortHp = document.getElementById("sortHp").value;
       const sortInfinix = document.getElementById("sortInfinix").value;
 
-      renderSingleTable("tbodyHp", dataProdukHp, sortHp);
-      renderSingleTable("tbodyInfinix", dataProdukInfinix, sortInfinix);
+      renderTableBrand("tblBestSellerHp", rawPromotorData.productsHp || [], sortHp);
+      renderTableBrand("tblBestSellerInfinix", rawPromotorData.productsInfinix || [], sortInfinix);
     }
 
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+    function renderTableBrand(tbodyId, list, sortBy) {
+      const tbody = document.getElementById(tbodyId);
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Tidak ada data produk untuk brand ini.</td></tr>';
+        return;
+      }
+
+      const sorted = [...list].sort((a, b) => {
+        if (sortBy === "qty") return (b.qty - a.qty) || (b.total - a.total);
+        return (b.total - a.total) || (b.qty - a.qty);
+      });
+
+      tbody.innerHTML = sorted.map((row, idx) => `
+        <tr>
+          <td style="color:${idx < 3 ? '#991b1b' : '#64748b'}; font-weight:800;">#${idx + 1}</td>
+          <td>${row.item}</td>
+          <td class="text-right" style="color:#64748b; font-weight:600;">${(row.qty || 0).toLocaleString('id-ID')} Pcs</td>
+          <td class="text-right" style="font-weight:800;">${formatRupiah(row.total || 0)}</td>
+        </tr>
+      `).join('');
     }
   </script>
 </body>
