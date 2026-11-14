@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Promotor Dashboard - mahadewa.id</title>
+
+  <!-- Font Plus Jakarta Sans & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Header Merah (Seragam dengan index.html) */
+    .top-header {
+      background: #991b1b;
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .brand-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-name-head {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .badge-cab-head {
+      background: #ffffff;
+      color: #991b1b;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-pill {
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 5px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-header {
+      background: #7f1d1d;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-header:hover {
+      background: #ffffff;
+      color: #991b1b;
+    }
+
+    /* Main Container */
+    .main-container {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+      flex: 1;
+    }
+
+    /* Page Title Row */
+    .page-head-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .page-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-sub {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* 2 Grid Cards Atas: Brand HP & Brand Infinix (by QTY) */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 22px 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: #991b1b;
+    }
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .kpi-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+    }
+    .kpi-badge {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 9px;
+      border-radius: 20px;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .kpi-value-wrap {
+      text-align: center;
+      padding: 8px 0 6px;
+    }
+    .kpi-value {
+      font-size: 34px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+    .kpi-unit {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-left: 4px;
+    }
+
+    /* Section Card untuk Top Best Seller Product */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 20px 22px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      margin-bottom: 22px;
+    }
+    .table-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .table-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .table-title-prefix {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .table-title-brand {
+      font-size: 15px;
+      font-weight: 800;
+      color: #991b1b;
+    }
+    .sort-select {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      outline: none;
+      cursor: pointer;
+    }
+    .sort-select:focus {
+      border-color: #991b1b;
+    }
+
+    /* Scrollable Table Wrapper */
+    .table-responsive {
+      width: 100%;
+      max-height: 360px;
+      overflow-y: auto;
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid #f1f5f9;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      color: #94a3b8;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 11px 14px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+      z-index: 2;
+    }
+    thead th.text-right {
+      text-align: right;
+    }
+    tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.15s;
+    }
+    tbody tr:hover {
+      background: #fef2f2;
+    }
+    tbody td {
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    td.col-rank {
+      width: 64px;
+      color: #64748b;
+      font-weight: 800;
+    }
+    td.col-rank.top-3 {
+      color: #991b1b;
+    }
+    td.col-qty {
+      text-align: right;
+      color: #475569;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    td.col-total {
+      text-align: right;
+      color: #0f172a;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* Loading & Error State */
+    .state-box {
+      text-align: center;
+      padding: 36px 16px;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .error-banner {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .kpi-value {
+        font-size: 28px;
+      }
+      .kpi-unit {
+        font-size: 22px;
+      }
+      .user-pill span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Merah -->
+  <div class="top-header">
+    <div class="brand-head">
+      <span class="brand-name-head">MAHADEWA.ID</span>
+      <span class="badge-cab-head">Cab. Palopo</span>
+    </div>
+    <div class="header-actions">
+      <div class="user-pill" id="userBadge">
+        <i class="fa-solid fa-user-tie"></i>
+        <span id="userNameText">Promotor</span>
+      </div>
+      <button type="button" class="btn-header" onclick="loadPromotorData()" title="Refresh Data">
+        <i class="fa-solid fa-rotate-right" id="iconRefresh"></i> Refresh
+      </button>
+      <button type="button" class="btn-header" onclick="handleLogout()" title="Keluar">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <div class="page-head-row">
+      <div>
+        <h1 class="page-title"><i class="fa-solid fa-chart-simple" style="color:#991b1b;"></i> Performa Brand Promotor</h1>
+        <p class="page-sub">Ringkasan pencapaian unit & produk terlaris Brand HP dan Infinix</p>
+      </div>
+    </div>
+
+    <div id="errorAlert" class="error-banner"></div>
+
+    <!-- 2 Kartu Summary Atas (M1:S6) -->
+    <div class="kpi-grid">
+      <!-- Card Brand HP -->
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">Brand HP</span>
+          <span class="kpi-badge">BY QTY</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="valHpQty">-</span><span class="kpi-unit">Unit</span>
+        </div>
+      </div>
+
+      <!-- Card Brand Infinix -->
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">Brand Infinix</span>
+          <span class="kpi-badge">BY QTY</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="valInfinixQty">-</span><span class="kpi-unit">Unit</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabel 1: Top Best Seller Product Brand HP -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <div class="table-title-group">
+          <span class="table-title-prefix">TOP BEST SELLER PRODUCT</span>
+          <span class="table-title-brand">Brand HP</span>
+        </div>
+        <select id="sortHp" class="sort-select" onchange="renderTables()">
+          <option value="omzet">By Omzet (Rp)</option>
+          <option value="qty">By Qty (Pcs)</option>
+        </select>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:70px;">RANK</th>
+              <th>NAMA PRODUK</th>
+              <th class="text-right" style="width:110px;">QTY</th>
+              <th class="text-right" style="width:150px;">TOTAL OMZET</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyHp">
+            <tr>
+              <td colspan="4" class="state-box">
+                <i class="fa-solid fa-spinner fa-spin"></i> Memuat data produk Brand HP...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tabel 2: Top Best Seller Product Brand Infinix -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <div class="table-title-group">
+          <span class="table-title-prefix">TOP BEST SELLER PRODUCT</span>
+          <span class="table-title-brand">Brand Infinix</span>
+        </div>
+        <select id="sortInfinix" class="sort-select" onchange="renderTables()">
+          <option value="omzet">By Omzet (Rp)</option>
+          <option value="qty">By Qty (Pcs)</option>
+        </select>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:70px;">RANK</th>
+              <th>NAMA PRODUK</th>
+              <th class="text-right" style="width:110px;">QTY</th>
+              <th class="text-right" style="width:150px;">TOTAL OMZET</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyInfinix">
+            <tr>
+              <td colspan="4" class="state-box">
+                <i class="fa-solid fa-spinner fa-spin"></i> Memuat data produk Brand Infinix...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menggunakan auth.js yang sama (berisi SCRIPT_URL) -->
+  <script src="auth.js"></script>
+  <script>
+    let dataProdukHp = [];
+    let dataProdukInfinix = [];
+
+    // Format Rupiah (Rp81.000.000)
+    function formatRupiah(angka) {
+      const num = Math.round(Number(angka) || 0);
+      return "Rp" + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    // Format Angka Ribuan
+    function formatAngka(angka) {
+      const num = Number(angka) || 0;
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    // Cek Sesi Login
+    window.addEventListener("DOMContentLoaded", () => {
+      const session = localStorage.getItem("mahadewa_user");
+      if (!session) {
+        window.location.href = "index.html";
+        return;
+      }
+      try {
+        const user = JSON.parse(session);
+        if (user && user.nama) {
+          document.getElementById("userNameText").textContent = user.nama;
+        }
+      } catch (e) {
+        localStorage.removeItem("mahadewa_user");
+        window.location.href = "index.html";
+        return;
+      }
+
+      loadPromotorData();
+    });
+
+    function handleLogout() {
+      localStorage.removeItem("mahadewa_user");
+      window.location.href = "index.html";
+    }
+
+    function showError(msg) {
+      const box = document.getElementById("errorAlert");
+      box.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
+      box.style.display = "block";
+    }
+
+    function hideError() {
+      document.getElementById("errorAlert").style.display = "none";
+    }
+
+    // Ambil data dari Apps Script via JSONP (mengikuti pola index.html)
+    function loadPromotorData() {
+      hideError();
+      const icon = document.getElementById("iconRefresh");
+      if (icon) icon.classList.add("fa-spin");
+
+      const callbackName = "onPromotorData_" + Math.floor(Math.random() * 100000);
+      window[callbackName] = function(res) {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        if (icon) icon.classList.remove("fa-spin");
+
+        if (res && res.success) {
+          document.getElementById("valHpQty").textContent = formatAngka(res.summary.hpQty);
+          document.getElementById("valInfinixQty").textContent = formatAngka(res.summary.infinixQty);
+
+          dataProdukHp = Array.isArray(res.productsHp) ? res.productsHp : [];
+          dataProdukInfinix = Array.isArray(res.productsInfinix) ? res.productsInfinix : [];
+
+          renderTables();
+        } else {
+          showError(res && res.message ? res.message : "Gagal memuat data dari server.");
+        }
+      };
+
+      const script = document.createElement("script");
+      script.src = `${SCRIPT_URL}?action=getPromotorData&callback=${callbackName}&ts=${new Date().getTime()}`;
+      script.onerror = function() {
+        delete window[callbackName];
+        if (icon) icon.classList.remove("fa-spin");
+        showError("Terjadi kesalahan koneksi ke server Apps Script.");
+      };
+      document.body.appendChild(script);
+    }
+
+    function renderSingleTable(tbodyId, rawList, sortBy) {
+      const tbody = document.getElementById(tbodyId);
+      if (!rawList || rawList.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="state-box">Belum ada data penjualan produk untuk brand ini.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      const sorted = [...rawList].sort((a, b) => {
+        if (sortBy === "qty") {
+          return b.qty - a.qty || b.total - a.total;
+        }
+        return b.total - a.total || b.qty - a.qty;
+      });
+
+      tbody.innerHTML = sorted.map((row, idx) => {
+        const rank = idx + 1;
+        const rankClass = rank <= 3 ? "col-rank top-3" : "col-rank";
+        return `
+          <tr>
+            <td class="${rankClass}">#${rank}</td>
+            <td>${escapeHtml(row.item)}</td>
+            <td class="col-qty">${formatAngka(row.qty)} Pcs</td>
+            <td class="col-total">${formatRupiah(row.total)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderTables() {
+      const sortHp = document.getElementById("sortHp").value;
+      const sortInfinix = document.getElementById("sortInfinix").value;
+
+      renderSingleTable("tbodyHp", dataProdukHp, sortHp);
+      renderSingleTable("tbodyInfinix", dataProdukInfinix, sortInfinix);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>
