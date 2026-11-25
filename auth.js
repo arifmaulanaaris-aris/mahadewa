@@ -27,7 +27,7 @@ function handleLogin(usernameInput, passwordInput, callbackSuccess, callbackErro
 
   window[callbackName] = function(response) {
     delete window[callbackName];
-    document.body.removeChild(script);
+    if (script.parentNode) document.body.removeChild(script);
 
     if (response && response.success) {
       // Simpan data user ke LocalStorage
@@ -44,7 +44,7 @@ function handleLogin(usernameInput, passwordInput, callbackSuccess, callbackErro
   script.src = url;
   script.onerror = function() {
     delete window[callbackName];
-    document.body.removeChild(script);
+    if (script.parentNode) document.body.removeChild(script);
     if (callbackError) callbackError("Gagal menghubungi server Apps Script.");
   };
   document.body.appendChild(script);
@@ -78,13 +78,7 @@ function checkAuthAndRenderNav() {
     return null;
   }
 
-  // Jika user sudah login dan berada di halaman login (index.html), arahkan ke dashboard/halaman utama
-  if (isLoginPage) {
-    // Bisa diarahkan ke halaman utama pilihan Anda
-    // window.location.href = "penjualan.html"; 
-  }
-
-  // Set User Badge di Header
+  // Set User Badge di Header jika tersedia
   const badge = document.getElementById("userBadge");
   if (badge) {
     badge.innerText = `${(currentUser.nama || currentUser.username || '').toUpperCase()} (${(currentUser.role || 'STAFF').toUpperCase()})`;
@@ -100,30 +94,49 @@ function checkAuthAndRenderNav() {
   const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
   const akses = currentUser.akses || {};
 
-  // Ambil elemen navigasi sidebar/header
+  // Ambil elemen navigasi sidebar desktop & mobile
   const navPenjualan = document.getElementById("nav-penjualan");
+  const navPenjualanMb = document.getElementById("nav-penjualan-mb");
+  const navPromotor = document.getElementById("nav-promotor");
+  const navPromotorMb = document.getElementById("nav-promotor-mb");
   const navKeuangan = document.getElementById("nav-keuangan");
+  const navKeuanganMb = document.getElementById("nav-keuangan-mb");
   const navSiplah = document.getElementById("nav-siplah");
+  const navSiplahMb = document.getElementById("nav-siplah-mb");
   const navKebersihan = document.getElementById("nav-kebersihan");
-  const navAbsensi = document.getElementById("nav-absensi"); // Element Navigasi Absensi
+  const navKebersihanMb = document.getElementById("nav-kebersihan-mb");
+  const navAbsensi = document.getElementById("nav-absensi");
+  const navAbsensiMb = document.getElementById("nav-absensi-mb");
+  const navLpj = document.getElementById("nav-lpj");
+  const navLpjMb = document.getElementById("nav-lpj-mb");
   const navAdminUsers = document.getElementById("nav-admin-users");
+  const navAdminUsersMb = document.getElementById("nav-admin-users-mb");
 
   const accPenjualan = hasAccess(akses.penjualan) || hasAccess(akses.PENJUALAN);
+  const accPromotor = hasAccess(akses.promotor) || hasAccess(akses.PROMOTOR);
   const accKeuangan = hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService) || hasAccess(akses.KEUANGAN_MTK) || hasAccess(akses.KEUANGAN_SERVICE);
   const accSiplah = hasAccess(akses.siplah) || hasAccess(akses.SIPLAH);
   const accKebersihan = hasAccess(akses.kebersihan) || hasAccess(akses.KEBERSIHAN);
 
-  // Tampilkan / Sembunyikan Navigasi Menu
+  // Tampilkan / Sembunyikan Navigasi Menu Desktop
   if (navPenjualan) navPenjualan.style.display = (isUserAdmin || accPenjualan) ? "flex" : "none";
+  if (navPromotor) navPromotor.style.display = (isUserAdmin || accPromotor) ? "flex" : "none";
   if (navKeuangan) navKeuangan.style.display = (isUserAdmin || accKeuangan) ? "flex" : "none";
   if (navSiplah) navSiplah.style.display = (isUserAdmin || accSiplah) ? "flex" : "none";
   if (navKebersihan) navKebersihan.style.display = (isUserAdmin || accKebersihan) ? "flex" : "none";
-  
-  // Menu Absensi dapat diakses oleh semua staf yang terautentikasi
   if (navAbsensi) navAbsensi.style.display = "flex";
-
-  // Menu Admin khusus untuk Role ADMIN
+  if (navLpj) navLpj.style.display = "flex";
   if (navAdminUsers) navAdminUsers.style.display = isUserAdmin ? "flex" : "none";
+
+  // Tampilkan / Sembunyikan Navigasi Menu Mobile
+  if (navPenjualanMb) navPenjualanMb.style.display = (isUserAdmin || accPenjualan) ? "inline-block" : "none";
+  if (navPromotorMb) navPromotorMb.style.display = (isUserAdmin || accPromotor) ? "inline-block" : "none";
+  if (navKeuanganMb) navKeuanganMb.style.display = (isUserAdmin || accKeuangan) ? "inline-block" : "none";
+  if (navSiplahMb) navSiplahMb.style.display = (isUserAdmin || accSiplah) ? "inline-block" : "none";
+  if (navKebersihanMb) navKebersihanMb.style.display = (isUserAdmin || accKebersihan) ? "inline-block" : "none";
+  if (navAbsensiMb) navAbsensiMb.style.display = "inline-block";
+  if (navLpjMb) navLpjMb.style.display = "inline-block";
+  if (navAdminUsersMb) navAdminUsersMb.style.display = isUserAdmin ? "inline-block" : "none";
 
   return currentUser;
 }
@@ -132,15 +145,18 @@ function checkAuthAndRenderNav() {
 // 3. UTILITAS LOGOUT & PROFIL
 // ----------------------------------------------------------------------------
 function handleLogout() {
-  if (confirm("Apakah Anda yakin ingin keluar?")) {
-    localStorage.removeItem("mahadewa_user");
-    window.location.href = "index.html";
-  }
+  localStorage.removeItem("mahadewa_user");
+  window.location.href = "index.html";
 }
 
 function showProfile() {
   if (!currentUser) return;
-  alert(`PROFIL SAYA:\nNama: ${currentUser.nama || '-'}\nUsername: ${currentUser.username || '-'}\nDivisi: ${currentUser.devisi || '-'}\nRole: ${currentUser.role || 'STAFF'}`);
+  const info = `PROFIL SAYA: Nama: ${currentUser.nama || '-'} | Username: ${currentUser.username || '-'} | Divisi: ${currentUser.devisi || '-'} | Role: ${currentUser.role || 'STAFF'}`;
+  if (typeof showToast === "function") {
+    showToast(info);
+  } else {
+    console.log(info);
+  }
 }
 
 // Jalankan otomatis pengecekan auth saat halaman selesai dibaca
