@@ -155,7 +155,7 @@
     <a href="keuangan.html" id="nav-keuangan-mb" class="mobile-nav-item">Keuangan</a>
     <a href="siplah.html" id="nav-siplah-mb" class="mobile-nav-item">SIPLah Tertunda</a>
     <a href="lpj_kegiatan.html" id="nav-lpj-mb" class="mobile-nav-item">LPJ Kegiatan</a>
-    <a href="admin.html" id="nav-admin-users-mb" class="mobile-nav-item active">Kelola Akun & Akses</a>
+    <a href="admin_users.html" id="nav-admin-users-mb" class="mobile-nav-item active">Kelola Akun & Akses</a>
   </div>
 
   <div class="container">
@@ -168,7 +168,7 @@
       <a id="nav-keuangan" href="keuangan.html" class="menu-item">Keuangan</a>
       <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
       <a id="nav-lpj" href="lpj_kegiatan.html" class="menu-item">LPJ Kegiatan</a>
-      <a id="nav-admin-users" href="admin.html" class="menu-item active">Kelola Akun & Akses</a>
+      <a id="nav-admin-users" href="admin_users.html" class="menu-item active">Kelola Akun & Akses</a>
     </div>
     
     <!-- Area Konten Utama -->
@@ -176,7 +176,7 @@
       
       <!-- Panel Form Tambah Akun -->
       <div class="box-panel">
-        <div class="panel-header"><i class="fa-solid fa-user-plus" style="color:#991b1b; margin-right:6px;"></i> Pengguna Baru</div>
+        <div class="panel-header"><i class="fa-solid fa-user-plus" style="color:#991b1b; margin-right:6px;"></i> Tambah Pengguna Baru</div>
         
         <div class="grid-2">
           <div class="form-group">
@@ -230,6 +230,7 @@
           <label class="checkbox-group"><input type="checkbox" id="chkKebersihan" checked>Kebersihan Toko</label>
           <label class="checkbox-group"><input type="checkbox" id="chkKpiKebersihan" checked>Progres & KPI Staff</label>
           <label class="checkbox-group"><input type="checkbox" id="chkAuditKebersihan">Audit Kebersihan</label>
+          <label class="checkbox-group"><input type="checkbox" id="chkLpjKegiatan">LPJ Kegiatan</label>
         </div>
 
         <button id="btnSimpanAkun" class="btn-submit" onclick="submitAkunBaru()">Simpan Akun Baru</button>
@@ -237,7 +238,7 @@
 
       <!-- Panel Tabel Daftar Akun Terdaftar -->
       <div class="box-panel">
-        <div class="panel-header"><i class="fa-solid fa-users-gear" style="color:#991b1b; margin-right:6px;"></i> Daftar Akun & Edit Izin Akses Staf</div>
+        <div class="panel-header"><i class="fa-solid fa-users-gear" style="color:#991b1b; margin-right:6px;"></i> Daftar Akun & Pengaturan Izin Akses</div>
         <div class="table-container">
           <table>
             <thead>
@@ -323,6 +324,7 @@
         <label class="checkbox-group"><input type="checkbox" id="editChkKebersihan">Kebersihan Toko</label>
         <label class="checkbox-group"><input type="checkbox" id="editChkKpiKebersihan">Progres & KPI Staff</label>
         <label class="checkbox-group"><input type="checkbox" id="editChkAuditKebersihan">Audit Kebersihan</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkLpjKegiatan">LPJ Kegiatan</label>
       </div>
 
       <div class="modal-footer">
@@ -453,6 +455,7 @@
       document.getElementById("editChkAuditKebersihan").checked = aks.auditKebersihan !== undefined ? aks.auditKebersihan : sum.includes("audit");
       document.getElementById("editChkAbsensi").checked = aks.absensiStaff !== undefined ? aks.absensiStaff : sum.includes("absensi");
       document.getElementById("editChkPromotor").checked = aks.promotor !== undefined ? aks.promotor : sum.includes("promotor");
+      document.getElementById("editChkLpjKegiatan").checked = aks.lpjKegiatan !== undefined ? aks.lpjKegiatan : sum.includes("lpj");
 
       document.getElementById("editAkunModal").style.display = "flex";
     }
@@ -495,7 +498,8 @@
           kpiKebersihan: document.getElementById("editChkKpiKebersihan").checked,
           auditKebersihan: document.getElementById("editChkAuditKebersihan").checked,
           absensiStaff: document.getElementById("editChkAbsensi").checked,
-          promotor: document.getElementById("editChkPromotor").checked
+          promotor: document.getElementById("editChkPromotor").checked,
+          lpjKegiatan: document.getElementById("editChkLpjKegiatan").checked
         }
       };
 
@@ -556,7 +560,8 @@
           siplah: document.getElementById("chkSiplah").checked,
           kebersihan: document.getElementById("chkKebersihan").checked,
           kpiKebersihan: document.getElementById("chkKpiKebersihan").checked,
-          auditKebersihan: document.getElementById("chkAuditKebersihan").checked
+          auditKebersihan: document.getElementById("chkAuditKebersihan").checked,
+          lpjKegiatan: document.getElementById("chkLpjKegiatan").checked
         }
       };
 
