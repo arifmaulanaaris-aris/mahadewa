@@ -78,21 +78,33 @@ function checkAuthAndRenderNav() {
     return null;
   }
 
-  // Set User Badge di Header jika tersedia
-  const badge = document.getElementById("userBadge");
-  if (badge) {
-    badge.innerText = `${(currentUser.nama || currentUser.username || '').toUpperCase()} (${(currentUser.role || 'STAFF').toUpperCase()})`;
+  applyNavVisibility(currentUser);
+
+  // Sinkronisasi hak akses terbaru dari server di latar belakang
+  if (!isLoginPage && currentUser && currentUser.username) {
+    syncUserPermissions(currentUser.username);
   }
 
-  // Helper cek akses fleksibel
+  return currentUser;
+}
+
+// Menerapkan tampilan menu berdasarkan role & hak akses user
+function applyNavVisibility(user) {
+  if (!user) return;
+
+  const badge = document.getElementById("userBadge");
+  if (badge) {
+    badge.innerText = `${(user.nama || user.username || '').toUpperCase()} (${(user.role || 'STAFF').toUpperCase()})`;
+  }
+
   const hasAccess = (val) => {
     if (typeof val === "boolean") return val;
     if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
     return false;
   };
 
-  const isUserAdmin = (currentUser.role || "").toUpperCase() === "ADMIN";
-  const akses = currentUser.akses || {};
+  const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
+  const akses = user.akses || {};
 
   // Ambil elemen navigasi sidebar desktop & mobile
   const navPenjualan = document.getElementById("nav-penjualan");
@@ -109,6 +121,8 @@ function checkAuthAndRenderNav() {
   const navAbsensiMb = document.getElementById("nav-absensi-mb");
   const navLpj = document.getElementById("nav-lpj");
   const navLpjMb = document.getElementById("nav-lpj-mb");
+  const navProfil = document.getElementById("nav-profil");
+  const navProfilMb = document.getElementById("nav-profil-mb");
   const navAdminUsers = document.getElementById("nav-admin-users");
   const navAdminUsersMb = document.getElementById("nav-admin-users-mb");
 
@@ -126,6 +140,7 @@ function checkAuthAndRenderNav() {
   if (navKebersihan) navKebersihan.style.display = (isUserAdmin || accKebersihan) ? "flex" : "none";
   if (navAbsensi) navAbsensi.style.display = "flex";
   if (navLpj) navLpj.style.display = "flex";
+  if (navProfil) navProfil.style.display = "flex";
   if (navAdminUsers) navAdminUsers.style.display = isUserAdmin ? "flex" : "none";
 
   // Tampilkan / Sembunyikan Navigasi Menu Mobile
@@ -136,6 +151,7 @@ function checkAuthAndRenderNav() {
   if (navKebersihanMb) navKebersihanMb.style.display = (isUserAdmin || accKebersihan) ? "inline-block" : "none";
   if (navAbsensiMb) navAbsensiMb.style.display = "inline-block";
   if (navLpjMb) navLpjMb.style.display = "inline-block";
+  if (navProfilMb) navProfilMb.style.display = "inline-block";
   if (navAdminUsersMb) navAdminUsersMb.style.display = isUserAdmin ? "inline-block" : "none";
 
   return currentUser;
