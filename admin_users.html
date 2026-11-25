@@ -32,7 +32,7 @@
     }
     .btn-head-action:hover { background: rgba(255,255,255,0.25); }
 
-    /* Navigasi Mobile Halus (Smooth Scroll) */
+    /* Navigasi Mobile Halus */
     .mobile-nav {
       display: none; background: #ffffff; padding: 10px 14px; border-bottom: 1px solid #e2e8f0;
       overflow-x: auto; white-space: nowrap; gap: 8px; -webkit-overflow-scrolling: touch;
@@ -69,6 +69,7 @@
     .form-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
     .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; transition: all 0.2s; }
     .form-control:focus { border-color: #991b1b; box-shadow: 0 0 0 2px rgba(153, 27, 27, 0.1); }
+    .form-control:disabled { background: #f1f5f9; color: #64748b; cursor: not-allowed; }
 
     .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; }
     .checkbox-group input { accent-color: #991b1b; width: 16px; height: 16px; }
@@ -79,21 +80,54 @@
 
     /* Table Styling */
     .table-container { overflow-x: auto; margin-top: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; min-width: 650px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; min-width: 720px; }
     th { background: #f8fafc; padding: 10px 12px; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
-    td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; }
+    td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; vertical-align: middle; }
     
     .badge-role { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 800; display: inline-block; }
     .badge-admin { background: #fee2e2; color: #991b1b; }
     .badge-staff { background: #e0f2fe; color: #0369a1; }
     
-    .btn-delete { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .action-btns { display: flex; gap: 6px; justify-content: center; }
+    .btn-edit { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-edit:hover { background: #1d4ed8; color: white; }
+    .btn-delete { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
     .btn-delete:hover { background: #dc2626; color: white; }
+
+    /* Modal Edit & Konfirmasi */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55);
+      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 1000;
+      overflow-y: auto;
+    }
+    .modal-card {
+      background: #ffffff; border-radius: 16px; padding: 24px; max-width: 680px; width: 100%;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid #e2e8f0; margin: auto;
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0;
+    }
+    .modal-title { font-size: 15px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
+    .btn-close-modal { background: none; border: none; font-size: 18px; color: #64748b; cursor: pointer; }
+    .modal-grid-checks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding-top: 14px; border-top: 1px solid #f1f5f9; }
+    .btn-cancel { background: #f1f5f9; color: #475569; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-save-edit { background: #991b1b; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-save-edit:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+    /* Toast Notifikasi */
+    .toast-msg {
+      position: fixed; bottom: 24px; right: 24px; background: #0f172a; color: white;
+      padding: 12px 18px; border-radius: 10px; font-size: 13px; font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.18); display: none; align-items: center;
+      gap: 10px; z-index: 1100;
+    }
 
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .mobile-nav { display: flex; }
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 8px; }
+      .grid-2, .grid-3, .grid-4, .modal-grid-checks { grid-template-columns: 1fr; gap: 8px; }
       .content { padding: 16px; }
     }
   </style>
@@ -112,7 +146,7 @@
     </div>
   </div>
 
-  <!-- Mobile Nav Horizontal Terfilter Hak Akses -->
+  <!-- Mobile Nav Horizontal -->
   <div class="mobile-nav" id="mobileNavContainer">
     <a href="absensi.html" id="nav-absensi-mb" class="mobile-nav-item">Absensi Staf</a>
     <a href="kebersihan.html" id="nav-kebersihan-mb" class="mobile-nav-item">Kebersihan Toko</a>
@@ -120,7 +154,8 @@
     <a href="promotor.html" id="nav-promotor-mb" class="mobile-nav-item">Promotor</a>
     <a href="keuangan.html" id="nav-keuangan-mb" class="mobile-nav-item">Keuangan</a>
     <a href="siplah.html" id="nav-siplah-mb" class="mobile-nav-item">SIPLah Tertunda</a>
-    <a href="admin_users.html" id="nav-admin-users-mb" class="mobile-nav-item" style="display:none;">Kelola Akun & Akses</a>
+    <a href="lpj_kegiatan.html" id="nav-lpj-mb" class="mobile-nav-item">LPJ Kegiatan</a>
+    <a href="admin.html" id="nav-admin-users-mb" class="mobile-nav-item active">Kelola Akun & Akses</a>
   </div>
 
   <div class="container">
@@ -132,7 +167,8 @@
       <a id="nav-promotor" href="promotor.html" class="menu-item">Promotor</a>
       <a id="nav-keuangan" href="keuangan.html" class="menu-item">Keuangan</a>
       <a id="nav-siplah" href="siplah.html" class="menu-item">SIPLah Tertunda</a>
-      <a id="nav-admin-users" href="admin_users.html" class="menu-item" style="display:none;">Kelola Akun & Akses</a>
+      <a id="nav-lpj" href="lpj_kegiatan.html" class="menu-item">LPJ Kegiatan</a>
+      <a id="nav-admin-users" href="admin.html" class="menu-item active">Kelola Akun & Akses</a>
     </div>
     
     <!-- Area Konten Utama -->
@@ -140,7 +176,7 @@
       
       <!-- Panel Form Tambah Akun -->
       <div class="box-panel">
-        <div class="panel-header">Pengguna Baru</div>
+        <div class="panel-header"><i class="fa-solid fa-user-plus" style="color:#991b1b; margin-right:6px;"></i> Pengguna Baru</div>
         
         <div class="grid-2">
           <div class="form-group">
@@ -201,7 +237,7 @@
 
       <!-- Panel Tabel Daftar Akun Terdaftar -->
       <div class="box-panel">
-        <div class="panel-header">Daftar Akun Terdaftar</div>
+        <div class="panel-header"><i class="fa-solid fa-users-gear" style="color:#991b1b; margin-right:6px;"></i> Daftar Akun & Edit Izin Akses Staf</div>
         <div class="table-container">
           <table>
             <thead>
@@ -227,14 +263,115 @@
     </div>
   </div>
 
+  <!-- MODAL EDIT IZIN AKSES & PROFIL STAF -->
+  <div id="editAkunModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-user-pen" style="color:#991b1b; margin-right:6px;"></i> Edit Izin Akses & Data Staf</div>
+        <button type="button" class="btn-close-modal" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Username (ID Login)</label>
+          <input type="text" id="editUsername" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password Baru (Kosongkan jika tetap)</label>
+          <input type="text" id="editPassword" class="form-control" placeholder="Isi jika ingin mengganti password">
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 0;">
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" id="editNama" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kategori Devisi</label>
+          <select id="editDevisi" class="form-control">
+            <option value="TEKNISI">TEKNISI</option>
+            <option value="KASIR">KASIR</option>
+            <option value="ADMIN 01">ADMIN 01</option>
+            <option value="ADMIN 02">ADMIN 02</option>
+            <option value="MARKETING 01">MARKETING 01</option>
+            <option value="MARKETING 02">MARKETING 02</option>
+            <option value="MARKETING 03">MARKETING 03</option>
+            <option value="GUDANG">GUDANG</option>
+            <option value="PROMOTOR HP">PROMOTOR HP</option>
+            <option value="PROMOTOR INFINIX">PROMOTOR INFINIX</option>
+            <option value="PROMOTOR PEMBIAYAAN">PROMOTOR PEMBIAYAAN</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role Akses</label>
+          <select id="editRole" class="form-control">
+            <option value="STAFF">STAFF (Terbatas)</option>
+            <option value="ADMIN">ADMIN (Akses Penuh)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-label" style="margin-top: 10px; color:#0f172a;">Centang Menu yang Diizinkan:</div>
+      <div class="modal-grid-checks">
+        <label class="checkbox-group"><input type="checkbox" id="editChkAbsensi">Absensi Staf</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkPenjualan">Penjualan</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkPromotor">Promotor</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkKeuanganMtk">Keuangan MTK</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkKeuanganService">Keuangan Service</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkSiplah">SIPLah Tertunda</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkKebersihan">Kebersihan Toko</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkKpiKebersihan">Progres & KPI Staff</label>
+        <label class="checkbox-group"><input type="checkbox" id="editChkAuditKebersihan">Audit Kebersihan</label>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeEditModal()">Batal</button>
+        <button type="button" id="btnSimpanEdit" class="btn-save-edit" onclick="submitEditAkun()">
+          <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI HAPUS AKUN -->
+  <div id="deleteAkunModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 380px; text-align: center;">
+      <div style="font-size: 32px; color: #dc2626; margin-bottom: 10px;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div class="modal-title" style="margin-bottom: 8px;">Hapus Akun Staf?</div>
+      <p style="font-size: 13px; color: #475569; margin-bottom: 20px;">Apakah Anda yakin ingin menghapus akun <strong id="delTargetLabel"></strong> secara permanen?</p>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-cancel" style="flex:1;" onclick="closeDeleteModal()">Batal</button>
+        <button type="button" id="btnConfirmDelete" class="btn-save-edit" style="flex:1; background:#dc2626;" onclick="executeHapusAkun()">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFIKASI -->
+  <div id="toastNotif" class="toast-msg">
+    <i class="fa-solid fa-circle-check" style="color:#4ade80;"></i>
+    <span id="toastText">Berhasil</span>
+  </div>
+
   <script src="auth.js"></script>
   <script>
+    let allAkunList = [];
+    let targetDeleteUser = "";
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById("toastNotif");
+      const icon = toast.querySelector("i");
+      icon.className = isError ? "fa-solid fa-circle-exclamation" : "fa-solid fa-circle-check";
+      icon.style.color = isError ? "#f87171" : "#4ade80";
+      document.getElementById("toastText").innerText = msg;
+      toast.style.display = "flex";
+      setTimeout(() => { toast.style.display = "none"; }, 3500);
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
       const user = checkAuthAndRenderNav();
-      filterMobileNavAccess(user);
 
       if (user && (user.role || "").toUpperCase() !== "ADMIN") {
-        alert("Akses Ditolak! Halaman ini khusus untuk ADMIN.");
         window.location.href = "absensi.html";
         return;
       }
@@ -247,41 +384,18 @@
       fetchAkunList();
     });
 
-    function filterMobileNavAccess(user) {
-      if (!user) return;
-      const isUserAdmin = (user.role || "").toUpperCase() === "ADMIN";
-      const akses = user.akses || {};
-
-      const hasAccess = (val) => {
-        if (typeof val === "boolean") return val;
-        if (typeof val === "string") return val.trim().toUpperCase() === "YA" || val.trim().toUpperCase() === "TRUE";
-        return false;
-      };
-
-      const navKebMb = document.getElementById("nav-kebersihan-mb");
-      const navPenjMb = document.getElementById("nav-penjualan-mb");
-      const navPromMb = document.getElementById("nav-promotor-mb");
-      const navKeuMb = document.getElementById("nav-keuangan-mb");
-      const navSipMb = document.getElementById("nav-siplah-mb");
-      const navAdminMb = document.getElementById("nav-admin-users-mb");
-
-      if (navKebMb) navKebMb.style.display = (isUserAdmin || hasAccess(akses.kebersihan)) ? "inline-block" : "none";
-      if (navPenjMb) navPenjMb.style.display = (isUserAdmin || hasAccess(akses.penjualan)) ? "inline-block" : "none";
-      if (navPromMb) navPromMb.style.display = (isUserAdmin || hasAccess(akses.promotor)) ? "inline-block" : "none";
-      if (navKeuMb) navKeuMb.style.display = (isUserAdmin || hasAccess(akses.keuanganMtk) || hasAccess(akses.keuanganService)) ? "inline-block" : "none";
-      if (navSipMb) navSipMb.style.display = (isUserAdmin || hasAccess(akses.siplah)) ? "inline-block" : "none";
-      if (navAdminMb) navAdminMb.style.display = isUserAdmin ? "inline-block" : "none";
-    }
-
     // Fetch List Akun dari Spreadsheet
     async function fetchAkunList() {
       const tbody = document.getElementById("akunTableBody");
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Memuat data akun...</td></tr>`;
+
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=getAkunList`);
+        const res = await fetch(`${SCRIPT_URL}?action=getAkunList&ts=${new Date().getTime()}`);
         const result = await res.json();
 
         if (result.success && result.data && result.data.length > 0) {
-          tbody.innerHTML = result.data.map((item, index) => {
+          allAkunList = result.data;
+          tbody.innerHTML = allAkunList.map((item, index) => {
             const roleClass = (item.role || "").toUpperCase() === "ADMIN" ? "badge-admin" : "badge-staff";
             return `
               <tr>
@@ -290,18 +404,122 @@
                 <td>${item.nama}</td>
                 <td>${item.devisi}</td>
                 <td><span class="badge-role ${roleClass}">${item.role}</span></td>
-                <td style="font-size: 11px; color: #64748b;">${item.aksesSummary || '-'}</td>
-                <td style="text-align: center;">
-                  <button class="btn-delete" onclick="hapusAkun('${item.username}')">Hapus</button>
+                <td style="font-size: 11px; color: #64748b; max-width: 260px;">${item.aksesSummary || '-'}</td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-edit" onclick="openEditModal(${index})"><i class="fa-solid fa-pen-to-square"></i> Edit Akses</button>
+                    <button class="btn-delete" onclick="openDeleteModal('${item.username}')"><i class="fa-solid fa-trash"></i></button>
+                  </div>
                 </td>
               </tr>
             `;
           }).join("");
         } else {
+          allAkunList = [];
           tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">Belum ada data akun terdaftar.</td></tr>`;
         }
       } catch (e) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444; padding: 20px;">Gagal memuat list akun dari server.</td></tr>`;
+      }
+    }
+
+    // Buka Modal Edit & Isi Data Sebelumnya
+    function openEditModal(index) {
+      const item = allAkunList[index];
+      if (!item) return;
+
+      document.getElementById("editUsername").value = item.username;
+      document.getElementById("editPassword").value = "";
+      document.getElementById("editNama").value = item.nama;
+      
+      const devSelect = document.getElementById("editDevisi");
+      const devVal = (item.devisi || "").toUpperCase();
+      if ([...devSelect.options].some(o => o.value === devVal)) {
+        devSelect.value = devVal;
+      }
+
+      document.getElementById("editRole").value = (item.role || "STAFF").toUpperCase();
+
+      // Isi checkbox izin akses dari properti item.akses (atau fallback dari aksesSummary)
+      const aks = item.akses || {};
+      const sum = (item.aksesSummary || "").toLowerCase();
+
+      document.getElementById("editChkPenjualan").checked = aks.penjualan !== undefined ? aks.penjualan : sum.includes("penjualan");
+      document.getElementById("editChkKeuanganMtk").checked = aks.keuanganMtk !== undefined ? aks.keuanganMtk : sum.includes("keuangan mtk");
+      document.getElementById("editChkKeuanganService").checked = aks.keuanganService !== undefined ? aks.keuanganService : sum.includes("keuangan service");
+      document.getElementById("editChkSiplah").checked = aks.siplah !== undefined ? aks.siplah : sum.includes("siplah");
+      document.getElementById("editChkKebersihan").checked = aks.kebersihan !== undefined ? aks.kebersihan : sum.includes("kebersihan");
+      document.getElementById("editChkKpiKebersihan").checked = aks.kpiKebersihan !== undefined ? aks.kpiKebersihan : sum.includes("kpi");
+      document.getElementById("editChkAuditKebersihan").checked = aks.auditKebersihan !== undefined ? aks.auditKebersihan : sum.includes("audit");
+      document.getElementById("editChkAbsensi").checked = aks.absensiStaff !== undefined ? aks.absensiStaff : sum.includes("absensi");
+      document.getElementById("editChkPromotor").checked = aks.promotor !== undefined ? aks.promotor : sum.includes("promotor");
+
+      document.getElementById("editAkunModal").style.display = "flex";
+    }
+
+    function closeEditModal() {
+      document.getElementById("editAkunModal").style.display = "none";
+    }
+
+    // Simpan Perubahan Edit Akun & Izin Akses
+    async function submitEditAkun() {
+      const username = document.getElementById("editUsername").value.trim();
+      const password = document.getElementById("editPassword").value.trim();
+      const nama = document.getElementById("editNama").value.trim();
+      const devisi = document.getElementById("editDevisi").value;
+      const role = document.getElementById("editRole").value;
+
+      if (!nama) {
+        showToast("Nama lengkap tidak boleh kosong!", true);
+        return;
+      }
+
+      const btn = document.getElementById("btnSimpanEdit");
+      const oriHtml = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+      btn.disabled = true;
+
+      const payload = {
+        action: "editAkun",
+        username: username,
+        password: password, // Jika kosong, backend tidak akan mengubah password lama
+        nama: nama,
+        devisi: devisi,
+        role: role,
+        akses: {
+          penjualan: document.getElementById("editChkPenjualan").checked,
+          keuanganMtk: document.getElementById("editChkKeuanganMtk").checked,
+          keuanganService: document.getElementById("editChkKeuanganService").checked,
+          siplah: document.getElementById("editChkSiplah").checked,
+          kebersihan: document.getElementById("editChkKebersihan").checked,
+          kpiKebersihan: document.getElementById("editChkKpiKebersihan").checked,
+          auditKebersihan: document.getElementById("editChkAuditKebersihan").checked,
+          absensiStaff: document.getElementById("editChkAbsensi").checked,
+          promotor: document.getElementById("editChkPromotor").checked
+        }
+      };
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        btn.innerHTML = oriHtml;
+        btn.disabled = false;
+
+        if (result.success) {
+          showToast(`Izin akses akun '${username}' berhasil diperbarui!`);
+          closeEditModal();
+          fetchAkunList();
+        } else {
+          showToast("Gagal memperbarui: " + (result.message || "Error server"), true);
+        }
+      } catch (e) {
+        btn.innerHTML = oriHtml;
+        btn.disabled = false;
+        showToast("Terjadi kesalahan koneksi saat menyimpan perubahan.", true);
       }
     }
 
@@ -314,7 +532,7 @@
       const role = document.getElementById("newRole").value;
 
       if (!username || !password || !nama) {
-        alert("Harap isi Username, Password, dan Nama Lengkap!");
+        showToast("Harap isi Username, Password, dan Nama Lengkap!", true);
         return;
       }
 
@@ -353,42 +571,61 @@
         btn.disabled = false;
 
         if (result.success) {
-          alert("Selamat! Akun baru berhasil ditambahkan.");
+          showToast("Akun baru berhasil ditambahkan!");
           document.getElementById("newUsername").value = "";
           document.getElementById("newPassword").value = "";
           document.getElementById("newNama").value = "";
           document.getElementById("chkPromotor").checked = false;
-          
           fetchAkunList();
         } else {
-          alert("Gagal: " + result.message);
+          showToast("Gagal: " + result.message, true);
         }
       } catch (e) {
         btn.innerText = "Simpan Akun Baru";
         btn.disabled = false;
-        alert("Terjadi kesalahan koneksi saat menyimpan akun.");
+        showToast("Terjadi kesalahan koneksi saat menyimpan akun.", true);
       }
     }
 
-    // Hapus Akun
-    async function hapusAkun(username) {
-      if (!confirm(`Apakah Anda yakin ingin menghapus akun '${username}'?`)) return;
+    // Modal Konfirmasi Hapus
+    function openDeleteModal(username) {
+      targetDeleteUser = username;
+      document.getElementById("delTargetLabel").innerText = username;
+      document.getElementById("deleteAkunModal").style.display = "flex";
+    }
+
+    function closeDeleteModal() {
+      targetDeleteUser = "";
+      document.getElementById("deleteAkunModal").style.display = "none";
+    }
+
+    async function executeHapusAkun() {
+      if (!targetDeleteUser) return;
+      const btn = document.getElementById("btnConfirmDelete");
+      btn.innerText = "Menghapus...";
+      btn.disabled = true;
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          body: JSON.stringify({ action: "hapusAkun", username: username })
+          body: JSON.stringify({ action: "hapusAkun", username: targetDeleteUser })
         });
         const result = await res.json();
 
+        btn.innerText = "Ya, Hapus";
+        btn.disabled = false;
+        closeDeleteModal();
+
         if (result.success) {
-          alert(`Akun '${username}' berhasil dihapus.`);
+          showToast(`Akun '${targetDeleteUser}' berhasil dihapus.`);
           fetchAkunList();
         } else {
-          alert("Gagal menghapus: " + result.message);
+          showToast("Gagal menghapus: " + result.message, true);
         }
       } catch (e) {
-        alert("Terjadi kesalahan koneksi saat menghapus akun.");
+        btn.innerText = "Ya, Hapus";
+        btn.disabled = false;
+        showToast("Terjadi kesalahan koneksi saat menghapus akun.", true);
       }
     }
   </script>
