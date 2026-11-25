@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LPJ Kegiatan - mahadewa.id</title>
+  
+  <!-- Font Plus Jakarta Sans & FontAwesome (Seragam dengan Dashboard mahadewa.id) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Header Merah */
+    .top-header {
+      background: #991b1b;
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .user-info-head { display: flex; align-items: center; gap: 8px; }
+    .user-name-head { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
+    .badge-role-head { background: #ffffff; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    
+    .head-actions { display: flex; gap: 8px; }
+    .btn-head-action {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-head-action:hover { background: rgba(255,255,255,0.25); }
+
+    /* Navigasi Mobile Horizontal */
+    .mobile-nav {
+      display: none;
+      background: #ffffff;
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto;
+      white-space: nowrap;
+      gap: 8px;
+      -webkit-overflow-scrolling: touch;
+      position: sticky;
+      top: 57px;
+      z-index: 90;
+    }
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav-item {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      text-decoration: none;
+      background: #f1f5f9;
+      transition: all 0.2s ease;
+    }
+    .mobile-nav-item.active { background: #991b1b; color: white; box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25); }
+
+    /* Layout & Sidebar Desktop */
+    .container { display: flex; flex: 1; }
+    .sidebar { width: 220px; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e2e8f0; flex-shrink: 0; }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 700; color: #64748b; text-decoration: none; margin-bottom: 4px; transition: all 0.2s;
+    }
+    .menu-item:hover { background: #f8fafc; color: #0f172a; }
+    .menu-item.active { background: #991b1b; color: white; }
+
+    .content { flex: 1; padding: 20px 24px; width: 100%; max-width: 1100px; margin: 0 auto; }
+
+    /* Panels & Form Styling */
+    .box-panel {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .panel-header {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .panel-header i { color: #991b1b; margin-right: 6px; }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: #475569;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1e293b;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-control:focus {
+      background: #ffffff;
+      border-color: #991b1b;
+      box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.1);
+    }
+    textarea.form-control {
+      resize: vertical;
+      min-height: 95px;
+      line-height: 1.5;
+    }
+
+    /* Area Upload Foto */
+    .upload-dropzone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .upload-dropzone:hover {
+      border-color: #991b1b;
+      background: #fef2f2;
+    }
+    .upload-dropzone i {
+      font-size: 28px;
+      color: #991b1b;
+      margin-bottom: 8px;
+    }
+    .upload-dropzone p {
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+    }
+    .upload-dropzone span {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Grid Preview Foto Lampiran */
+    .photo-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .photo-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .photo-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-card-caption {
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      border-top: 1px solid #f1f5f9;
+    }
+    .photo-card-caption input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1e293b;
+      outline: none;
+    }
+    .btn-remove-photo {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(153, 27, 27, 0.9);
+      color: white;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Action Buttons */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: #991b1b;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: #7f1d1d; }
+
+    .btn-secondary {
+      background: #0f172a;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: #334155; }
+
+    .btn-outline {
+      background: #ffffff;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    /* Modal Notifikasi Kustom (Pengganti alert) */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 999;
+    }
+
+    /* Tabel Riwayat LPJ Tersimpan */
+    .table-container { overflow-x: auto; font-size: 12px; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    .custom-table th {
+      background: #f8fafc; padding: 10px 12px; text-align: left; font-size: 11px;
+      font-weight: 800; color: #64748b; border-bottom: 1px solid #e2e8f0; text-transform: uppercase;
+    }
+    .custom-table td {
+      padding: 12px; border-bottom: 1px solid #f1f5f9; color: #334155; font-weight: 600; vertical-align: top;
+    }
+    .badge-dampak {
+      background: #dcfce7; color: #15803d; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block;
+    }
+
+    /* Mode Cetak / PDF */
+    .print-header-only { display: none; }
+    @media print {
+      body { background: white; }
+      .top-header, .sidebar, .mobile-nav, .no-print, .btn-remove-photo, .upload-dropzone { display: none !important; }
+      .content { padding: 0; max-width: 100%; }
+      .box-panel { border: none; box-shadow: none; padding: 0; }
+      .form-control { border: none; background: transparent; padding: 4px 0; font-weight: 600; color: #000; }
+      .print-header-only {
+        display: block;
+        border-bottom: 2px solid #991b1b;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+      }
+      .photo-preview-grid { grid-template-columns: repeat(2, 1fr); }
+      .photo-card img { height: 200px; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .form-grid-2 { grid-template-columns: 1fr; gap: 0; }
+      .content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Merah -->
+  <div class="top-header">
+    <div class="user-info-head">
+      <span id="headerUserName" class="user-name-head">MAHADEWA.ID</span>
+      <span id="headerUserRole" class="badge-role-head">Cab. Palopo</span>
+    </div>
+    <div class="head-actions">
+      <button class="btn-head-action" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak / PDF</button>
+      <button class="btn-head-action" onclick="handleLogoutSafe()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
+    </div>
+  </div>
+
+  <!-- Navigasi Mobile -->
+  <div class="mobile-nav">
+    <a href="absensi.html" class="mobile-nav-item">Absensi Staf</a>
+    <a href="kebersihan.html" class="mobile-nav-item">Kebersihan Toko</a>
+    <a href="penjualan.html" class="mobile-nav-item">Penjualan</a>
+    <a href="keuangan.html" class="mobile-nav-item">Keuangan</a>
+    <a href="siplah.html" class="mobile-nav-item">SIPLah Tertunda</a>
+    <a href="lpj_kegiatan.html" class="mobile-nav-item active">LPJ Kegiatan</a>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Desktop -->
+    <div class="sidebar">
+      <a href="absensi.html" class="menu-item">Absensi Staf</a>
+      <a href="kebersihan.html" class="menu-item">Kebersihan Toko</a>
+      <a href="penjualan.html" class="menu-item">Penjualan</a>
+      <a href="keuangan.html" class="menu-item">Keuangan</a>
+      <a href="siplah.html" class="menu-item">SIPLah Tertunda</a>
+      <a href="lpj_kegiatan.html" class="menu-item active">LPJ Kegiatan</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      
+      <!-- Kop Surat Khusus Cetak PDF -->
+      <div class="print-header-only">
+        <h2 style="color:#991b1b; font-weight:800;">MAHADEWA.ID - CABANG PALOPO</h2>
+        <p style="font-size:13px; font-weight:700; color:#334155;">LAPORAN PERTANGGUNGJAWABAN (LPJ) KEGIATAN</p>
+      </div>
+
+      <!-- FORM LAPORAN PERTANGGUNGJAWABAN KEGIATAN -->
+      <div class="box-panel">
+        <div class="panel-header">
+          <span><i class="fa-solid fa-file-signature"></i> Form Laporan Pertanggungjawaban Kegiatan</span>
+        </div>
+
+        <form id="formLpjKegiatan" onsubmit="simpanLaporanLpj(event)">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Nama Kegiatan *</label>
+              <input type="text" id="namaKegiatan" class="form-control" placeholder="Contoh: Kunjungan Presentasi SIPLah ke SMKN 1 Palopo" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tanggal & Waktu Pelaksanaan *</label>
+              <input type="date" id="tglKegiatan" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Penanggung Jawab / Pelaksana *</label>
+              <input type="text" id="picKegiatan" class="form-control" placeholder="Nama Staf / Tim Pelaksana" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Divisi / Kategori</label>
+              <select id="divisiKegiatan" class="form-control">
+                <option value="MARKETING">MARKETING & SIPLAH</option>
+                <option value="TEKNISI">TEKNISI & SERVICE</option>
+                <option value="ADMIN">ADMIN & KASIR</option>
+                <option value="OPERASIONAL">OPERASIONAL TOKO</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Uraian Singkat Pelaksanaan Kegiatan *</label>
+            <textarea id="uraianKegiatan" class="form-control" placeholder="Jelaskan kronologi singkat, lokasi, pihak yang ditemui, atau kendala selama kegiatan berlangsung..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Dampak & Hasil yang Dicapai dari Kegiatan *</label>
+            <textarea id="dampakKegiatan" class="form-control" placeholder="Jelaskan dampak nyata bagi toko/perusahaan (Contoh: Mendapatkan 3 PO pengadaan laptop sekolah senilai Rp 45 juta, peningkatan awareness brand, atau penyelesaian komplain pelanggan)..." required></textarea>
+          </div>
+
+          <!-- LAMPIRAN DOKUMENTASI FOTO -->
+          <div class="form-group">
+            <label class="form-label">Lampiran Dokumentasi Foto Kegiatan *</label>
+            <div class="upload-dropzone no-print" onclick="document.getElementById('inputFotoLpj').click()">
+              <i class="fa-solid fa-camera"></i>
+              <p>Klik untuk Ambil Foto dari Kamera atau Pilih dari Galeri</p>
+              <span>Bisa memilih lebih dari 1 foto sebagai bukti dokumentasi kegiatan</span>
+            </div>
+            <input type="file" id="inputFotoLpj" accept="image/*" multiple style="display:none;" onchange="handleFotoUpload(this)">
+
+            <!-- Grid Pratinjau Foto -->
+            <div id="previewFotoGrid" class="photo-preview-grid"></div>
+          </div>
+
+          <div class="action-bar no-print">
+            <button type="submit" id="btnSimpanLpj" class="btn-primary">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Kirim & Simpan ke Spreadsheet
+            </button>
+            <button type="button" class="btn-secondary" onclick="window.print()">
+              <i class="fa-solid fa-file-pdf"></i> Cetak / Export PDF
+            </button>
+            <button type="button" class="btn-outline" onclick="resetFormLpj()">
+              <i class="fa-solid fa-rotate-left"></i> Reset Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIWAYAT LAPORAN LPJ TERSIMPAN -->
+      <div class="box-panel no-print">
+        <div class="panel-header">
+          <span><i class="fa-solid fa-table"></i> Riwayat Laporan Kegiatan (Spreadsheet LPJ_KEGIATAN)</span>
+          <button type="button" class="btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="loadSavedReports()">
+            <i class="fa-solid fa-rotate"></i> Refresh Data
+          </button>
+        </div>
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Nama Kegiatan & Pelaksana</th>
+                <th>Dampak Kegiatan</th>
+                <th>Lampiran Foto</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tblRiwayatLpj">
+              <tr><td colspan="5" style="text-align:center; color:#64748b;">Memuat data dari Spreadsheet...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notifikasi -->
+  <div id="toastNotif" class="toast-msg">
+    <i class="fa-solid fa-circle-check" style="color:#4ade80;"></i>
+    <span id="toastText">Berhasil disimpan!</span>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    let uploadedPhotos = []; // Menyimpan array { id, dataUrl, caption }
+    let savedReports = [];
+
+    window.addEventListener("DOMContentLoaded", () => {
+      // Set default tanggal hari ini
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("tglKegiatan").value = today;
+
+      // Cek sesi login mahadewa_user jika ada
+      const session = localStorage.getItem("mahadewa_user");
+      if (session) {
+        try {
+          const user = JSON.parse(session);
+          if (user) {
+            const namaUser = (user.nama || user.username || "STAFF").toUpperCase();
+            document.getElementById("headerUserName").innerText = namaUser;
+            document.getElementById("headerUserRole").innerText = user.role || "Staff";
+            document.getElementById("picKegiatan").value = namaUser;
+          }
+        } catch (e) {}
+      }
+
+      // Muat riwayat LPJ dari Google Spreadsheet
+      loadSavedReports();
+    });
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById("toastNotif");
+      const icon = toast.querySelector("i");
+      icon.className = isError ? "fa-solid fa-circle-exclamation" : "fa-solid fa-circle-check";
+      icon.style.color = isError ? "#f87171" : "#4ade80";
+      document.getElementById("toastText").innerText = msg;
+      toast.style.display = "flex";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 3500);
+    }
+
+    // Kompres dan baca foto agar ringan dikirim ke Google Drive via Apps Script
+    function handleFotoUpload(input) {
+      const files = Array.from(input.files);
+      if (!files.length) return;
+
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement("canvas");
+            const maxDim = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height && width > maxDim) {
+              height *= maxDim / width;
+              width = maxDim;
+            } else if (height > maxDim) {
+              width *= maxDim / height;
+              height = maxDim;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedUrl = canvas.toDataURL("image/jpeg", 0.75);
+            uploadedPhotos.push({
+              id: Date.now() + Math.random(),
+              dataUrl: compressedUrl,
+              caption: "Dokumentasi Kegiatan"
+            });
+            renderPhotoGrid();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      input.value = "";
+    }
+
+    function renderPhotoGrid() {
+      const grid = document.getElementById("previewFotoGrid");
+      if (uploadedPhotos.length === 0) {
+        grid.innerHTML = "";
+        return;
+      }
+
+      grid.innerHTML = uploadedPhotos.map((photo, idx) => `
+        <div class="photo-card">
+          <button type="button" class="btn-remove-photo" onclick="removePhoto(${idx})" title="Hapus Foto">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <img src="${photo.dataUrl}" alt="Lampiran Foto ${idx + 1}" crossorigin="anonymous">
+          <div class="photo-card-caption">
+            <input type="text" value="${photo.caption}" placeholder="Keterangan foto..." onchange="updateCaption(${idx}, this.value)">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateCaption(idx, val) {
+      if (uploadedPhotos[idx]) uploadedPhotos[idx].caption = val;
+    }
+
+    function removePhoto(idx) {
+      uploadedPhotos.splice(idx, 1);
+      renderPhotoGrid();
+    }
+
+    async function simpanLaporanLpj(e) {
+      e.preventDefault();
+      if (uploadedPhotos.length === 0) {
+        showToast("Harap lampirkan minimal 1 foto dokumentasi kegiatan!", true);
+        return;
+      }
+
+      if (typeof SCRIPT_URL === "undefined") {
+        showToast("Konfigurasi auth.js (SCRIPT_URL) tidak ditemukan!", true);
+        return;
+      }
+
+      const btn = document.getElementById("btnSimpanLpj");
+      const oriText = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Mengunggah ke Spreadsheet...`;
+      btn.disabled = true;
+
+      const payload = {
+        action: "simpanLpjKegiatan",
+        nama: document.getElementById("namaKegiatan").value.trim(),
+        tanggal: document.getElementById("tglKegiatan").value,
+        pic: document.getElementById("picKegiatan").value.trim(),
+        divisi: document.getElementById("divisiKegiatan").value,
+        uraian: document.getElementById("uraianKegiatan").value.trim(),
+        dampak: document.getElementById("dampakKegiatan").value.trim(),
+        photos: uploadedPhotos.map(p => ({
+          dataUrl: p.dataUrl,
+          caption: p.caption
+        }))
+      };
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        btn.innerHTML = oriText;
+        btn.disabled = false;
+
+        if (result && result.success) {
+          showToast("Laporan LPJ & Foto berhasil disimpan ke Spreadsheet!");
+          resetFormLpj(false);
+          loadSavedReports();
+        } else {
+          showToast("Gagal menyimpan: " + (result.message || result.error || "Error server"), true);
+        }
+      } catch (err) {
+        btn.innerHTML = oriText;
+        btn.disabled = false;
+        showToast("Terjadi kesalahan koneksi saat mengirim data ke Spreadsheet.", true);
+      }
+    }
+
+    function loadSavedReports() {
+      const tbody = document.getElementById("tblRiwayatLpj");
+      if (typeof SCRIPT_URL === "undefined") {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#dc2626;">File auth.js belum terhubung.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;"><i class="fa-solid fa-spinner fa-spin"></i> Memuat data dari Spreadsheet...</td></tr>`;
+
+      const callbackName = "onLpjLoaded_" + Math.floor(Math.random() * 100000);
+      window[callbackName] = function(data) {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+
+        if (data && Array.isArray(data.lpjKegiatan)) {
+          savedReports = data.lpjKegiatan;
+        } else {
+          savedReports = [];
+        }
+        renderRiwayatTable();
+      };
+
+      const script = document.createElement("script");
+      script.src = `${SCRIPT_URL}?callback=${callbackName}&ts=${new Date().getTime()}`;
+      script.onerror = function() {
+        delete window[callbackName];
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#dc2626;">Gagal memuat riwayat dari server.</td></tr>`;
+      };
+      document.body.appendChild(script);
+    }
+
+    function renderRiwayatTable() {
+      const tbody = document.getElementById("tblRiwayatLpj");
+      if (!savedReports || savedReports.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">Belum ada riwayat LPJ kegiatan di Spreadsheet.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = savedReports.map((item, idx) => {
+        const tglFormatted = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
+        const photoLinks = (item.photos || []).map((p, i) => 
+          `<a href="${p.dataUrl}" target="_blank" style="color:#991b1b; font-weight:700; text-decoration:underline; display:inline-block; margin-right:6px;">
+            <i class="fa-solid fa-image"></i> Foto ${i + 1}
+          </a>`
+        ).join('');
+
+        return `
+          <tr>
+            <td>${tglFormatted}</td>
+            <td>
+              <div style="font-weight:800; color:#0f172a;">${item.nama}</div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">PIC: ${item.pic} (${item.divisi})</div>
+            </td>
+            <td style="max-width:280px; white-space:normal; line-height:1.4;">
+              <span class="badge-dampak"><i class="fa-solid fa-chart-line"></i> Dampak:</span><br>
+              <span style="font-size:11px; color:#334155;">${item.dampak}</span>
+            </td>
+            <td>
+              ${photoLinks || '<span style="color:#94a3b8;">-</span>'}
+            </td>
+            <td>
+              <button type="button" class="btn-outline" style="padding:6px 10px; font-size:11px;" onclick="muatKeForm(${idx})">
+                <i class="fa-solid fa-eye"></i> Buka / Cetak
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function muatKeForm(idx) {
+      const item = savedReports[idx];
+      if (!item) return;
+
+      document.getElementById("namaKegiatan").value = item.nama;
+      if (item.tanggal) {
+        try {
+          document.getElementById("tglKegiatan").value = new Date(item.tanggal).toISOString().split('T')[0];
+        } catch(e) {}
+      }
+      document.getElementById("picKegiatan").value = item.pic;
+      document.getElementById("divisiKegiatan").value = item.divisi;
+      document.getElementById("uraianKegiatan").value = item.uraian;
+      document.getElementById("dampakKegiatan").value = item.dampak;
+      
+      // Konversi URL Google Drive ke format thumbnail langsung agar tampil saat dicetak
+      uploadedPhotos = (item.photos || []).map(p => {
+        let displayUrl = p.dataUrl;
+        const match = displayUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          displayUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+        }
+        return {
+          dataUrl: displayUrl,
+          caption: p.caption || "Dokumentasi Kegiatan"
+        };
+      });
+      renderPhotoGrid();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast("Data LPJ dari Spreadsheet dimuat ke form. Siap dicetak!");
+    }
+
+    function resetFormLpj(notify = true) {
+      document.getElementById("formLpjKegiatan").reset();
+      document.getElementById("tglKegiatan").value = new Date().toISOString().split('T')[0];
+      uploadedPhotos = [];
+      renderPhotoGrid();
+      if (notify) showToast("Form telah dibersihkan.");
+    }
+
+    function handleLogoutSafe() {
+      if (typeof handleLogout === "function") {
+        handleLogout();
+      } else {
+        localStorage.removeItem("mahadewa_user");
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+</body>
+</html>
